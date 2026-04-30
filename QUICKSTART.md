@@ -36,7 +36,7 @@ docker compose down
 # Detener y borrar datos de la base de datos
 docker compose down -v
 
-# Reconstruir después de cambios en dependencias
+# Reconstruir después de cambios en dependencias (package.json, .csproj)
 docker compose up -d --build
 
 # Entrar a un contenedor
@@ -46,13 +46,26 @@ docker compose exec backend sh
 
 ## Desarrollo
 
-### Frontend (Next.js)
+### Modo desarrollo con hot-reload (recomendado)
 
-Los archivos en `frontend/` se sincronizan automáticamente con el contenedor. Solo editá y el servidor se recarga solo.
+```bash
+docker compose watch
+```
 
-### Backend (.NET 8)
+Esto sincroniza automáticamente los cambios de archivos entre tu máquina y los contenedores. Funciona en **Windows, Mac y Linux** sin configuración adicional.
 
-Los archivos en `backend/` se sincronizan automáticamente. `dotnet watch` detecta cambios y recompila.
+- **Frontend**: Next.js detecta cambios y recarga al instante
+- **Backend**: `dotnet watch` recompila automáticamente
+
+> ⚠️ `docker compose watch` ocupa la terminal. Abrí otra terminal para otros comandos.
+
+### Modo producción (sin hot-reload)
+
+```bash
+docker compose up -d
+```
+
+Levanta los servicios en segundo plano sin sincronización de archivos. Ideal para probar o si solo necesitás la base de datos.
 
 ### Base de datos
 
