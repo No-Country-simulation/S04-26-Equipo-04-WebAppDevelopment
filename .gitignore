@@ -35,3 +35,10 @@ logs/
 
 # Docker
 postgres_data/
+
+# .NET
+.vs/
+bin/
+obj/
+*.user
+appsettings.Development.json
