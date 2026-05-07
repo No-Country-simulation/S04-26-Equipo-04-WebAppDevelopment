@@ -84,6 +84,17 @@ Ejemplo:
 * Next.js
 * React
 * Deploy: Vercel (gratis)
+* Pruebas: Vitest (unitarias) + Playwright (E2E smoke)
+
+### Comandos clave del frontend
+
+Desde `frontend/`:
+
+* `npm run dev`
+* `npm run lint`
+* `npm run typecheck`
+* `npm run test`
+* `npm run test:e2e`
 
 ---
 
