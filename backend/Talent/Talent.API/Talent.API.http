@@ -1,0 +1,6 @@
+@Talent.API_HostAddress = http://localhost:5187
+
+GET {{Talent.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
