@@ -69,7 +69,7 @@ export function HeroSection() {
           <div className="absolute -right-20 -top-20 h-96 w-96 rounded-full bg-secondary-fixed opacity-20 blur-[100px]" />
           <div className="relative z-10 overflow-hidden rounded-2xl shadow-2xl md:rotate-2">
             <Image
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuDGY_WdMso0xAxhDD4qn6ohGr2tXQSj6cFyXj9BTf8tXn51cCUAPQDfTBPk1vkHhwFSOP42GCU7QS77Jg9mHVTBG1kBSp1gsr9eCK6HrGUSir_6vOyNjgfW41oegKk2DJTzDzA4cv05dDjhVoRZ32VJt-YC4PbrpLR7BfEGgonbBDHJB7gHEJrbGYR4om04frd1ZWBCDKWR9X3QdNr8NCeu044POc9TlG3VzFNAowpFqTyIVKmTWZ5n7V3XqF47nnSo2Nqwq6bT70s"
+              src="/images/landing/hero-senior.png"
               alt="Profesional senior sonriendo en oficina moderna"
               width={900}
               height={1100}
@@ -171,9 +171,10 @@ export function SolutionsSection() {
                 {index === 3 && (
                   <>
                     <Image
-                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuCmkaXjNryVFV_TRikUHP1D6lGRicl-FFSefhoFaPqBub_nQgr-f0rPtG_Q8MS0piglayibCYTEgqaCG34SmycB19mKek9-0VMMDSpi1GlR-whc-aCBsh3ZEPKqGHsianG2HronkBeYZXFTRnvrg5iQpjYYzAEh7dByj9BYH6f2B7DP3kvyT2r6RKlZL4NbkrYuspNgMU-bJtSoDhxQpW1y8y_3qF3P4x7ZQDo4K2ZQ_tRIQwhNcFOXzkBwC8morgsmRdY_LVJhm5E"
+                      src="/images/landing/solutions-community.png"
                       alt="Profesionales senior colaborando en un entorno corporativo moderno"
                       fill
+                      sizes="(min-width: 768px) 66vw, 100vw"
                       className="object-cover"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-primary/85 via-primary/45 to-primary/15" />
