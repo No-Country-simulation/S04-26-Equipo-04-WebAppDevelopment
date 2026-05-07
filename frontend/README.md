@@ -1,36 +1,80 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Frontend - TalentRenew
 
-## Getting Started
+Aplicación frontend construida con Next.js (App Router), React y Tailwind CSS.
 
-First, run the development server:
+## Requisitos
+
+- Node.js 20+
+- npm 10+
+
+## Ejecución local
+
+Desde la carpeta `frontend`:
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Abrir en navegador:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- [http://localhost:3000](http://localhost:3000)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Scripts disponibles
 
-## Learn More
+- `npm run dev`: inicia entorno de desarrollo.
+- `npm run build`: compila para producción.
+- `npm run start`: ejecuta build de producción.
+- `npm run lint`: valida reglas de ESLint.
+- `npm run typecheck`: valida tipos TypeScript.
+- `npm run test`: corre pruebas unitarias con cobertura.
+- `npm run test:watch`: corre pruebas unitarias en modo watch.
+- `npm run test:e2e`: corre pruebas E2E smoke con Playwright.
+- `npm run test:e2e:ui`: abre Playwright UI.
 
-To learn more about Next.js, take a look at the following resources:
+## Calidad y pruebas
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Este frontend tiene tres capas de validación:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. Linting con ESLint (`eslint-config-next`).
+2. Type checking con TypeScript (`tsc --noEmit`).
+3. Testing:
+   - Unitario: Vitest + Testing Library.
+   - E2E smoke: Playwright.
 
-## Deploy on Vercel
+### Flujo recomendado antes de commit
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+npm run lint
+npm run typecheck
+npm run test
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Estructura principal
+
+```text
+frontend/
+  src/
+    app/
+    components/
+      auth/
+      landing/
+      layout/
+  e2e/
+  playwright.config.ts
+  vitest.config.ts
+  vitest.setup.ts
+```
+
+## CI
+
+Se ejecuta en GitHub Actions con el workflow:
+
+- `.github/workflows/frontend-ci.yml`
+
+Validaciones automáticas:
+
+- lint
+- typecheck
+- pruebas unitarias
+- pruebas E2E smoke
