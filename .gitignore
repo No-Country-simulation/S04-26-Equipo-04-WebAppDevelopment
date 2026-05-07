@@ -35,3 +35,7 @@ logs/
 
 # Docker
 postgres_data/
+
+# .NET build artifacts
+backend/obj/
+backend/bin/
