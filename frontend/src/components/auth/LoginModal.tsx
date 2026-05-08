@@ -1,10 +1,24 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { type FormEvent, useCallback, useEffect, useState } from "react";
+import {
+  type AuthMode,
+  googleAuthRequest,
+  loginRequest,
+  registerRequest,
+  type LoginPayload,
+} from "@/lib/auth-client";
 
 type LoginModalProps = {
   isOpen: boolean;
   onClose: () => void;
+};
+
+type RegisterPayload = {
+  name: string;
+  email: string;
+  password: string;
+  acceptedTerms: boolean;
 };
 
 function GoogleIcon() {
@@ -31,11 +45,94 @@ function GoogleIcon() {
 }
 
 export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
-  const [mode, setMode] = useState<"login" | "register">("login");
+  const [mode, setMode] = useState<AuthMode>("login");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const [loginData, setLoginData] = useState<LoginPayload>({
+    email: "",
+    password: "",
+  });
+  const [registerData, setRegisterData] = useState<RegisterPayload>({
+    name: "",
+    email: "",
+    password: "",
+    acceptedTerms: false,
+  });
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  // Reset visual state each time modal closes.
   const closeModal = useCallback(() => {
     setMode("login");
+    setErrorMessage(null);
     onClose();
   }, [onClose]);
+
+  const handleLoginSubmit = useCallback(
+    async (event: FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
+      setErrorMessage(null);
+      setIsSubmitting(true);
+
+      try {
+        await loginRequest(loginData);
+        closeModal();
+      } catch (error) {
+        setErrorMessage(error instanceof Error ? error.message : "No se pudo iniciar sesión.");
+      } finally {
+        setIsSubmitting(false);
+      }
+    },
+    [loginData, closeModal],
+  );
+
+  const handleRegisterSubmit = useCallback(
+    async (event: FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
+      setErrorMessage(null);
+
+      if (!registerData.acceptedTerms) {
+        setErrorMessage("Debes aceptar términos y condiciones.");
+        return;
+      }
+
+      setIsSubmitting(true);
+
+      try {
+        await registerRequest({
+          name: registerData.name,
+          email: registerData.email,
+          password: registerData.password,
+        });
+        closeModal();
+      } catch (error) {
+        setErrorMessage(error instanceof Error ? error.message : "No se pudo crear cuenta.");
+      } finally {
+        setIsSubmitting(false);
+      }
+    },
+    [registerData, closeModal],
+  );
+
+  const handleGoogleAuth = useCallback(async () => {
+    setErrorMessage(null);
+    setIsSubmitting(true);
+
+    try {
+      // Backend debe responder `authUrl` para redirección OAuth.
+      const result = await googleAuthRequest({ mode });
+
+      if (result && typeof result === "object" && "authUrl" in result && typeof result.authUrl === "string") {
+        window.location.href = result.authUrl;
+        return;
+      }
+
+      setErrorMessage("Backend debe responder URL de autorización Google.");
+    } catch (error) {
+      setErrorMessage(error instanceof Error ? error.message : "No se pudo iniciar Google.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  }, [mode]);
 
   useEffect(() => {
     if (!isOpen) {
@@ -57,6 +154,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
       return;
     }
 
+    // Prevent background scroll while mobile sheet/modal is open.
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
 
@@ -109,9 +207,13 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
           </button>
         </div>
 
+        {errorMessage ? (
+          <p className="mb-4 rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">{errorMessage}</p>
+        ) : null}
+
         {mode === "login" ? (
           <>
-            <form className="space-y-4">
+            <form className="space-y-4" onSubmit={handleLoginSubmit}>
               <div>
                 <label className="mb-1 block text-sm font-semibold text-[#1A2B4B]" htmlFor="login-email">
                   Correo electrónico
@@ -122,7 +224,10 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
                   type="email"
                   autoComplete="email"
                   placeholder="tu@email.com"
+                  value={loginData.email}
+                  onChange={(event) => setLoginData((prev) => ({ ...prev, email: event.target.value }))}
                   className="h-11 w-full rounded-md border border-slate-300 bg-white px-3 text-sm text-slate-800 outline-none transition focus:border-secondary focus:ring-2 focus:ring-secondary/20"
+                  required
                 />
               </div>
 
@@ -136,12 +241,15 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
                   type="password"
                   autoComplete="current-password"
                   placeholder="********"
+                  value={loginData.password}
+                  onChange={(event) => setLoginData((prev) => ({ ...prev, password: event.target.value }))}
                   className="h-11 w-full rounded-md border border-slate-300 bg-white px-3 text-sm text-slate-800 outline-none transition focus:border-secondary focus:ring-2 focus:ring-secondary/20"
+                  required
                 />
               </div>
 
-              <button className="btn-primary w-full" type="button">
-                Entrar
+              <button className="btn-primary w-full disabled:cursor-not-allowed disabled:opacity-70" type="submit" disabled={isSubmitting}>
+                {isSubmitting ? "Entrando..." : "Entrar"}
               </button>
             </form>
 
@@ -153,6 +261,8 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
 
             <button
               type="button"
+              onClick={handleGoogleAuth}
+              disabled={isSubmitting}
               className="flex h-11 w-full items-center justify-center gap-2 rounded-md border border-slate-300 bg-white text-sm font-semibold text-[#1A2B4B] transition hover:border-slate-400 hover:bg-slate-50"
             >
               <GoogleIcon />
@@ -172,7 +282,17 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
           </>
         ) : (
           <>
-            <form className="space-y-4">
+            <button
+              type="button"
+              onClick={handleGoogleAuth}
+              disabled={isSubmitting}
+              className="mb-5 flex h-11 w-full items-center justify-center gap-2 rounded-md border border-slate-300 bg-white text-sm font-semibold text-[#1A2B4B] transition hover:border-slate-400 hover:bg-slate-50"
+            >
+              <GoogleIcon />
+              Registrarme con Google
+            </button>
+
+            <form className="space-y-4" onSubmit={handleRegisterSubmit}>
               <div>
                 <label className="mb-1 block text-sm font-semibold text-[#1A2B4B]" htmlFor="register-name">
                   Nombre completo
@@ -183,7 +303,10 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
                   type="text"
                   autoComplete="name"
                   placeholder="Tu nombre"
+                  value={registerData.name}
+                  onChange={(event) => setRegisterData((prev) => ({ ...prev, name: event.target.value }))}
                   className="h-11 w-full rounded-md border border-slate-300 bg-white px-3 text-sm text-slate-800 outline-none transition focus:border-secondary focus:ring-2 focus:ring-secondary/20"
+                  required
                 />
               </div>
 
@@ -197,7 +320,10 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
                   type="email"
                   autoComplete="email"
                   placeholder="tu@email.com"
+                  value={registerData.email}
+                  onChange={(event) => setRegisterData((prev) => ({ ...prev, email: event.target.value }))}
                   className="h-11 w-full rounded-md border border-slate-300 bg-white px-3 text-sm text-slate-800 outline-none transition focus:border-secondary focus:ring-2 focus:ring-secondary/20"
+                  required
                 />
               </div>
 
@@ -211,7 +337,11 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
                   type="password"
                   autoComplete="new-password"
                   placeholder="********"
+                  value={registerData.password}
+                  onChange={(event) => setRegisterData((prev) => ({ ...prev, password: event.target.value }))}
                   className="h-11 w-full rounded-md border border-slate-300 bg-white px-3 text-sm text-slate-800 outline-none transition focus:border-secondary focus:ring-2 focus:ring-secondary/20"
+                  minLength={8}
+                  required
                 />
               </div>
 
@@ -219,6 +349,10 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
                 <input
                   type="checkbox"
                   name="terms"
+                  checked={registerData.acceptedTerms}
+                  onChange={(event) =>
+                    setRegisterData((prev) => ({ ...prev, acceptedTerms: event.target.checked }))
+                  }
                   className="mt-0.5 h-4 w-4 rounded border-slate-300 text-secondary focus:ring-secondary"
                 />
                 <span>
@@ -230,8 +364,12 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
                 </span>
               </label>
 
-              <button className="btn-primary w-full" type="button">
-                Crear cuenta
+              <button
+                className="btn-primary w-full disabled:cursor-not-allowed disabled:opacity-70"
+                type="submit"
+                disabled={isSubmitting || !registerData.acceptedTerms}
+              >
+                {isSubmitting ? "Creando..." : "Crear cuenta"}
               </button>
             </form>
 

@@ -93,6 +93,7 @@ Ejemplo:
 * React
 * Deploy: Vercel (gratis)
 * Pruebas: Vitest (unitarias) + Playwright (E2E smoke)
+* Auth UI: modal unificado login/registro + Google (frontend desacoplado)
 
 ### Comandos clave del frontend
 
@@ -103,6 +104,12 @@ Desde `frontend/`:
 * `npm run typecheck`
 * `npm run test`
 * `npm run test:e2e`
+
+### Integración Auth FE/BE
+
+Detalles técnicos, contrato de endpoints y puntos de integración:
+
+* `frontend/README.md` (sección **Auth frontend**)
 
 ---
 
