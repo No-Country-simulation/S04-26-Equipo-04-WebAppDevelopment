@@ -3,9 +3,9 @@
 import { type FormEvent, useCallback, useEffect, useState } from "react";
 import {
   type AuthMode,
-  googleAuthRequest,
   loginRequest,
   registerRequest,
+  type AuthResponse,
   type LoginPayload,
 } from "@/lib/auth-client";
 
@@ -16,6 +16,7 @@ type LoginModalProps = {
 
 type RegisterPayload = {
   name: string;
+  lastName: string;
   email: string;
   password: string;
   acceptedTerms: boolean;
@@ -54,6 +55,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
   });
   const [registerData, setRegisterData] = useState<RegisterPayload>({
     name: "",
+    lastName: "",
     email: "",
     password: "",
     acceptedTerms: false,
@@ -67,6 +69,19 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
     onClose();
   }, [onClose]);
 
+  const handleAuthSuccess = useCallback((response: AuthResponse | null) => {
+    if (!response) {
+      closeModal();
+      return;
+    }
+    localStorage.setItem("auth_token", response.token);
+    localStorage.setItem(
+      "auth_user",
+      JSON.stringify({ id: response.id, nombre: response.nombre, email: response.email }),
+    );
+    closeModal();
+  }, [closeModal]);
+
   const handleLoginSubmit = useCallback(
     async (event: FormEvent<HTMLFormElement>) => {
       event.preventDefault();
@@ -74,15 +89,15 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
       setIsSubmitting(true);
 
       try {
-        await loginRequest(loginData);
-        closeModal();
+        const response = await loginRequest(loginData);
+        handleAuthSuccess(response);
       } catch (error) {
         setErrorMessage(error instanceof Error ? error.message : "No se pudo iniciar sesión.");
       } finally {
         setIsSubmitting(false);
       }
     },
-    [loginData, closeModal],
+    [loginData, handleAuthSuccess],
   );
 
   const handleRegisterSubmit = useCallback(
@@ -98,41 +113,25 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
       setIsSubmitting(true);
 
       try {
-        await registerRequest({
+        const response = await registerRequest({
           name: registerData.name,
+          lastName: registerData.lastName,
           email: registerData.email,
           password: registerData.password,
         });
-        closeModal();
+        handleAuthSuccess(response);
       } catch (error) {
         setErrorMessage(error instanceof Error ? error.message : "No se pudo crear cuenta.");
       } finally {
         setIsSubmitting(false);
       }
     },
-    [registerData, closeModal],
+    [registerData, handleAuthSuccess],
   );
 
   const handleGoogleAuth = useCallback(async () => {
-    setErrorMessage(null);
-    setIsSubmitting(true);
-
-    try {
-      // Backend debe responder `authUrl` para redirección OAuth.
-      const result = await googleAuthRequest({ mode });
-
-      if (result && typeof result === "object" && "authUrl" in result && typeof result.authUrl === "string") {
-        window.location.href = result.authUrl;
-        return;
-      }
-
-      setErrorMessage("Backend debe responder URL de autorización Google.");
-    } catch (error) {
-      setErrorMessage(error instanceof Error ? error.message : "No se pudo iniciar Google.");
-    } finally {
-      setIsSubmitting(false);
-    }
-  }, [mode]);
+    setErrorMessage("Google login en backend todavía no disponible.");
+  }, []);
 
   useEffect(() => {
     if (!isOpen) {
@@ -262,7 +261,6 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
             <button
               type="button"
               onClick={handleGoogleAuth}
-              disabled={isSubmitting}
               className="flex h-11 w-full items-center justify-center gap-2 rounded-md border border-slate-300 bg-white text-sm font-semibold text-[#1A2B4B] transition hover:border-slate-400 hover:bg-slate-50"
             >
               <GoogleIcon />
@@ -285,7 +283,6 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
             <button
               type="button"
               onClick={handleGoogleAuth}
-              disabled={isSubmitting}
               className="mb-5 flex h-11 w-full items-center justify-center gap-2 rounded-md border border-slate-300 bg-white text-sm font-semibold text-[#1A2B4B] transition hover:border-slate-400 hover:bg-slate-50"
             >
               <GoogleIcon />
@@ -305,6 +302,23 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
                   placeholder="Tu nombre"
                   value={registerData.name}
                   onChange={(event) => setRegisterData((prev) => ({ ...prev, name: event.target.value }))}
+                  className="h-11 w-full rounded-md border border-slate-300 bg-white px-3 text-sm text-slate-800 outline-none transition focus:border-secondary focus:ring-2 focus:ring-secondary/20"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="mb-1 block text-sm font-semibold text-[#1A2B4B]" htmlFor="register-lastname">
+                  Apellido
+                </label>
+                <input
+                  id="register-lastname"
+                  name="lastName"
+                  type="text"
+                  autoComplete="family-name"
+                  placeholder="Tu apellido"
+                  value={registerData.lastName}
+                  onChange={(event) => setRegisterData((prev) => ({ ...prev, lastName: event.target.value }))}
                   className="h-11 w-full rounded-md border border-slate-300 bg-white px-3 text-sm text-slate-800 outline-none transition focus:border-secondary focus:ring-2 focus:ring-secondary/20"
                   required
                 />
