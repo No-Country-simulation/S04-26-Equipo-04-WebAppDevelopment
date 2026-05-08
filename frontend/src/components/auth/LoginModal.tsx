@@ -331,14 +331,14 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
             <form className="space-y-4" onSubmit={handleRegisterSubmit}>
               <div>
                 <label className="mb-1 block text-sm font-semibold text-[#1A2B4B]" htmlFor="register-name">
-                  Nombre completo
+                  Nombres
                 </label>
                 <input
                   id="register-name"
                   name="name"
                   type="text"
                   autoComplete="name"
-                  placeholder="Tu nombre"
+                  placeholder="Tus nombres"
                   value={registerData.name}
                   onChange={(event) => setRegisterData((prev) => ({ ...prev, name: event.target.value }))}
                   className="h-11 w-full rounded-md border border-slate-300 bg-white px-3 text-sm text-slate-800 outline-none transition focus:border-secondary focus:ring-2 focus:ring-secondary/20"
@@ -348,14 +348,14 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
 
               <div>
                 <label className="mb-1 block text-sm font-semibold text-[#1A2B4B]" htmlFor="register-lastname">
-                  Apellido
+                  Apellidos
                 </label>
                 <input
                   id="register-lastname"
                   name="lastName"
                   type="text"
                   autoComplete="family-name"
-                  placeholder="Tu apellido"
+                  placeholder="Tus apellidos"
                   value={registerData.lastName}
                   onChange={(event) => setRegisterData((prev) => ({ ...prev, lastName: event.target.value }))}
                   className="h-11 w-full rounded-md border border-slate-300 bg-white px-3 text-sm text-slate-800 outline-none transition focus:border-secondary focus:ring-2 focus:ring-secondary/20"
