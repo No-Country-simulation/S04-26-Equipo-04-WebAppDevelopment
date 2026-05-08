@@ -9,6 +9,7 @@ export type LoginPayload = {
 
 export type RegisterPayload = {
   name: string;
+  lastName: string;
   email: string;
   password: string;
 };
@@ -21,7 +22,14 @@ export type GoogleAuthResponse = {
   authUrl?: string;
 };
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8080";
+export type AuthResponse = {
+  id: number;
+  nombre: string;
+  email: string;
+  token: string;
+};
+
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:5187";
 
 async function postAuth<TPayload, TResponse = unknown>(path: string, payload: TPayload): Promise<TResponse | null> {
   const response = await fetch(`${API_BASE_URL}${path}`, {
@@ -32,25 +40,42 @@ async function postAuth<TPayload, TResponse = unknown>(path: string, payload: TP
     body: JSON.stringify(payload),
   });
 
-  if (!response.ok) {
-    const errorText = await response.text();
-    throw new Error(errorText || "Error de autenticación");
-  }
-
   const contentType = response.headers.get("content-type") ?? "";
+  let data: unknown = null;
+
   if (contentType.includes("application/json")) {
-    return (await response.json()) as TResponse;
+    data = await response.json();
+  } else {
+    const text = await response.text();
+    data = text ? { message: text } : null;
   }
 
-  return null;
+  if (!response.ok) {
+    if (data && typeof data === "object" && "message" in data && typeof data.message === "string") {
+      throw new Error(data.message);
+    }
+    throw new Error("Error de autenticación");
+  }
+
+  return data as TResponse;
 }
 
 export async function loginRequest(payload: LoginPayload) {
-  return postAuth<LoginPayload>("/api/auth/login", payload);
+  const backendPayload = {
+    Email: payload.email,
+    Contraseña: payload.password,
+  };
+  return postAuth<typeof backendPayload, AuthResponse>("/api/Auth/login", backendPayload);
 }
 
 export async function registerRequest(payload: RegisterPayload) {
-  return postAuth<RegisterPayload>("/api/auth/register", payload);
+  const backendPayload = {
+    Nombre: payload.name,
+    Apellido: payload.lastName,
+    Email: payload.email,
+    Contraseña: payload.password,
+  };
+  return postAuth<typeof backendPayload, AuthResponse>("/api/Auth/register", backendPayload);
 }
 
 export async function googleAuthRequest(payload: GoogleAuthPayload) {
