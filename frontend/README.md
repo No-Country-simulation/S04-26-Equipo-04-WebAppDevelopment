@@ -60,11 +60,50 @@ frontend/
       auth/
       landing/
       layout/
+    lib/
   e2e/
   playwright.config.ts
   vitest.config.ts
   vitest.setup.ts
 ```
+
+## Auth frontend (masticado para backend)
+
+Flujo actual:
+
+- Modal unificado de acceso en `src/components/auth/LoginModal.tsx`.
+- Modo `login` y `register` en mismo componente.
+- Botón Google en ambos modos.
+- No hay dependencia directa de backend framework; solo `fetch`.
+
+Contrato que consume frontend:
+
+- `POST /api/auth/login`
+  - body: `{ "email": "string", "password": "string" }`
+- `POST /api/auth/register`
+  - body: `{ "name": "string", "email": "string", "password": "string" }`
+- `POST /api/auth/google`
+  - body: `{ "mode": "login" | "register" }`
+  - response esperada: `{ "authUrl": "https://..." }`
+
+Base URL API:
+
+- `NEXT_PUBLIC_API_URL` (ejemplo: `http://localhost:8080`)
+- fallback local: `http://localhost:8080`
+
+Punto de integración:
+
+- `src/lib/auth-client.ts`
+  - `loginRequest(payload)`
+  - `registerRequest(payload)`
+  - `googleAuthRequest(payload)`
+
+Buenas prácticas aplicadas:
+
+- Lógica de red aislada en `lib/`.
+- UI desacoplada de contrato HTTP.
+- Estados UX básicos (`loading`, `error`, `disabled` por términos).
+- Cierre modal por `Escape`, click fuera, restauración de scroll del `body`.
 
 ## CI
 

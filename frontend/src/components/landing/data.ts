@@ -15,13 +15,13 @@ export const challengeCards = [
     title: "El sesgo invisible",
     description:
       "Reemplazamos prejuicios por evidencia de adaptabilidad real y resultados verificables.",
-    icon: "trendDown",
+    icon: "search",
   },
   {
     title: "La brecha de herramientas",
     description:
       "No es falta de capacidad, es falta de acceso a una actualización estratégica constante.",
-    icon: "shuffle",
+    icon: "compass",
   },
   {
     title: "Talento oculto",

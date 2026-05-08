@@ -15,6 +15,14 @@ Esta plataforma tiene como objetivo mejorar la empleabilidad de profesionales +4
 
 👉 Enfoque principal: convertir experiencia en empleabilidad real basada en evidencia de habilidades.
 
+## Documentación de producto
+
+Para alinear decisiones de negocio y alcance de MVP:
+
+* `docs/contexto-problema.md`
+* `docs/segmento-prioritario-mvp.md`
+* `docs/prd-mvp-v1.md`
+
 ---
 
 # 🧱 2. Arquitectura del Sistema
@@ -85,6 +93,7 @@ Ejemplo:
 * React
 * Deploy: Vercel (gratis)
 * Pruebas: Vitest (unitarias) + Playwright (E2E smoke)
+* Auth UI: modal unificado login/registro + Google (frontend desacoplado)
 
 ### Comandos clave del frontend
 
@@ -95,6 +104,12 @@ Desde `frontend/`:
 * `npm run typecheck`
 * `npm run test`
 * `npm run test:e2e`
+
+### Integración Auth FE/BE
+
+Detalles técnicos, contrato de endpoints y puntos de integración:
+
+* `frontend/README.md` (sección **Auth frontend**)
 
 ---
 
