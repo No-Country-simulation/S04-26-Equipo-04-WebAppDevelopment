@@ -17,6 +17,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 // Inyección de dependencias: conectamos interfaces con implementaciones
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<IUsuarioService, UsuarioService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+
 
 var app = builder.Build();
 

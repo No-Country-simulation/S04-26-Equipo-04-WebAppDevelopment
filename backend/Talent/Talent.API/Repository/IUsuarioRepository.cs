@@ -9,5 +9,7 @@ namespace Talent.API.Repositories
         Task<Usuario> CreateAsync(Usuario usuario);
         Task<Usuario?> UpdateAsync(long id, Usuario usuario);
         Task<bool> DeleteAsync(long id);
+        Task<Usuario?> GetByEmailAsync(string email);
+
     }
 }

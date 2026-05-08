@@ -1,0 +1,92 @@
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using Microsoft.IdentityModel.Tokens;
+using Talent.API.DTO;
+using Talent.API.Entities;
+using Talent.API.Repositories;
+
+namespace Talent.API.Services
+{
+    public class AuthService : IAuthService
+    {
+        private readonly IUsuarioRepository _repository;
+        private readonly IConfiguration _config;
+
+        public AuthService(IUsuarioRepository repository, IConfiguration config)
+        {
+            _repository = repository;
+            _config = config;
+        }
+
+        public async Task<AuthResponseDTO> RegisterAsync(RegisterDTO dto)
+        {
+            // Verificar si el email ya existe
+            var existente = await _repository.GetByEmailAsync(dto.Email);
+            if (existente != null)
+                throw new Exception("El email ya está registrado");
+
+            // Crear el usuario con contraseña hasheada
+            var usuario = new Usuario
+            {
+                Nombre = dto.Nombre,
+                Apellido = dto.Apellido,
+                Email = dto.Email,
+                Contraseña = BCrypt.Net.BCrypt.HashPassword(dto.Contraseña)
+            };
+
+            var creado = await _repository.CreateAsync(usuario);
+
+            return new AuthResponseDTO
+            {
+                Id = creado.Id,
+                Nombre = creado.Nombre,
+                Email = creado.Email,
+                Token = GenerarToken(creado)
+            };
+        }
+
+        public async Task<AuthResponseDTO?> LoginAsync(LoginDTO dto)
+        {
+            var usuario = await _repository.GetByEmailAsync(dto.Email);
+            if (usuario == null) return null;
+
+            // Verificar contraseña hasheada
+            if (!BCrypt.Net.BCrypt.Verify(dto.Contraseña, usuario.Contraseña))
+                return null;
+
+            return new AuthResponseDTO
+            {
+                Id = usuario.Id,
+                Nombre = usuario.Nombre,
+                Email = usuario.Email,
+                Token = GenerarToken(usuario)
+            };
+        }
+
+        private string GenerarToken(Usuario usuario)
+        {
+            var claims = new[]
+            {
+                new Claim(ClaimTypes.NameIdentifier, usuario.Id.ToString()),
+                new Claim(ClaimTypes.Email, usuario.Email),
+                new Claim(ClaimTypes.Name, usuario.Nombre)
+            };
+
+            var key = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(_config["Jwt:Key"]!));
+
+            var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+            var token = new JwtSecurityToken(
+                issuer: _config["Jwt:Issuer"],
+                audience: _config["Jwt:Audience"],
+                claims: claims,
+                expires: DateTime.UtcNow.AddHours(24),
+                signingCredentials: credentials
+            );
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+    }
+}
