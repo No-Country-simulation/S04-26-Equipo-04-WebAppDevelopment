@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Talent.API.Entities;
+using Microsoft.AspNetCore.Mvc;
+using Talent.API.DTO;
 using Talent.API.Services;
 
 namespace Talent.API.Controllers
@@ -16,14 +16,14 @@ namespace Talent.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Usuario>>> GetAll()
+        public async Task<ActionResult<List<UsuarioResponseDTO>>> GetAll()
         {
             var usuarios = await _service.GetAllAsync();
             return Ok(usuarios);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Usuario>> GetById(long id)
+        public async Task<ActionResult<UsuarioResponseDTO>> GetById(long id)
         {
             var usuario = await _service.GetByIdAsync(id);
             if (usuario == null) return NotFound();
@@ -31,18 +31,32 @@ namespace Talent.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Usuario>> Create(Usuario usuario)
+        public async Task<ActionResult<UsuarioResponseDTO>> Create(CreateUsuarioDTO dto)
         {
-            var creado = await _service.CreateAsync(usuario);
-            return CreatedAtAction(nameof(GetById), new { id = creado.Id }, creado);
+            try
+            {
+                var creado = await _service.CreateAsync(dto);
+                return CreatedAtAction(nameof(GetById), new { id = creado.Id }, creado);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<Usuario>> Update(long id, Usuario usuario)
+        public async Task<ActionResult<UsuarioResponseDTO>> Update(long id, UpdateUsuarioDTO dto)
         {
-            var actualizado = await _service.UpdateAsync(id, usuario);
-            if (actualizado == null) return NotFound();
-            return Ok(actualizado);
+            try
+            {
+                var actualizado = await _service.UpdateAsync(id, dto);
+                if (actualizado == null) return NotFound();
+                return Ok(actualizado);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
 
         [HttpDelete("{id}")]
