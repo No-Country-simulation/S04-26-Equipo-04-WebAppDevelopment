@@ -45,6 +45,23 @@ function GoogleIcon() {
   );
 }
 
+function LinkedInIcon() {
+  return (
+    <svg aria-hidden="true" className="h-5 w-5" viewBox="0 0 24 24" fill="none">
+      <rect x="2" y="2" width="20" height="20" rx="3" fill="#0A66C2" />
+      <path d="M8.1 10.2H5.8V18h2.3v-7.8Z" fill="white" />
+      <path
+        d="M7 9.1c.8 0 1.4-.6 1.4-1.3 0-.8-.6-1.3-1.4-1.3-.8 0-1.4.6-1.4 1.3 0 .8.6 1.3 1.4 1.3Z"
+        fill="white"
+      />
+      <path
+        d="M18.2 13.5c0-2.3-1.2-3.4-2.9-3.4-1.3 0-1.9.7-2.2 1.2v-1.1h-2.3V18h2.3v-4.1c0-1.1.2-2.1 1.5-2.1s1.3 1.2 1.3 2.2V18h2.3l.1-4.5Z"
+        fill="white"
+      />
+    </svg>
+  );
+}
+
 export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
   const [mode, setMode] = useState<AuthMode>("login");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -131,6 +148,10 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
 
   const handleGoogleAuth = useCallback(async () => {
     setErrorMessage("Google login en backend todavía no disponible.");
+  }, []);
+
+  const handleLinkedInAuth = useCallback(async () => {
+    setErrorMessage("LinkedIn login en backend todavía no disponible.");
   }, []);
 
   useEffect(() => {
@@ -267,6 +288,15 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
               Iniciar con Google
             </button>
 
+            <button
+              type="button"
+              onClick={handleLinkedInAuth}
+              className="mt-3 flex h-11 w-full items-center justify-center gap-2 rounded-md border border-slate-300 bg-white text-sm font-semibold text-[#1A2B4B] transition hover:border-slate-400 hover:bg-slate-50"
+            >
+              <LinkedInIcon />
+              Iniciar con LinkedIn
+            </button>
+
             <p className="mt-5 text-center text-sm text-slate-600">
               ¿No tienes cuenta?{" "}
               <button
@@ -287,6 +317,15 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
             >
               <GoogleIcon />
               Registrarme con Google
+            </button>
+
+            <button
+              type="button"
+              onClick={handleLinkedInAuth}
+              className="mb-5 flex h-11 w-full items-center justify-center gap-2 rounded-md border border-slate-300 bg-white text-sm font-semibold text-[#1A2B4B] transition hover:border-slate-400 hover:bg-slate-50"
+            >
+              <LinkedInIcon />
+              Registrarme con LinkedIn
             </button>
 
             <form className="space-y-4" onSubmit={handleRegisterSubmit}>
