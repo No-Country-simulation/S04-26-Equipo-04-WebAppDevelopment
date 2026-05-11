@@ -21,9 +21,16 @@ builder.Services.AddCors(options =>
     });
 });
 
-// Conexión a PostgreSQL
+// Conexión a PostgreSQL (con retry para errores transitorios del pooler)
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseNpgsql(
+        builder.Configuration.GetConnectionString("DefaultConnection"),
+        npgsqlOptions => npgsqlOptions.EnableRetryOnFailure(
+            maxRetryCount: 5,
+            maxRetryDelay: TimeSpan.FromSeconds(10),
+            errorCodesToAdd: null
+        )
+    ));
 
 // Inyección de dependencias: conectamos interfaces con implementaciones
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
