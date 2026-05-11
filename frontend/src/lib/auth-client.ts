@@ -29,7 +29,8 @@ export type AuthResponse = {
   token: string;
 };
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:5187";
+const API_BASE_URL =
+  process.env.NEXT_PUBLIC_API_URL ?? "https://s04-26-equipo-04-webappdevelopment.onrender.com";
 
 async function postAuth<TPayload, TResponse = unknown>(path: string, payload: TPayload): Promise<TResponse | null> {
   const response = await fetch(`${API_BASE_URL}${path}`, {

@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;400;500;600;700;800&amp;family=Work+Sans:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-fixed": "#181c1c",
+                        "surface-dim": "#cfdaf1",
+                        "tertiary-container": "#282c2c",
+                        "on-secondary-fixed-variant": "#00504e",
+                        "surface-variant": "#d8e3fa",
+                        "on-error-container": "#93000a",
+                        "secondary-container": "#a3edea",
+                        "on-secondary": "#ffffff",
+                        "surface-tint": "#4e5e81",
+                        "surface-bright": "#f9f9ff",
+                        "secondary": "#156967",
+                        "on-error": "#ffffff",
+                        "on-surface-variant": "#44474e",
+                        "on-background": "#111c2c",
+                        "on-primary-container": "#8293b8",
+                        "on-tertiary-fixed-variant": "#434847",
+                        "primary-fixed-dim": "#b6c6ef",
+                        "inverse-on-surface": "#ebf1ff",
+                        "error-container": "#ffdad6",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary-container": "#1c6d6b",
+                        "outline": "#75777f",
+                        "secondary-fixed": "#a6f0ed",
+                        "surface-container": "#e7eeff",
+                        "surface-container-highest": "#d8e3fa",
+                        "primary-container": "#1a2b4b",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary-fixed": "#00201f",
+                        "on-primary-fixed": "#081b3a",
+                        "tertiary-fixed": "#e0e3e2",
+                        "tertiary-fixed-dim": "#c4c7c6",
+                        "background": "#f9f9ff",
+                        "on-surface": "#111c2c",
+                        "on-tertiary-container": "#8f9393",
+                        "outline-variant": "#c5c6cf",
+                        "surface-container-high": "#dee8ff",
+                        "on-primary": "#ffffff",
+                        "inverse-primary": "#b6c6ef",
+                        "on-primary-fixed-variant": "#364768",
+                        "surface": "#f9f9ff",
+                        "primary-fixed": "#d8e2ff",
+                        "tertiary": "#141817",
+                        "inverse-surface": "#263142",
+                        "primary": "#031635",
+                        "error": "#ba1a1a",
+                        "surface-container-low": "#f0f3ff",
+                        "secondary-fixed-dim": "#8ad3d0"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "base": "8px",
+                        "margin-desktop": "32px",
+                        "container-max": "1280px",
+                        "margin-mobile": "16px",
+                        "gutter": "24px"
+                    },
+                    "fontFamily": {
+                        "label-md": ["Work Sans"],
+                        "display-lg": ["Manrope"],
+                        "headline-lg": ["Manrope"],
+                        "body-lg": ["Work Sans"],
+                        "headline-md": ["Manrope"],
+                        "body-md": ["Work Sans"],
+                        "body-sm": ["Work Sans"],
+                        "label-lg": ["Work Sans"]
+                    },
+                    "fontSize": {
+                        "label-md": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "label-lg": ["14px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background text-on-surface font-body-md selection:bg-secondary-container selection:text-on-secondary-container">
+<!-- Top Navigation Anchor -->
+<header class="fixed top-0 left-0 w-full flex justify-between items-center px-8 h-16 bg-white/90 backdrop-blur-md border-b border-slate-100 z-50">
+<div class="text-xl font-black text-[#1A2B4B] tracking-tight">TalentRenew</div>
+<nav class="hidden md:flex gap-8">
+<a class="text-slate-600 font-medium hover:text-teal-600 transition-all duration-200 font-['Manrope'] text-sm" href="#">Home</a>
+<a class="text-slate-600 font-medium hover:text-teal-600 transition-all duration-200 font-['Manrope'] text-sm" href="#">How it works</a>
+<a class="text-[#1A2B4B] font-bold border-b-2 border-teal-600 pb-1 font-['Manrope'] text-sm" href="#">For Professionals</a>
+<a class="text-slate-600 font-medium hover:text-teal-600 transition-all duration-200 font-['Manrope'] text-sm" href="#">For Companies</a>
+</nav>
+<button class="bg-[#1A2B4B] text-white px-6 py-2 rounded-lg font-['Manrope'] font-medium text-sm hover:opacity-90 active:scale-95 transition-all">Login</button>
+</header>
+<!-- Sidebar Shell -->
+<aside class="fixed left-0 top-0 h-full hidden lg:flex flex-col p-4 z-40 bg-slate-50 border-r border-slate-200 w-64 pt-20">
+<div class="mb-8 px-4">
+<div class="flex items-center gap-3 mb-4">
+<div class="w-10 h-10 rounded-full bg-primary-container overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Professional portrait of a mature male executive in his early 50s, wearing a tailored navy suit and a confident smile. The setting is a bright, modern corporate office with soft natural light. The visual style is high-end, clean, and authoritative, using a professional color palette of deep blues and crisp whites to emphasize experience and modern adaptability." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAEXUP7pyqdTC8AEqwgwotXhE-W0jD-X1_qOECWNRmryuTwPQl7qWnC-XvUS6OqdtTnwoS9Fv4HpEN65AtT4wVQZHUhLdxFkTSP1WTt98aKemz-Snwha1HbhdeidCDqfpsb3GcrkR_1lj2tbNRJMz5GB7dwUNKQldzIWwgZ4wRcEeV8ZhD4sd2L9o2FphhJPmAmWjszk1M5Y7B23MWpaI45t1_FhvrsM3d-gwTgEzdceD30y-m39t5Y-RPWHkpYKNagYrtGB1snANw"/>
+</div>
+<div>
+<p class="text-[#1A2B4B] font-bold text-sm">Valued Expert</p>
+<p class="text-slate-500 text-xs">Growth Track Active</p>
+</div>
+</div>
+</div>
+<nav class="flex-1 flex flex-col gap-2">
+<a class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-100 hover:translate-x-1 rounded-lg transition-all font-['Manrope'] text-sm tracking-wide" href="#">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span> Diagnostic
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-100 hover:translate-x-1 rounded-lg transition-all font-['Manrope'] text-sm tracking-wide" href="#">
+<span class="material-symbols-outlined" data-icon="auto_stories">auto_stories</span> Learning Path
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 bg-teal-50 text-teal-700 rounded-lg font-semibold font-['Manrope'] text-sm tracking-wide" href="#">
+<span class="material-symbols-outlined" data-icon="person_pin" style="font-variation-settings: 'FILL' 1;">person_pin</span> Profile
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-100 hover:translate-x-1 rounded-lg transition-all font-['Manrope'] text-sm tracking-wide" href="#">
+<span class="material-symbols-outlined" data-icon="hub">hub</span> Marketplace
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-100 hover:translate-x-1 rounded-lg transition-all font-['Manrope'] text-sm tracking-wide" href="#">
+<span class="material-symbols-outlined" data-icon="query_stats">query_stats</span> Progress
+            </a>
+</nav>
+<div class="mt-auto pt-6 flex flex-col gap-2">
+<button class="w-full bg-secondary text-on-secondary py-3 rounded-lg font-semibold text-sm mb-4">Find Opportunities</button>
+<a class="flex items-center gap-3 px-4 py-2 text-slate-600 hover:text-primary transition-colors text-xs font-['Manrope']" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span> Settings
+            </a>
+<a class="flex items-center gap-3 px-4 py-2 text-slate-600 hover:text-primary transition-colors text-xs font-['Manrope']" href="#">
+<span class="material-symbols-outlined" data-icon="help_outline">help_outline</span> Support
+            </a>
+</div>
+</aside>
+<!-- Main Canvas -->
+<main class="lg:ml-64 pt-24 pb-12 px-4 md:px-8 max-w-7xl mx-auto">
+<!-- Profile Header Section -->
+<section class="bg-white rounded-xl shadow-[0_4px_20px_rgba(26,43,75,0.08)] overflow-hidden mb-8 border border-slate-100">
+<div class="h-32 bg-gradient-to-r from-primary to-secondary"></div>
+<div class="px-8 pb-8 -mt-16 flex flex-col md:flex-row gap-6 items-end md:items-center">
+<div class="w-32 h-32 rounded-xl border-4 border-white bg-slate-200 overflow-hidden shadow-lg relative">
+<img class="w-full h-full object-cover" data-alt="Close up of a professional executive with salt and pepper hair, radiating confidence and wisdom. He is framed against a clean, minimalist architectural background. The lighting is sophisticated and warm, highlighting textures of a high-quality wool blazer. The overall aesthetic is one of renewed vitality and seasoned authority within a modern corporate context." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBoadxkeb6l5k4Fu8vYiqMPfC8lNRCk7_QytpLcpRwFRFHBj544u85C27I4FeGXrAfQZADyCusMgd21gAf9LdxbqIZBg6ZnfAvlnOpwNGc8jEcguPcf6W2T_OHI9noPy9VSAGsbtgL9JbC7g5IDh7-58LnNNrTrUsv8p9GbXsF_QRt9kjNprvCxsVG8KvfcUpC4Y2MSnX_iF4gxLEQ9bxZajeKFX5P6seIINnuoMacLrilOpx9m7OF4X9GUgP_0ItrwOolnMCX1hak"/>
+</div>
+<div class="flex-1">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+<div>
+<h1 class="font-headline-lg text-primary">Javier Mendoza</h1>
+<p class="font-body-lg text-secondary font-medium uppercase tracking-wide text-sm">CFO &amp; Business Strategist | Transformación Digital en Finanzas</p>
+</div>
+<div class="flex gap-3">
+<button class="bg-primary-container text-white px-5 py-2.5 rounded-lg font-semibold text-sm flex items-center gap-2">
+<span class="material-symbols-outlined text-sm" data-icon="mail">mail</span> Contactar
+                            </button>
+<button class="border border-outline-variant text-primary px-5 py-2.5 rounded-lg font-semibold text-sm hover:bg-slate-50">
+                                Exportar CV
+                            </button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+<!-- Executive Summary & Readiness (Col 8) -->
+<div class="md:col-span-8 flex flex-col gap-6">
+<!-- Executive Summary -->
+<div class="bg-white p-8 rounded-xl border border-slate-100 shadow-[0_4px_20px_rgba(26,43,75,0.08)]">
+<div class="flex items-center gap-2 mb-4 text-primary">
+<span class="material-symbols-outlined" data-icon="article">article</span>
+<h2 class="font-headline-md">Resumen Ejecutivo</h2>
+</div>
+<p class="font-body-md text-on-surface-variant leading-relaxed">
+                        Líder financiero con más de 25 años de trayectoria en corporaciones multinacionales, especializado en la modernización de infraestructuras críticas y estrategia de crecimiento sostenible. Mi enfoque actual integra la solidez del control financiero tradicional con la agilidad de las **FinTech** y modelos de **Business Intelligence**. Apasionado por mentorizar equipos multigeneracionales y liderar procesos de transformación digital que trascienden el balance general.
+                    </p>
+</div>
+<!-- Career History -->
+<div class="bg-white p-8 rounded-xl border border-slate-100 shadow-[0_4px_20px_rgba(26,43,75,0.08)]">
+<div class="flex items-center gap-2 mb-8 text-primary">
+<span class="material-symbols-outlined" data-icon="history_edu">history_edu</span>
+<h2 class="font-headline-md">Career History</h2>
+</div>
+<div class="relative flex flex-col gap-10">
+<!-- Connector Line -->
+<div class="absolute left-[19px] top-2 bottom-2 w-0.5 bg-surface-container"></div>
+<!-- Timeline Item 1 -->
+<div class="relative pl-12">
+<div class="absolute left-0 top-1 w-10 h-10 rounded-full bg-white border-2 border-teal-600 flex items-center justify-center z-10 shadow-sm">
+<span class="material-symbols-outlined text-teal-600 text-lg" data-icon="account_balance">account_balance</span>
+</div>
+<div class="flex justify-between items-start mb-1">
+<h3 class="font-headline-sm text-primary font-bold">Chief Financial Officer (CFO)</h3>
+<span class="text-xs font-label-lg bg-surface-container px-3 py-1 rounded-full text-primary">2018 - Presente</span>
+</div>
+<p class="text-secondary font-semibold text-sm mb-2">Global Dynamics Inc.</p>
+<p class="text-sm text-on-surface-variant">Lideré la reestructuración financiera post-fusión, implementando sistemas ERP basados en IA que redujeron los tiempos de cierre mensual en un 40%.</p>
+</div>
+<!-- Timeline Item 2 -->
+<div class="relative pl-12">
+<div class="absolute left-0 top-1 w-10 h-10 rounded-full bg-white border-2 border-slate-200 flex items-center justify-center z-10 shadow-sm">
+<span class="material-symbols-outlined text-slate-400 text-lg" data-icon="business">business</span>
+</div>
+<div class="flex justify-between items-start mb-1">
+<h3 class="font-headline-sm text-primary font-bold">Director de Estrategia Financiera</h3>
+<span class="text-xs font-label-lg bg-surface-container px-3 py-1 rounded-full text-primary">2012 - 2018</span>
+</div>
+<p class="text-secondary font-semibold text-sm mb-2">NexGen Industrial</p>
+<p class="text-sm text-on-surface-variant">Supervisión de operaciones en 5 países, gestionando un presupuesto anual de $200M y coordinando la salida a bolsa de la división europea.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Side Cards (Col 4) -->
+<div class="md:col-span-4 flex flex-col gap-6">
+<!-- Market Readiness Indicator -->
+<div class="bg-primary-container text-white p-6 rounded-xl shadow-lg relative overflow-hidden">
+<div class="absolute -right-8 -top-8 w-32 h-32 bg-secondary opacity-20 rounded-full"></div>
+<h3 class="font-label-lg text-teal-400 mb-4 uppercase tracking-widest">Market Readiness</h3>
+<div class="flex items-end gap-2 mb-2">
+<span class="text-4xl font-bold font-display-lg">94%</span>
+<span class="text-teal-400 text-sm mb-1 font-semibold flex items-center">
+<span class="material-symbols-outlined text-sm" data-icon="trending_up">trending_up</span> +3% este mes
+                        </span>
+</div>
+<div class="w-full bg-white/20 h-2 rounded-full mb-6">
+<div class="bg-teal-400 h-2 rounded-full" style="width: 94%"></div>
+</div>
+<p class="text-xs text-slate-300 leading-relaxed font-body-sm">Tu perfil está en el top 5% de expertos verificados en transformación financiera digital.</p>
+</div>
+<!-- Verified Badges -->
+<div class="bg-white p-6 rounded-xl border border-slate-100 shadow-[0_4px_20px_rgba(26,43,75,0.08)]">
+<h3 class="font-label-lg text-primary mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary" data-icon="verified" style="font-variation-settings: 'FILL' 1;">verified</span>
+                        Verificación TalentRenew
+                    </h3>
+<div class="grid grid-cols-2 gap-4">
+<div class="flex flex-col items-center p-3 rounded-lg bg-slate-50 text-center">
+<div class="w-12 h-12 bg-gradient-to-br from-yellow-400 to-amber-600 rounded-full mb-2 flex items-center justify-center shadow-md">
+<span class="material-symbols-outlined text-white" data-icon="military_tech">military_tech</span>
+</div>
+<p class="text-[10px] font-bold text-primary">Master Strategist</p>
+</div>
+<div class="flex flex-col items-center p-3 rounded-lg bg-slate-50 text-center">
+<div class="w-12 h-12 bg-gradient-to-br from-teal-400 to-secondary rounded-full mb-2 flex items-center justify-center shadow-md">
+<span class="material-symbols-outlined text-white" data-icon="digital_out_of_home">digital_out_of_home</span>
+</div>
+<p class="text-[10px] font-bold text-primary">Digital Transformation</p>
+</div>
+<div class="flex flex-col items-center p-3 rounded-lg bg-slate-50 text-center">
+<div class="w-12 h-12 bg-gradient-to-br from-slate-400 to-primary rounded-full mb-2 flex items-center justify-center shadow-md">
+<span class="material-symbols-outlined text-white" data-icon="diversity_3">diversity_3</span>
+</div>
+<p class="text-[10px] font-bold text-primary">Hybrid Leadership</p>
+</div>
+<div class="flex flex-col items-center p-3 rounded-lg bg-slate-50 text-center">
+<div class="w-12 h-12 bg-gradient-to-br from-blue-400 to-indigo-600 rounded-full mb-2 flex items-center justify-center shadow-md">
+<span class="material-symbols-outlined text-white" data-icon="shield">shield</span>
+</div>
+<p class="text-[10px] font-bold text-primary">Ethical Governance</p>
+</div>
+</div>
+</div>
+<!-- Availability & Interest -->
+<div class="bg-white p-6 rounded-xl border border-slate-100 shadow-[0_4px_20px_rgba(26,43,75,0.08)]">
+<h3 class="font-label-lg text-primary mb-4 uppercase tracking-widest">Disponibilidad</h3>
+<div class="flex items-center gap-3 mb-6 p-3 bg-secondary-container rounded-lg">
+<span class="material-symbols-outlined text-secondary" data-icon="calendar_today">calendar_today</span>
+<div>
+<p class="text-xs font-bold text-on-secondary-container">Inmediata (Híbrido)</p>
+<p class="text-[10px] text-on-secondary-container opacity-80">Full-time / Fractional CFO</p>
+</div>
+</div>
+<h3 class="font-label-lg text-primary mb-3 uppercase tracking-widest text-[10px]">Sectores de Interés</h3>
+<div class="flex flex-wrap gap-2">
+<span class="text-[11px] px-3 py-1 bg-surface-container rounded-full text-primary font-medium">FinTech</span>
+<span class="text-[11px] px-3 py-1 bg-surface-container rounded-full text-primary font-medium">Clean Energy</span>
+<span class="text-[11px] px-3 py-1 bg-surface-container rounded-full text-primary font-medium">Logistics</span>
+<span class="text-[11px] px-3 py-1 bg-surface-container rounded-full text-primary font-medium">HealthTech</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Skills Matrix Section (Full Width) -->
+<section class="mt-8 bg-white p-8 rounded-xl border border-slate-100 shadow-[0_4px_20px_rgba(26,43,75,0.08)]">
+<div class="flex items-center gap-2 mb-8 text-primary">
+<span class="material-symbols-outlined" data-icon="grid_view">grid_view</span>
+<h2 class="font-headline-md">Skills Matrix</h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+<!-- Traditional Expertise -->
+<div>
+<h3 class="font-label-lg text-primary mb-6 flex items-center justify-between">
+                        Traditional Leadership 
+                        <span class="text-xs text-slate-400 font-normal">Sólida Autoridad</span>
+</h3>
+<div class="space-y-6">
+<div class="group">
+<div class="flex justify-between mb-1 text-sm font-medium">
+<span>P&amp;L Management</span>
+<span class="text-secondary">Expert</span>
+</div>
+<div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[100%]"></div>
+</div>
+</div>
+<div class="group">
+<div class="flex justify-between mb-1 text-sm font-medium">
+<span>Global Compliance</span>
+<span class="text-secondary">Advanced</span>
+</div>
+<div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[90%]"></div>
+</div>
+</div>
+<div class="group">
+<div class="flex justify-between mb-1 text-sm font-medium">
+<span>M&amp;A Strategy</span>
+<span class="text-secondary">Expert</span>
+</div>
+<div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[95%]"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Digital/New Skills -->
+<div>
+<h3 class="font-label-lg text-secondary mb-6 flex items-center justify-between">
+                        New Digital Skills 
+                        <span class="text-xs text-slate-400 font-normal">Agilidad Adaptativa</span>
+</h3>
+<div class="space-y-6">
+<div class="group">
+<div class="flex justify-between mb-1 text-sm font-medium">
+<span>Data Visualization (PowerBI/Tableau)</span>
+<span class="text-teal-600">Verificado</span>
+</div>
+<div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+<div class="bg-secondary h-full w-[85%]"></div>
+</div>
+</div>
+<div class="group">
+<div class="flex justify-between mb-1 text-sm font-medium">
+<span>Blockchain for Finance</span>
+<span class="text-teal-600">Verificado</span>
+</div>
+<div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+<div class="bg-secondary h-full w-[70%]"></div>
+</div>
+</div>
+<div class="group">
+<div class="flex justify-between mb-1 text-sm font-medium">
+<span>Agile Project Management</span>
+<span class="text-teal-600">En Curso</span>
+</div>
+<div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+<div class="bg-secondary h-full w-[60%] opacity-60"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer Anchor -->
+<footer class="w-full py-12 px-8 flex flex-col md:flex-row justify-between items-center gap-6 bg-[#1A2B4B] text-white border-t border-slate-700 mt-20">
+<div class="text-lg font-bold text-teal-400">TalentRenew</div>
+<div class="flex gap-8 text-slate-400 font-['Manrope'] text-xs uppercase tracking-widest">
+<a class="hover:text-white transition-colors" href="#">Institutional</a>
+<a class="hover:text-white transition-colors" href="#">Careers</a>
+<a class="hover:text-white transition-colors" href="#">Privacy Policy</a>
+<a class="hover:text-white transition-colors" href="#">Contact Support</a>
+</div>
+<p class="text-slate-400 text-xs font-['Manrope'] uppercase tracking-widest">© 2024 TalentRenew. Empowering experienced authority and continuous growth.</p>
+</footer>
+</body></html>
