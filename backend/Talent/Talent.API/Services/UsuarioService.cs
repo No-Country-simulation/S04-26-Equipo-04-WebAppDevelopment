@@ -54,7 +54,7 @@ namespace Talent.API.Services
                 Nombre = dto.Nombre,
                 Apellido = dto.Apellido,
                 Email = dto.Email,
-                Contraseña = BCrypt.Net.BCrypt.HashPassword(dto.Contraseña)
+                Password = BCrypt.Net.BCrypt.HashPassword(dto.Password)
             };
 
             var creado = await _repository.CreateAsync(usuario);
@@ -84,9 +84,9 @@ namespace Talent.API.Services
             existente.Email = dto.Email;
 
             // Solo actualizar la contraseña si mandaron una nueva
-            if (!string.IsNullOrEmpty(dto.Contraseña))
+            if (!string.IsNullOrEmpty(dto.Password))
             {
-                existente.Contraseña = BCrypt.Net.BCrypt.HashPassword(dto.Contraseña);
+                existente.Password = BCrypt.Net.BCrypt.HashPassword(dto.Password);
             }
             // Si no mandaron contraseña, se mantiene la que ya tenía
 

@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Talent.API.Entities;
 
 namespace Talent.API.Data
@@ -22,7 +22,7 @@ namespace Talent.API.Data
                 entity.Property(e => e.Nombre).HasColumnName("nombre");
                 entity.Property(e => e.Apellido).HasColumnName("apellido");
                 entity.Property(e => e.Email).HasColumnName("email");
-                entity.Property(e => e.Contraseña).HasColumnName("contraseña");
+                entity.Property(e => e.Password).HasColumnName("contraseña");
             });
         }
     }

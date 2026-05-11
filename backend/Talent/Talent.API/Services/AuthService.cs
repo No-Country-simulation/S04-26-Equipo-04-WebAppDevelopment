@@ -1,4 +1,4 @@
-﻿using System.IdentityModel.Tokens.Jwt;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
@@ -32,7 +32,7 @@ namespace Talent.API.Services
                 Nombre = dto.Nombre,
                 Apellido = dto.Apellido,
                 Email = dto.Email,
-                Contraseña = BCrypt.Net.BCrypt.HashPassword(dto.Contraseña)
+                Password = BCrypt.Net.BCrypt.HashPassword(dto.Password)
             };
 
             var creado = await _repository.CreateAsync(usuario);
@@ -52,7 +52,7 @@ namespace Talent.API.Services
             if (usuario == null) return null;
 
             // Verificar contraseña hasheada
-            if (!BCrypt.Net.BCrypt.Verify(dto.Contraseña, usuario.Contraseña))
+            if (!BCrypt.Net.BCrypt.Verify(dto.Password, usuario.Password))
                 return null;
 
             return new AuthResponseDTO

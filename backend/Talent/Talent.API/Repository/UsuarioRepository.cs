@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Talent.API.Data;
 using Talent.API.Entities;
 
@@ -38,7 +38,7 @@ namespace Talent.API.Repositories
             existente.Nombre = usuario.Nombre;
             existente.Apellido = usuario.Apellido;
             existente.Email = usuario.Email;
-            existente.Contraseña = usuario.Contraseña;
+            existente.Password = usuario.Password;
 
             await _context.SaveChangesAsync();
             return existente;
