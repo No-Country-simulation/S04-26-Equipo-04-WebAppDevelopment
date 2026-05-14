@@ -1,29 +1,47 @@
+import Link from 'next/link';
+import { Logo } from '@/components/Logo';
+import {  MessageCircle } from 'lucide-react';
+
 export default function Footer() {
   return (
-    <footer className="border-t border-primary/20 bg-primary py-10 text-on-primary">
-      <div className="app-container flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
-        <div>
-          <p className="text-lg font-bold text-secondary-fixed">TalentRenew</p>
-          <p className="mt-2 max-w-md text-sm text-white/70">
-            © 2026 TalentRenew. Plataforma para potenciar talento senior y
-            conectar experiencia con oportunidades reales.
-          </p>
+    <footer className="bg-dark-base">
+      <div className="max-w-7xl mx-auto px-8 py-12">
+        <div className="flex items-start justify-between">
+          <div className="text-white">
+            <Logo />
+          </div>
+          <div className="flex gap-8">
+            <Link href="/como-funciona" className="text-[12px] text-text-muted-dark hover:text-text-secondary-dark transition-colors">
+              Cómo funciona
+            </Link>
+            <Link href="/empresas" className="text-[12px] text-text-muted-dark hover:text-text-secondary-dark transition-colors">
+              Para empresas
+            </Link>
+            <Link href="/terminos" className="text-[12px] text-text-muted-dark hover:text-text-secondary-dark transition-colors">
+              Términos
+            </Link>
+            <Link href="/privacidad" className="text-[12px] text-text-muted-dark hover:text-text-secondary-dark transition-colors">
+              Privacidad
+            </Link>
+          </div>
         </div>
 
-        <nav className="flex flex-wrap gap-4 text-xs font-semibold uppercase tracking-wider text-white/70">
-          <a className="hover:text-white" href="#">
-            Institucional
-          </a>
-          <a className="hover:text-white" href="#">
-            Carreras
-          </a>
-          <a className="hover:text-white" href="#">
-            Privacidad
-          </a>
-          <a className="hover:text-white" href="#">
-            Soporte
-          </a>
-        </nav>
+        <div className="border-t border-white/8 mt-8 pt-6 flex items-center justify-between">
+          <p className="text-[12px] text-text-muted-dark">
+            © 2026 TalentRenew · Red de Bienestar Laboral
+          </p>
+          <div className="flex gap-4">
+            {/* <a href="#" className="text-[#4A6480] hover:text-text-secondary-dark transition-colors">
+              <Linkedin size={16} />
+            </a>
+            <a href="#" className="text-[#4A6480] hover:text-text-secondary-dark transition-colors">
+              <Instagram size={16} />
+            </a> */}
+            <a href="#" className="text-[#4A6480] hover:text-text-secondary-dark transition-colors">
+              <MessageCircle size={16} />
+            </a>
+          </div>
+        </div>
       </div>
     </footer>
   );
