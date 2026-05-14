@@ -1,128 +1,111 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f9f9ff;
-  --on-background: #111c2c;
-  --surface: #f9f9ff;
-  --surface-container-low: #f0f3ff;
-  --surface-container: #e7eeff;
-  --surface-container-high: #dee8ff;
-  --primary: #031635;
-  --on-primary: #ffffff;
-  --primary-container: #1a2b4b;
-  --secondary: #156967;
-  --on-secondary: #ffffff;
-  --secondary-container: #a3edea;
-  --on-secondary-container: #1c6d6b;
-  --secondary-fixed: #a6f0ed;
-  --on-surface-variant: #44474e;
-  --outline-variant: #c5c6cf;
-  --radius-sm: 0.5rem;
-  --radius-md: 0.75rem;
-  --radius-lg: 1rem;
-  --container-max: 1280px;
-  --space-mobile: 1rem;
-  --space-desktop: 2rem;
-  --section-y: 5rem;
-  --shadow-soft: 0 4px 20px rgba(26, 43, 75, 0.08);
+  /* TalentRenew Design System */
+
+  /* Brand Colors */
+  --primary-navy: #1E3A5F;
+  --amber-accent: #C98A2A;
+  --dark-base: #0F1E30;
+  --light-bg: #F7F8FA;
+  --white: #FFFFFF;
+  --success-green: #3B7A52;
+  --light-amber: rgba(201, 138, 42, 0.15);
+  --light-navy: rgba(30, 58, 95, 0.6);
+
+  /* Text Colors */
+  --text-primary-dark: #FFFFFF;
+  --text-secondary-dark: #A8C4E0;
+  --text-muted-dark: #7A9DC0;
+  --text-primary-light: #1E3A5F;
+  --text-secondary-light: #6B7A8D;
+
+  /* Borders */
+  --border-dark: rgba(255, 255, 255, 0.08);
+  --border-light: rgba(0, 0, 0, 0.1);
+
+  /* Typography */
+  --font-size: 15px;
+  --font-weight-medium: 500;
+  --font-weight-normal: 400;
+
+  /* Spacing (8px system) */
+  --spacing-1: 4px;
+  --spacing-2: 8px;
+  --spacing-3: 12px;
+  --spacing-4: 16px;
+  --spacing-6: 24px;
+  --spacing-8: 32px;
+  --spacing-12: 48px;
+  --spacing-16: 64px;
+
+  /* Radii */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-pill: 100px;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-on-background: var(--on-background);
-  --color-surface: var(--surface);
-  --color-surface-container-low: var(--surface-container-low);
-  --color-surface-container: var(--surface-container);
-  --color-surface-container-high: var(--surface-container-high);
-  --color-primary: var(--primary);
-  --color-on-primary: var(--on-primary);
-  --color-primary-container: var(--primary-container);
-  --color-secondary: var(--secondary);
-  --color-on-secondary: var(--on-secondary);
-  --color-secondary-container: var(--secondary-container);
-  --color-on-secondary-container: var(--on-secondary-container);
-  --color-secondary-fixed: var(--secondary-fixed);
-  --color-on-surface-variant: var(--on-surface-variant);
-  --color-outline-variant: var(--outline-variant);
-  --font-sans: var(--font-body);
-  --font-heading: var(--font-heading);
+  --color-primary-navy: var(--primary-navy);
+  --color-amber-accent: var(--amber-accent);
+  --color-dark-base: var(--dark-base);
+  --color-light-bg: var(--light-bg);
+  --color-white: var(--white);
+  --color-success-green: var(--success-green);
+  --color-light-amber: var(--light-amber);
+  --color-light-navy: var(--light-navy);
+  --color-text-primary-dark: var(--text-primary-dark);
+  --color-text-secondary-dark: var(--text-secondary-dark);
+  --color-text-muted-dark: var(--text-muted-dark);
+  --color-text-primary-light: var(--text-primary-light);
+  --color-text-secondary-light: var(--text-secondary-light);
+  --color-border-dark: var(--border-dark);
+  --color-border-light: var(--border-light);
 }
 
-body {
-  background: var(--background);
-  color: var(--on-background);
-  font-family: var(--font-body), sans-serif;
-}
+@layer base {
+  * {
+    @apply outline-none;
+  }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-family: var(--font-heading), sans-serif;
-}
+  body {
+    @apply bg-white;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
 
-.app-container {
-  width: min(100% - (var(--space-mobile) * 2), var(--container-max));
-  margin-inline: auto;
-}
+  html {
+    font-size: var(--font-size);
+  }
 
-.section-padding {
-  padding-block: var(--section-y);
-}
+  h1 {
+    font-size: 32px;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    line-height: 1.3;
+  }
 
-.card-elevated {
-  border: 1px solid color-mix(in oklab, var(--outline-variant) 70%, white);
-  border-radius: var(--radius-lg);
-  background: white;
-  box-shadow: var(--shadow-soft);
-}
+  h2 {
+    font-size: 24px;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    line-height: 1.3;
+  }
 
-.badge-soft {
-  display: inline-flex;
-  align-items: center;
-  border-radius: 9999px;
-  padding: 0.35rem 0.85rem;
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--secondary);
-  background: color-mix(in oklab, var(--secondary-fixed) 70%, white);
-}
+  h3 {
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 1.4;
+  }
 
-.btn-primary,
-.btn-secondary {
-  height: 3rem;
-  border-radius: var(--radius-sm);
-  padding-inline: 1.5rem;
-  font-size: 0.9rem;
-  font-weight: 700;
-  transition: all 180ms ease;
-}
+  h4 {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.5;
+  }
 
-.btn-primary {
-  color: var(--on-primary);
-  background: var(--primary);
-}
-
-.btn-primary:hover {
-  transform: translateY(-1px);
-}
-
-.btn-secondary {
-  border: 2px solid var(--secondary);
-  color: var(--secondary);
-  background: transparent;
-}
-
-.btn-secondary:hover {
-  background: color-mix(in oklab, var(--secondary-fixed) 55%, white);
-}
-
-@media (min-width: 768px) {
-  .app-container {
-    width: min(100% - (var(--space-desktop) * 2), var(--container-max));
+  p, body {
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 1.6;
   }
 }
