@@ -4,12 +4,20 @@ Esta carpeta contiene la documentación oficial de los endpoints desarrollados e
 
 ## 🚀 Estado Actual del MVP
 
-Hasta el momento, el Backend tiene implementados y asegurados los siguientes módulos:
+Hasta el momento, el Backend está **desplegado en vivo en Render** y tiene implementados y asegurados los siguientes módulos:
 
 1. **Módulo 0: Autenticación y Seguridad (JWT)** - Registro, Login y Roles.
 2. **Módulo 3: Diagnóstico Profesional** - Cuestionario adaptativo, cálculo de puntajes y radar de habilidades.
 
 *(Nota: Los Módulos 1 y 2 fueron conceptuales, y los Módulos 4 en adelante están en desarrollo).*
+
+## 🌐 Acceso a Swagger (Documentación Viva)
+
+Hemos habilitado **Swagger** en producción para que el equipo de Front pueda ver y probar los endpoints directamente desde el navegador, sin instalar nada.
+
+👉 **Link de Swagger:** [https://s04-26-equipo-04-webappdevelopment.onrender.com/swagger](https://s04-26-equipo-04-webappdevelopment.onrender.com/swagger)
+
+*Importante: Acordate de usar el botón verde "Authorize" en Swagger para pegarle el Token JWT después de loguearte, sino te va a dar error 401 Unauthorized.*
 
 ## ⚙️ Configuración Inicial Sugerida (Axios)
 
@@ -24,8 +32,9 @@ npm install axios
 ```javascript
 import axios from 'axios';
 
-// La URL base donde corre el backend localmente
-const API_URL = 'http://localhost:5187/api'; 
+// Usar variables de entorno en Next.js (.env.local) para separar dev de prod
+// URL de Producción: 'https://s04-26-equipo-04-webappdevelopment.onrender.com/api'
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://s04-26-equipo-04-webappdevelopment.onrender.com/api'; 
 
 export const api = axios.create({
   baseURL: API_URL,
