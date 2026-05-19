@@ -6,5 +6,7 @@ namespace Talent.API.DTO
         public string Apellido { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;
+
+        public string TipoUsuario { get; set; } = "profesional";
     }
 }

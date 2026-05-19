@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Talent.API.DTO;
 using Talent.API.Services;
@@ -45,6 +46,7 @@ namespace Talent.API.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize]
         public async Task<ActionResult<UsuarioResponseDTO>> Update(long id, UpdateUsuarioDTO dto)
         {
             try
@@ -60,6 +62,7 @@ namespace Talent.API.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "admin")]
         public async Task<ActionResult> Delete(long id)
         {
             var eliminado = await _service.DeleteAsync(id);

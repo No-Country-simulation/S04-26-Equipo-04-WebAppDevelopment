@@ -32,7 +32,8 @@ namespace Talent.API.Services
                 Nombre = dto.Nombre,
                 Apellido = dto.Apellido,
                 Email = dto.Email,
-                Password = BCrypt.Net.BCrypt.HashPassword(dto.Password)
+                Password = BCrypt.Net.BCrypt.HashPassword(dto.Password),
+                TipoUsuario = dto.TipoUsuario
             };
 
             var creado = await _repository.CreateAsync(usuario);
@@ -70,7 +71,8 @@ namespace Talent.API.Services
             {
                 new Claim(ClaimTypes.NameIdentifier, usuario.Id.ToString()),
                 new Claim(ClaimTypes.Email, usuario.Email),
-                new Claim(ClaimTypes.Name, usuario.Nombre)
+                new Claim(ClaimTypes.Name, usuario.Nombre),
+                new Claim(ClaimTypes.Role, usuario.TipoUsuario)
             };
 
             var key = new SymmetricSecurityKey(
