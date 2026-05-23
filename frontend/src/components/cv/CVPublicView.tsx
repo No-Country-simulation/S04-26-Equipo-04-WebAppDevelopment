@@ -21,7 +21,7 @@ export default function CVPublicView({ profile }: Props) {
 
         <div className="grid grid-cols-1 gap-6 md:grid-cols-12">
           <div className="space-y-6 md:col-span-8">
-            <article className="rounded-xl border border-slate-100 bg-white p-8 shadow-[0_4px_20px_rgba(26,43,75,0.08)]">
+            <article className="rounded-xl border border-border bg-card p-8 ring-1 ring-foreground/10">
               <h2 className="mb-4 text-2xl font-semibold text-primary">Resumen Ejecutivo</h2>
               <p className="leading-relaxed text-on-surface-variant">
                 {profile.summary.executiveSummary}

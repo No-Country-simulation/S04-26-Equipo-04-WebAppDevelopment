@@ -273,7 +273,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
       <Card
         className={cn(
           "max-h-[90vh] w-full gap-0 overflow-y-auto rounded-b-none py-0 ring-foreground/10 sm:max-w-md sm:rounded-xl",
-          "shadow-[0_4px_20px_rgba(26,43,75,0.08)]",
+          "shadow-[0px_4px_20px_rgba(26,43,75,0.08)]",
         )}
         onPointerDown={(event) => event.stopPropagation()}
       >

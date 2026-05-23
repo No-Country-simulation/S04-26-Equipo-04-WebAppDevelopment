@@ -17,7 +17,7 @@ export default function Navbar() {
 
   return (
     <>
-      <header className="fixed top-0 left-0 z-50 h-16 w-full border-b border-slate-100 bg-white/90 shadow-[0px_4px_20px_rgba(26,43,75,0.08)] backdrop-blur-sm">
+      <header className="fixed top-0 left-0 z-50 h-16 w-full border-b border-border bg-background/90 shadow-[0px_4px_20px_rgba(26,43,75,0.08)] backdrop-blur-sm">
         <div className="mx-auto flex h-full max-w-container-max items-center justify-between px-8">
           <Link
             href="/"
@@ -33,8 +33,8 @@ export default function Navbar() {
                 href={item.href}
                 className={`text-base font-semibold transition ${
                   item.active
-                    ? "border-b-3 border-[#156967] pb-1 text-primary"
-                    : "text-[#475569] hover:text-primary"
+                    ? "border-b-3 border-secondary-700 pb-1 text-primary"
+                    : "text-neutral hover:text-primary"
                 }`}
               >
                 {item.name}

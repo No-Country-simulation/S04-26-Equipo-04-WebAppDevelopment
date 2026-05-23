@@ -14,7 +14,7 @@ export default function HeroSection() {
           <h1 className="font-heading text-5xl/14 text-primary my-6 font-bold tracking-[-0.02em]">
             Tu experiencia es tu mayor valor. Conéctala con el futuro.
           </h1>
-          <p className="text-[#44474E] mb-10 max-w-xl">
+          <p className="mb-10 max-w-xl text-on-surface-variant">
             Plataforma de empleabilidad +45 que une diagnóstico, aprendizaje dinámico y conexión
             real con empresas líderes.
           </p>
@@ -39,7 +39,7 @@ export default function HeroSection() {
             />
             <div className="absolute bottom-6 left-6 max-w-xs rounded-xl border-l-4 border-secondary bg-white/70 p-6 shadow-lg backdrop-blur-md">
               <p className="mb-1 font-heading text-primary">Autoridad valorada</p>
-              <p className="text-[#44474E]">
+              <p className="text-on-surface-variant">
                 Uniendo décadas de trayectoria con la agilidad del mañana.
               </p>
             </div>

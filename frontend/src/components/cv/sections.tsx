@@ -22,7 +22,7 @@ type SectionProps = {
 
 export function ProfileHero({ profile }: SectionProps) {
   return (
-    <section className="relative isolate overflow-hidden rounded-xl border border-slate-100 bg-white shadow-[0_4px_20px_rgba(26,43,75,0.08)]">
+    <section className="relative isolate overflow-hidden rounded-xl border border-border bg-card ring-1 ring-foreground/10">
       <div
         className={`relative z-0 h-24 bg-gradient-to-r ${profile.summary.coverGradient}`}
         aria-hidden
@@ -61,14 +61,14 @@ export function ProfileHero({ profile }: SectionProps) {
             <div className="flex w-full flex-col items-stretch gap-2 sm:w-auto sm:flex-row sm:shrink-0 sm:items-center sm:justify-end sm:gap-3 md:gap-4">
               <button
                 type="button"
-                className="inline-flex h-11 min-w-[10rem] items-center justify-center gap-2 rounded-lg bg-primary-container px-5 text-sm font-semibold text-white shadow-sm transition hover:opacity-95"
+                className="inline-flex h-11 min-w-[10rem] items-center justify-center gap-2 rounded-lg bg-primary px-5 text-sm font-semibold text-primary-foreground shadow-sm transition hover:bg-primary/90"
               >
                 <EnvelopeSimple className="h-4 w-4 shrink-0" weight="bold" />
                 Contactar
               </button>
               <button
                 type="button"
-                className="inline-flex h-11 min-w-[10rem] items-center justify-center whitespace-nowrap rounded-lg border border-outline-variant bg-white px-5 text-sm font-semibold text-primary shadow-sm transition hover:bg-slate-50"
+                className="inline-flex h-11 min-w-[10rem] items-center justify-center whitespace-nowrap rounded-lg border-2 border-secondary bg-transparent px-5 text-sm font-semibold text-secondary shadow-sm transition hover:bg-muted"
               >
                 Exportar CV
               </button>
@@ -82,12 +82,12 @@ export function ProfileHero({ profile }: SectionProps) {
 
 export function EducationSection({ profile }: SectionProps) {
   return (
-    <article className="rounded-xl border border-slate-100 bg-white p-8 shadow-[0_4px_20px_rgba(26,43,75,0.08)]">
+    <article className="rounded-xl border border-border bg-card p-8 ring-1 ring-foreground/10">
       <header className="mb-8 flex items-center gap-2 text-primary">
         <GraduationCap className="h-6 w-6 text-secondary" weight="duotone" />
         <h2 className="text-2xl font-semibold">Formación académica</h2>
       </header>
-      <ul className="space-y-0 divide-y divide-outline-variant/50">
+      <ul className="space-y-0 divide-y divide-border">
         {profile.education.map((item) => (
           <li key={`${item.title}-${item.institution}`} className="flex flex-col gap-1 py-5 first:pt-0">
             <h3 className="text-lg font-bold text-primary">{item.title}</h3>
@@ -102,7 +102,7 @@ export function EducationSection({ profile }: SectionProps) {
 
 export function ExperienceTimeline({ profile }: SectionProps) {
   return (
-    <article className="rounded-xl border border-slate-100 bg-white p-8 shadow-[0_4px_20px_rgba(26,43,75,0.08)]">
+    <article className="rounded-xl border border-border bg-card p-8 ring-1 ring-foreground/10">
       <header className="mb-8 flex items-center gap-2 text-primary">
         <Briefcase className="h-6 w-6 text-secondary" weight="duotone" />
         <h2 className="text-2xl font-semibold">Trayectoria profesional</h2>
@@ -113,7 +113,7 @@ export function ExperienceTimeline({ profile }: SectionProps) {
           <div key={`${item.company}-${item.period}`} className="relative pl-12">
             <div
               className={`absolute left-0 top-1 flex h-10 w-10 items-center justify-center rounded-full border-2 bg-white shadow-sm ${
-                item.isCurrent ? "border-secondary" : "border-outline-variant"
+                item.isCurrent ? "border-secondary" : "border-border"
               }`}
             >
               <Briefcase
@@ -141,7 +141,7 @@ export function SkillsPanel({ profile }: SectionProps) {
   const digital = profile.skills.filter((skill) => skill.category === "digital");
 
   return (
-    <section className="rounded-xl border border-slate-100 bg-white p-8 shadow-[0_4px_20px_rgba(26,43,75,0.08)]">
+    <section className="rounded-xl border border-border bg-card p-8 ring-1 ring-foreground/10">
       <header className="mb-8 flex items-center gap-2 text-primary">
         <Lightning className="h-6 w-6 text-secondary" weight="duotone" />
         <h2 className="text-2xl font-semibold">Matriz de competencias</h2>
@@ -170,7 +170,7 @@ function SkillsColumn({
     <div>
       <h3 className={`mb-6 flex items-center justify-between text-lg font-semibold ${tone === "leadership" ? "text-primary" : "text-secondary"}`}>
         {title}
-        <span className="text-xs font-normal text-slate-400">
+        <span className="text-xs font-normal text-muted-foreground">
           {tone === "leadership" ? "Sólida autoridad" : "Agilidad adaptativa"}
         </span>
       </h3>
@@ -178,7 +178,7 @@ function SkillsColumn({
         {skills.map((skill) => (
           <div key={skill.name}>
             <div className="mb-1 flex items-center justify-between text-sm">
-              <span className="font-medium text-on-background">{skill.name}</span>
+              <span className="font-medium text-foreground">{skill.name}</span>
               <span className={`font-semibold ${levelTone}`}>{skill.levelLabel}</span>
             </div>
             <div className="h-2 w-full overflow-hidden rounded-full bg-surface-container">
@@ -199,12 +199,12 @@ export function HighlightsBadges({ profile }: SectionProps) {
   const badgeGradients = [
     "from-amber-400 to-amber-600",
     "from-teal-400 to-secondary",
-    "from-slate-400 to-primary",
+    "from-neutral to-primary",
     "from-blue-400 to-indigo-600",
   ];
 
   return (
-    <article className="rounded-xl border border-slate-100 bg-white p-6 shadow-[0_4px_20px_rgba(26,43,75,0.08)]">
+    <article className="rounded-xl border border-border bg-card p-6 ring-1 ring-foreground/10">
       <h3 className="mb-6 text-sm font-bold tracking-widest text-primary uppercase">
         Verificación TalentRenew
       </h3>
@@ -212,7 +212,7 @@ export function HighlightsBadges({ profile }: SectionProps) {
         {profile.badges.map((badge, index) => (
           <div
             key={badge.title}
-            className="rounded-lg bg-slate-50 p-3 text-center"
+            className="rounded-lg bg-muted p-3 text-center"
           >
             <div
               className={`mx-auto mb-2 flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br ${badgeGradients[index % badgeGradients.length]} shadow-md`}
@@ -254,7 +254,7 @@ export function ProfileSidebar({ profile }: SectionProps) {
 
       <HighlightsBadges profile={profile} />
 
-      <article className="rounded-xl border border-slate-100 bg-white p-6 shadow-[0_4px_20px_rgba(26,43,75,0.08)]">
+      <article className="rounded-xl border border-border bg-card p-6 ring-1 ring-foreground/10">
         <h3 className="mb-4 text-sm font-bold tracking-widest text-primary uppercase">
           Disponibilidad
         </h3>
@@ -289,10 +289,10 @@ export function ProfileSidebar({ profile }: SectionProps) {
 
 export function ProfileWorkspaceSidebar({ profile }: SectionProps) {
   return (
-    <aside className="fixed left-0 top-16 hidden h-[calc(100vh-4rem)] w-64 flex-col border-r border-slate-200 bg-slate-50 p-4 lg:flex">
+    <aside className="fixed left-0 top-16 hidden h-[calc(100vh-4rem)] w-64 flex-col border-r border-border bg-muted p-4 lg:flex">
       <div className="mb-8 px-3">
         <div className="mb-4 flex items-center gap-3">
-          <div className="h-10 w-10 overflow-hidden rounded-full bg-primary-container">
+          <div className="h-10 w-10 overflow-hidden rounded-full bg-primary">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={profile.summary.avatar}
@@ -302,7 +302,7 @@ export function ProfileWorkspaceSidebar({ profile }: SectionProps) {
           </div>
           <div>
             <p className="text-sm font-bold text-primary">Experto valorado</p>
-            <p className="text-xs text-slate-500">Programa de crecimiento activo</p>
+            <p className="text-xs text-muted-foreground">Programa de crecimiento activo</p>
           </div>
         </div>
       </div>
@@ -322,15 +322,15 @@ export function ProfileWorkspaceSidebar({ profile }: SectionProps) {
         <SidebarItem icon={<TrendUp className="h-5 w-5" weight="duotone" />} label="Progreso" />
       </nav>
 
-      <div className="mt-6 border-t border-slate-200 pt-4">
-        <button className="mb-4 w-full rounded-lg bg-secondary py-3 text-sm font-semibold text-on-secondary">
+      <div className="mt-6 border-t border-border pt-4">
+        <button className="mb-4 w-full rounded-lg bg-secondary py-3 text-sm font-semibold text-primary-foreground">
           Buscar oportunidades
         </button>
-        <button className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-xs text-slate-600 hover:bg-slate-100">
+        <button className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-xs text-muted-foreground hover:bg-background">
           <SlidersHorizontal className="h-4 w-4" weight="duotone" />
           Ajustes
         </button>
-        <button className="mt-1 flex w-full items-center gap-2 rounded-lg px-3 py-2 text-xs text-slate-600 hover:bg-slate-100">
+        <button className="mt-1 flex w-full items-center gap-2 rounded-lg px-3 py-2 text-xs text-muted-foreground hover:bg-background">
           <Lifebuoy className="h-4 w-4" weight="duotone" />
           Soporte
         </button>
@@ -352,8 +352,8 @@ function SidebarItem({
     <button
       className={`flex w-full items-center gap-3 rounded-lg px-4 py-3 text-left text-sm tracking-wide ${
         active
-          ? "bg-teal-50 font-semibold text-teal-700"
-          : "text-slate-600 transition hover:translate-x-1 hover:bg-slate-100"
+          ? "bg-secondary-container font-semibold text-on-secondary-container"
+          : "text-muted-foreground transition hover:translate-x-1 hover:bg-background"
       }`}
     >
       {icon}
