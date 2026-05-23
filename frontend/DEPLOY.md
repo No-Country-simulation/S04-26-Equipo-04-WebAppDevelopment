@@ -26,7 +26,7 @@
 
 ## Rama sugerida
 
-Despliega **`main`**: landing del equipo (`develop`) + auth/CV integrados. Los cambios de diseño nuevos entran por merge desde `develop` (ver `TRABAJO-EQUIPO.md`).
+Despliega **`main`**: landing ámbar de Scarlet + auth/CV (ver `TRABAJO-EQUIPO.md`).
 
 ## Comprobar antes de desplegar
 
