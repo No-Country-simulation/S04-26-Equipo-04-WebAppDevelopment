@@ -17,31 +17,37 @@ export default function Navbar() {
 
   return (
     <>
-      <header className="fixed top-0 left-0 z-50 h-16 w-full border-b border-border bg-background/90 shadow-[0px_4px_20px_rgba(26,43,75,0.08)] backdrop-blur-sm">
-        <div className="mx-auto flex h-full max-w-container-max items-center justify-between px-8">
+      <header className="fixed top-0 left-0 z-50 flex h-16 w-full items-center justify-between border-b border-slate-100 bg-white/90 px-8 shadow-[0px_4px_20px_rgba(26,43,75,0.08)] backdrop-blur-md">
+        <Link
+          href="/"
+          className="font-heading text-xl font-black tracking-tight text-[#1A2B4B]"
+        >
+          TalentRenew
+        </Link>
+
+        <nav className="hidden items-center gap-8 md:flex">
+          {navItems.map((item) => (
+            <Link
+              key={item.name}
+              href={item.href}
+              className={`text-base font-semibold transition ${
+                item.active
+                  ? "border-b-2 border-secondary pb-1 font-bold text-[#1A2B4B]"
+                  : "font-medium text-slate-600 hover:text-secondary"
+              }`}
+            >
+              {item.name}
+            </Link>
+          ))}
+        </nav>
+
+        <div className="flex items-center gap-3">
           <Link
-            href="/"
-            className="font-heading text-xl font-extrabold tracking-tight text-primary"
+            href="/diseno"
+            className="hidden text-sm font-medium text-slate-600 hover:text-secondary sm:inline"
           >
-            TalentRenew
+            Ver prototipo
           </Link>
-
-          <nav className="hidden items-center gap-8 md:flex">
-            {navItems.map((item) => (
-              <Link
-                key={item.name}
-                href={item.href}
-                className={`text-base font-semibold transition ${
-                  item.active
-                    ? "border-b-3 border-secondary-700 pb-1 text-primary"
-                    : "text-neutral hover:text-primary"
-                }`}
-              >
-                {item.name}
-              </Link>
-            ))}
-          </nav>
-
           <Button type="button" onClick={() => setIsLoginOpen(true)}>
             Iniciar sesión
           </Button>

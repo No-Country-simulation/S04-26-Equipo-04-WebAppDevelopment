@@ -1,9 +1,15 @@
 import HeroSection from "@/components/sections/HeroSection";
+import ProblemSection from "@/components/sections/ProblemSection";
 
 /**
- * Landing del equipo (rama develop): Hero con shadcn está maquetado.
- * El resto de secciones en `components/sections/` son stubs; descomentar cuando el equipo las termine.
+ * Landing basada en el prototipo del equipo (`public/prototipo/prototipo.html`).
+ * Vista HTML completa del diseño: abrir /prototipo/prototipo.html en el navegador.
  */
 export default function Home() {
-  return <HeroSection />;
+  return (
+    <div className="p-8">
+      <HeroSection />
+      <ProblemSection />
+    </div>
+  );
 }
