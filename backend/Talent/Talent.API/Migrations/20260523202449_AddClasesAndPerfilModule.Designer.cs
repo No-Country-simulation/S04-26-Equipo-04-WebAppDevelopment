@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Talent.API.Data;
@@ -11,9 +12,11 @@ using Talent.API.Data;
 namespace Talent.API.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260523202449_AddClasesAndPerfilModule")]
+    partial class AddClasesAndPerfilModule
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -377,53 +380,6 @@ namespace Talent.API.Migrations
                     b.ToTable("perfil_skills");
                 });
 
-            modelBuilder.Entity("Talent.API.Entities.Postulacion", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasColumnName("id_postulacion");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
-
-                    b.Property<string>("EstadoSeleccion")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("character varying(20)")
-                        .HasColumnName("estado_seleccion");
-
-                    b.Property<DateTime>("FechaAplicacion")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("fecha_aplicacion");
-
-                    b.Property<DateTime?>("FechaFeedback")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("fecha_feedback");
-
-                    b.Property<string>("FeedbackEmpresa")
-                        .HasMaxLength(300)
-                        .HasColumnType("character varying(300)")
-                        .HasColumnName("feedback_empresa");
-
-                    b.Property<long>("UsuarioId")
-                        .HasColumnType("bigint")
-                        .HasColumnName("id_usuario");
-
-                    b.Property<long>("VacanteId")
-                        .HasColumnType("bigint")
-                        .HasColumnName("id_vacante");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("VacanteId");
-
-                    b.HasIndex("UsuarioId", "VacanteId")
-                        .IsUnique()
-                        .HasDatabaseName("IX_postulaciones_usuario_vacante_unique");
-
-                    b.ToTable("postulaciones");
-                });
-
             modelBuilder.Entity("Talent.API.Entities.PreguntaDiagnostico", b =>
                 {
                     b.Property<long>("Id")
@@ -721,98 +677,6 @@ namespace Talent.API.Migrations
                     b.ToTable("usuarios", (string)null);
                 });
 
-            modelBuilder.Entity("Talent.API.Entities.Vacante", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasColumnName("id_vacante");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
-
-                    b.Property<string>("Descripcion")
-                        .IsRequired()
-                        .HasMaxLength(2000)
-                        .HasColumnType("character varying(2000)")
-                        .HasColumnName("descripcion");
-
-                    b.Property<long>("EmpresaId")
-                        .HasColumnType("bigint")
-                        .HasColumnName("id_empresa");
-
-                    b.Property<string>("Estado")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("character varying(20)")
-                        .HasColumnName("estado");
-
-                    b.Property<DateTime>("FechaPublicacion")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("fecha_publicacion");
-
-                    b.Property<string>("Modalidad")
-                        .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("character varying(30)")
-                        .HasColumnName("modalidad");
-
-                    b.Property<string>("RangoSalarial")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)")
-                        .HasColumnName("rango_salarial");
-
-                    b.Property<string>("Titulo")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
-                        .HasColumnName("titulo");
-
-                    b.Property<string>("Ubicacion")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
-                        .HasColumnName("ubicacion");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EmpresaId");
-
-                    b.ToTable("vacantes");
-                });
-
-            modelBuilder.Entity("Talent.API.Entities.VacanteSkill", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
-
-                    b.Property<string>("NivelRequerido")
-                        .IsRequired()
-                        .HasMaxLength(15)
-                        .HasColumnType("character varying(15)")
-                        .HasColumnName("nivel_requerido");
-
-                    b.Property<long>("SkillId")
-                        .HasColumnType("bigint")
-                        .HasColumnName("id_skill");
-
-                    b.Property<long>("VacanteId")
-                        .HasColumnType("bigint")
-                        .HasColumnName("id_vacante");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SkillId");
-
-                    b.HasIndex("VacanteId");
-
-                    b.ToTable("vacante_skills");
-                });
-
             modelBuilder.Entity("Talent.API.Entities.Clase", b =>
                 {
                     b.HasOne("Talent.API.Entities.Modulo", "Modulo")
@@ -915,25 +779,6 @@ namespace Talent.API.Migrations
                     b.Navigation("Perfil");
 
                     b.Navigation("Skill");
-                });
-
-            modelBuilder.Entity("Talent.API.Entities.Postulacion", b =>
-                {
-                    b.HasOne("Talent.API.Entities.Usuario", "Usuario")
-                        .WithMany()
-                        .HasForeignKey("UsuarioId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Talent.API.Entities.Vacante", "Vacante")
-                        .WithMany()
-                        .HasForeignKey("VacanteId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Usuario");
-
-                    b.Navigation("Vacante");
                 });
 
             modelBuilder.Entity("Talent.API.Entities.PreguntaDiagnostico", b =>
@@ -1061,36 +906,6 @@ namespace Talent.API.Migrations
                     b.Navigation("Categoria");
                 });
 
-            modelBuilder.Entity("Talent.API.Entities.Vacante", b =>
-                {
-                    b.HasOne("Talent.API.Entities.Usuario", "Empresa")
-                        .WithMany()
-                        .HasForeignKey("EmpresaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Empresa");
-                });
-
-            modelBuilder.Entity("Talent.API.Entities.VacanteSkill", b =>
-                {
-                    b.HasOne("Talent.API.Entities.Skill", "Skill")
-                        .WithMany()
-                        .HasForeignKey("SkillId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Talent.API.Entities.Vacante", "Vacante")
-                        .WithMany("VacanteSkills")
-                        .HasForeignKey("VacanteId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Skill");
-
-                    b.Navigation("Vacante");
-                });
-
             modelBuilder.Entity("Talent.API.Entities.CategoriaSkill", b =>
                 {
                     b.Navigation("Skills");
@@ -1128,11 +943,6 @@ namespace Talent.API.Migrations
             modelBuilder.Entity("Talent.API.Entities.RutaAprendizaje", b =>
                 {
                     b.Navigation("Progresos");
-                });
-
-            modelBuilder.Entity("Talent.API.Entities.Vacante", b =>
-                {
-                    b.Navigation("VacanteSkills");
                 });
 #pragma warning restore 612, 618
         }

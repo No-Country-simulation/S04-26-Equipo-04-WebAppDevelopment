@@ -20,11 +20,23 @@ namespace Talent.API.Data
         public DbSet<RespuestaDiagnostico> RespuestasDiagnostico { get; set; }
         public DbSet<ResultadoDiagnostico> ResultadosDiagnostico { get; set; }
 
-        // Rutas de Aprendizaje
+        // Rutas de Aprendizaje y Clases
         public DbSet<Modulo> Modulos { get; set; }
         public DbSet<ModuloSkill> ModuloSkills { get; set; }
         public DbSet<RutaAprendizaje> RutasAprendizaje { get; set; }
         public DbSet<ProgresoModulo> ProgresosModulo { get; set; }
+        public DbSet<Clase> Clases { get; set; }
+        public DbSet<ProgresoClase> ProgresosClase { get; set; }
+
+        // Perfil Dinámico (CV Vivo)
+        public DbSet<Perfil> Perfiles { get; set; }
+        public DbSet<PerfilSkill> PerfilSkills { get; set; }
+        public DbSet<Experiencia> Experiencias { get; set; }
+
+        // Vacantes y Matching
+        public DbSet<Vacante> Vacantes { get; set; }
+        public DbSet<VacanteSkill> VacanteSkills { get; set; }
+        public DbSet<Postulacion> Postulaciones { get; set; }
 
         // Este método le dice a EF cómo mapear tu clase a la tabla real
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -168,6 +180,160 @@ namespace Talent.API.Data
                     .WithMany()
                     .HasForeignKey(d => d.ModuloId)
                     .OnDelete(DeleteBehavior.Restrict);
+            });
+
+            modelBuilder.Entity<Clase>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Id).HasColumnName("id_clase");
+                entity.Property(e => e.ModuloId).HasColumnName("id_modulo");
+                entity.Property(e => e.Titulo).HasColumnName("titulo");
+                entity.Property(e => e.Descripcion).HasColumnName("descripcion");
+                entity.Property(e => e.VideoUrl).HasColumnName("video_url");
+                entity.Property(e => e.ContenidoTexto).HasColumnName("contenido_texto");
+                entity.Property(e => e.Orden).HasColumnName("orden");
+                entity.Property(e => e.Activa).HasColumnName("activa");
+
+                entity.HasOne(d => d.Modulo)
+                    .WithMany()
+                    .HasForeignKey(d => d.ModuloId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            modelBuilder.Entity<ProgresoClase>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Id).HasColumnName("id_progreso_clase");
+                entity.Property(e => e.ProgresoModuloId).HasColumnName("id_progreso_modulo");
+                entity.Property(e => e.ClaseId).HasColumnName("id_clase");
+                entity.Property(e => e.Completado).HasColumnName("completado");
+                entity.Property(e => e.FechaCompletado).HasColumnName("fecha_completado");
+
+                entity.HasOne(d => d.ProgresoModulo)
+                    .WithMany(p => p.ProgresosClase)
+                    .HasForeignKey(d => d.ProgresoModuloId)
+                    .OnDelete(DeleteBehavior.Cascade);
+                entity.HasOne(d => d.Clase)
+                    .WithMany()
+                    .HasForeignKey(d => d.ClaseId)
+                    .OnDelete(DeleteBehavior.Restrict);
+            });
+
+            modelBuilder.Entity<Perfil>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Id).HasColumnName("id_perfil");
+                entity.Property(e => e.UsuarioId).HasColumnName("id_usuario");
+                entity.Property(e => e.Titular).HasColumnName("titular");
+                entity.Property(e => e.Biografia).HasColumnName("biografia");
+                entity.Property(e => e.UrlLinkedin).HasColumnName("url_linkedin");
+                entity.Property(e => e.VisibleMarketplace).HasColumnName("visible_marketplace");
+
+                entity.HasOne(d => d.Usuario)
+                    .WithMany()
+                    .HasForeignKey(d => d.UsuarioId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            modelBuilder.Entity<PerfilSkill>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Id).HasColumnName("id");
+                entity.Property(e => e.PerfilId).HasColumnName("id_perfil");
+                entity.Property(e => e.SkillId).HasColumnName("id_skill");
+                entity.Property(e => e.Origen).HasColumnName("origen");
+                entity.Property(e => e.Nivel).HasColumnName("nivel");
+                entity.Property(e => e.Validada).HasColumnName("validada");
+
+                entity.HasOne(d => d.Perfil)
+                    .WithMany(p => p.PerfilSkills)
+                    .HasForeignKey(d => d.PerfilId)
+                    .OnDelete(DeleteBehavior.Cascade);
+                entity.HasOne(d => d.Skill)
+                    .WithMany()
+                    .HasForeignKey(d => d.SkillId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            modelBuilder.Entity<Experiencia>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Id).HasColumnName("id_experiencia");
+                entity.Property(e => e.PerfilId).HasColumnName("id_perfil");
+                entity.Property(e => e.Empresa).HasColumnName("empresa");
+                entity.Property(e => e.Cargo).HasColumnName("cargo");
+                entity.Property(e => e.FechaInicio).HasColumnName("fecha_inicio");
+                entity.Property(e => e.FechaFin).HasColumnName("fecha_fin");
+                entity.Property(e => e.Descripcion).HasColumnName("descripcion");
+
+                entity.HasOne(d => d.Perfil)
+                    .WithMany(p => p.Experiencias)
+                    .HasForeignKey(d => d.PerfilId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            modelBuilder.Entity<Vacante>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Id).HasColumnName("id_vacante");
+                entity.Property(e => e.EmpresaId).HasColumnName("id_empresa");
+                entity.Property(e => e.Titulo).HasColumnName("titulo");
+                entity.Property(e => e.Descripcion).HasColumnName("descripcion");
+                entity.Property(e => e.Ubicacion).HasColumnName("ubicacion");
+                entity.Property(e => e.Modalidad).HasColumnName("modalidad");
+                entity.Property(e => e.RangoSalarial).HasColumnName("rango_salarial");
+                entity.Property(e => e.Estado).HasColumnName("estado");
+                entity.Property(e => e.FechaPublicacion).HasColumnName("fecha_publicacion");
+
+                entity.HasOne(d => d.Empresa)
+                    .WithMany()
+                    .HasForeignKey(d => d.EmpresaId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            modelBuilder.Entity<VacanteSkill>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Id).HasColumnName("id");
+                entity.Property(e => e.VacanteId).HasColumnName("id_vacante");
+                entity.Property(e => e.SkillId).HasColumnName("id_skill");
+                entity.Property(e => e.NivelRequerido).HasColumnName("nivel_requerido");
+
+                entity.HasOne(d => d.Vacante)
+                    .WithMany(p => p.VacanteSkills)
+                    .HasForeignKey(d => d.VacanteId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne(d => d.Skill)
+                    .WithMany()
+                    .HasForeignKey(d => d.SkillId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            modelBuilder.Entity<Postulacion>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Id).HasColumnName("id_postulacion");
+                entity.Property(e => e.UsuarioId).HasColumnName("id_usuario");
+                entity.Property(e => e.VacanteId).HasColumnName("id_vacante");
+                entity.Property(e => e.FechaAplicacion).HasColumnName("fecha_aplicacion");
+                entity.Property(e => e.EstadoSeleccion).HasColumnName("estado_seleccion");
+                entity.Property(e => e.FeedbackEmpresa).HasColumnName("feedback_empresa");
+                entity.Property(e => e.FechaFeedback).HasColumnName("fecha_feedback");
+
+                entity.HasOne(d => d.Usuario)
+                    .WithMany()
+                    .HasForeignKey(d => d.UsuarioId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne(d => d.Vacante)
+                    .WithMany()
+                    .HasForeignKey(d => d.VacanteId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasIndex(e => new { e.UsuarioId, e.VacanteId })
+                    .IsUnique()
+                    .HasDatabaseName("IX_postulaciones_usuario_vacante_unique");
             });
         }
     }

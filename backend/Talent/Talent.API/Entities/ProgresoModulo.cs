@@ -33,5 +33,7 @@ namespace Talent.API.Entities
 
         [ForeignKey("ModuloId")]
         public Modulo Modulo { get; set; } = null!;
+
+        public ICollection<ProgresoClase> ProgresosClase { get; set; } = new List<ProgresoClase>();
     }
 }

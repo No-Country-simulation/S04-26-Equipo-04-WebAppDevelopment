@@ -58,6 +58,17 @@ builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IDiagnosticoRepository, DiagnosticoRepository>();
 builder.Services.AddScoped<IDiagnosticoService, DiagnosticoService>();
+builder.Services.AddScoped<IModuloRepository, ModuloRepository>();
+builder.Services.AddScoped<IRutaAprendizajeRepository, RutaAprendizajeRepository>();
+builder.Services.AddScoped<IPerfilRepository, PerfilRepository>();
+builder.Services.AddScoped<IVacanteRepository, VacanteRepository>();
+builder.Services.AddScoped<IModuloService, ModuloService>();
+builder.Services.AddScoped<IRutaAprendizajeService, RutaAprendizajeService>();
+builder.Services.AddScoped<IPerfilService, PerfilService>();
+builder.Services.AddScoped<IVacanteService, VacanteService>();
+builder.Services.AddScoped<IMatchService, MatchService>();
+builder.Services.AddScoped<IPostulacionRepository, PostulacionRepository>();
+builder.Services.AddScoped<IPostulacionService, PostulacionService>();
 
 
 var app = builder.Build();

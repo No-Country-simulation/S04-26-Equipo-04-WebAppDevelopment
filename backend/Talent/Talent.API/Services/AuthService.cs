@@ -12,11 +12,13 @@ namespace Talent.API.Services
     {
         private readonly IUsuarioRepository _repository;
         private readonly IConfiguration _config;
+        private readonly IPerfilRepository _perfilRepository;
 
-        public AuthService(IUsuarioRepository repository, IConfiguration config)
+        public AuthService(IUsuarioRepository repository, IConfiguration config, IPerfilRepository perfilRepository)
         {
             _repository = repository;
             _config = config;
+            _perfilRepository = perfilRepository;
         }
 
         public async Task<AuthResponseDTO> RegisterAsync(RegisterDTO dto)
@@ -26,6 +28,13 @@ namespace Talent.API.Services
             if (existente != null)
                 throw new Exception("El email ya está registrado");
 
+            // Validar rol
+            var rol = (dto.TipoUsuario ?? string.Empty).ToLower().Trim();
+            if (rol != "profesional" && rol != "empresa")
+            {
+                throw new Exception("El tipo de usuario especificado no es válido (solo 'profesional' o 'empresa').");
+            }
+
             // Crear el usuario con contraseña hasheada
             var usuario = new Usuario
             {
@@ -33,10 +42,20 @@ namespace Talent.API.Services
                 Apellido = dto.Apellido,
                 Email = dto.Email,
                 Password = BCrypt.Net.BCrypt.HashPassword(dto.Password),
-                TipoUsuario = dto.TipoUsuario
+                TipoUsuario = rol
             };
 
             var creado = await _repository.CreateAsync(usuario);
+
+            // Crear perfil profesional básico si el tipo de usuario es "profesional"
+            if (creado.TipoUsuario == "profesional")
+            {
+                await _perfilRepository.CreatePerfilAsync(new Perfil
+                {
+                    UsuarioId = creado.Id,
+                    VisibleMarketplace = false
+                });
+            }
 
             return new AuthResponseDTO
             {
