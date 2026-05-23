@@ -1,5 +1,7 @@
 "use client";
 
+import type { UserAccountType } from "@/lib/auth-types";
+
 export type AuthMode = "login" | "register";
 
 export type LoginPayload = {
@@ -12,6 +14,7 @@ export type RegisterPayload = {
   lastName: string;
   email: string;
   password: string;
+  accountType?: UserAccountType;
 };
 
 type GoogleAuthPayload = {
@@ -75,6 +78,7 @@ export async function registerRequest(payload: RegisterPayload) {
     Apellido: payload.lastName,
     Email: payload.email,
     Contraseña: payload.password,
+    TipoUsuario: payload.accountType ?? "profesional",
   };
   return postAuth<typeof backendPayload, AuthResponse>("/api/Auth/register", backendPayload);
 }

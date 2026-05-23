@@ -82,7 +82,7 @@ frontend/
 
 Flujo actual:
 
-- Modal unificado de acceso en `src/components/auth/LoginModal.tsx`.
+- Página de acceso en `/login` (`AccesoPanel`: persona vs empresa, modo demo).
 - Modo `login` y `register` en mismo componente.
 - Boton Google en ambos modos.
 - No hay dependencia directa de backend framework; solo `fetch`.

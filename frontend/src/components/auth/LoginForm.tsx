@@ -6,17 +6,21 @@ import Link from "next/link";
 
 import { Button } from "@/components/Button";
 import { Input } from "@/components/Input";
-import { loginRequest, type LoginPayload } from "@/lib/auth-client";
+import { loginWithFallback, demoSocialAuth } from "@/lib/auth-actions";
+import type { LoginPayload } from "@/lib/auth-client";
 import { saveAuthSession } from "@/lib/auth-session";
+import type { UserAccountType } from "@/lib/auth-types";
 import { GoogleIcon, LinkedInIcon } from "@/components/auth/auth-icons";
 
 type LoginFormProps = {
+  accountType: UserAccountType;
   onSuccess?: () => void;
   onSwitchToRegister?: () => void;
   showRegisterLink?: boolean;
 };
 
 export function LoginForm({
+  accountType,
   onSuccess,
   onSwitchToRegister,
   showRegisterLink = true,
@@ -26,22 +30,30 @@ export function LoginForm({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
+  const completeAuth = () => {
+    onSuccess?.();
+  };
+
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setErrorMessage(null);
     setIsSubmitting(true);
 
     try {
-      const response = await loginRequest(data);
-      if (response) {
-        saveAuthSession(response);
-      }
-      onSuccess?.();
+      const { response, demoMode } = await loginWithFallback(data, accountType);
+      saveAuthSession(response, { tipoUsuario: accountType, demoMode });
+      completeAuth();
     } catch (error) {
       setErrorMessage(error instanceof Error ? error.message : "No se pudo iniciar sesión.");
     } finally {
       setIsSubmitting(false);
     }
+  };
+
+  const handleSocialDemo = (provider: "google" | "linkedin") => {
+    const { response, demoMode } = demoSocialAuth(accountType, provider);
+    saveAuthSession(response, { tipoUsuario: accountType, demoMode });
+    completeAuth();
   };
 
   return (
@@ -61,7 +73,7 @@ export function LoginForm({
           type="email"
           name="email"
           autoComplete="email"
-          placeholder="tu@email.com"
+          placeholder={accountType === "empresa" ? "tu@empresa.com" : "tu@email.com"}
           value={data.email}
           onChange={(e) => setData((prev) => ({ ...prev, email: e.target.value }))}
           required
@@ -102,7 +114,7 @@ export function LoginForm({
         type="button"
         variant="ghost"
         className="w-full mb-3"
-        onClick={() => setErrorMessage("Google login en backend todavía no disponible.")}
+        onClick={() => handleSocialDemo("google")}
       >
         <GoogleIcon />
         Continuar con Google
@@ -111,7 +123,7 @@ export function LoginForm({
         type="button"
         variant="ghost"
         className="w-full mb-6"
-        onClick={() => setErrorMessage("LinkedIn login en backend todavía no disponible.")}
+        onClick={() => handleSocialDemo("linkedin")}
       >
         <LinkedInIcon />
         Continuar con LinkedIn
@@ -129,7 +141,7 @@ export function LoginForm({
               Crear cuenta
             </button>
           ) : (
-            <Link href="/register" className="text-amber-accent hover:underline font-medium">
+            <Link href="/login?tab=register" className="text-amber-accent hover:underline font-medium">
               Crear cuenta
             </Link>
           )}

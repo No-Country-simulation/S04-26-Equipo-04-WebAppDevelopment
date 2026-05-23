@@ -6,8 +6,9 @@ import Link from "next/link";
 
 import { Button } from "@/components/Button";
 import { Input } from "@/components/Input";
-import { registerRequest } from "@/lib/auth-client";
+import { registerProfessionalWithFallback, demoSocialAuth } from "@/lib/auth-actions";
 import { saveAuthSession } from "@/lib/auth-session";
+import type { UserAccountType } from "@/lib/auth-types";
 import { GoogleIcon, LinkedInIcon } from "@/components/auth/auth-icons";
 
 type RegisterFormProps = {
@@ -21,6 +22,7 @@ export function RegisterForm({
   onSwitchToLogin,
   showLoginLink = true,
 }: RegisterFormProps) {
+  const accountType: UserAccountType = "profesional";
   const [name, setName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -42,21 +44,25 @@ export function RegisterForm({
     setIsSubmitting(true);
 
     try {
-      const response = await registerRequest({
+      const { response, demoMode } = await registerProfessionalWithFallback({
         name: name.trim(),
         lastName: lastName.trim(),
         email: email.trim(),
         password,
       });
-      if (response) {
-        saveAuthSession(response);
-      }
+      saveAuthSession(response, { tipoUsuario: accountType, demoMode });
       onSuccess?.();
     } catch (error) {
       setErrorMessage(error instanceof Error ? error.message : "No se pudo crear la cuenta.");
     } finally {
       setIsSubmitting(false);
     }
+  };
+
+  const handleSocialDemo = (provider: "google" | "linkedin") => {
+    const { response, demoMode } = demoSocialAuth(accountType, provider);
+    saveAuthSession(response, { tipoUsuario: accountType, demoMode });
+    onSuccess?.();
   };
 
   return (
@@ -76,21 +82,11 @@ export function RegisterForm({
         <div className="h-[0.5px] bg-black/10 flex-1" />
       </div>
 
-      <Button
-        type="button"
-        variant="ghost"
-        className="w-full mb-3"
-        onClick={() => setErrorMessage("Google login en backend todavía no disponible.")}
-      >
+      <Button type="button" variant="ghost" className="w-full mb-3" onClick={() => handleSocialDemo("google")}>
         <GoogleIcon />
         Continuar con Google
       </Button>
-      <Button
-        type="button"
-        variant="ghost"
-        className="w-full mb-4"
-        onClick={() => setErrorMessage("LinkedIn login en backend todavía no disponible.")}
-      >
+      <Button type="button" variant="ghost" className="w-full mb-4" onClick={() => handleSocialDemo("linkedin")}>
         <LinkedInIcon />
         Continuar con LinkedIn
       </Button>

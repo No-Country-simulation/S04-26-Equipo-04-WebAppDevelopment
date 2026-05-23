@@ -43,7 +43,7 @@ export default function LandingPage() {
               Comenzar mi diagnóstico <ArrowRight className="h-4 w-4" />
             </Button>
           </Link>
-          <Link href="/company/register">
+          <Link href="/login?tab=register&tipo=empresa">
             <Button variant="secondary">
               <Briefcase className="h-4 w-4" />
               Buscar talento senior
