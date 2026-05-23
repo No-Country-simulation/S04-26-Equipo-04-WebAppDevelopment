@@ -6,21 +6,18 @@ import Link from "next/link";
 
 import { Button } from "@/components/Button";
 import { Input } from "@/components/Input";
-import { loginWithFallback, demoSocialAuth } from "@/lib/auth-actions";
+import { SocialAuthButtons } from "@/components/auth/SocialAuthButtons";
+import { loginWithFallback } from "@/lib/auth-actions";
 import type { LoginPayload } from "@/lib/auth-client";
 import { saveAuthSession } from "@/lib/auth-session";
-import type { UserAccountType } from "@/lib/auth-types";
-import { GoogleIcon, LinkedInIcon } from "@/components/auth/auth-icons";
 
 type LoginFormProps = {
-  accountType: UserAccountType;
   onSuccess?: () => void;
   onSwitchToRegister?: () => void;
   showRegisterLink?: boolean;
 };
 
 export function LoginForm({
-  accountType,
   onSuccess,
   onSwitchToRegister,
   showRegisterLink = true,
@@ -40,20 +37,14 @@ export function LoginForm({
     setIsSubmitting(true);
 
     try {
-      const { response, demoMode } = await loginWithFallback(data, accountType);
-      saveAuthSession(response, { tipoUsuario: accountType, demoMode });
+      const { response, demoMode } = await loginWithFallback(data);
+      saveAuthSession(response, { tipoUsuario: "profesional", demoMode });
       completeAuth();
     } catch (error) {
       setErrorMessage(error instanceof Error ? error.message : "No se pudo iniciar sesión.");
     } finally {
       setIsSubmitting(false);
     }
-  };
-
-  const handleSocialDemo = (provider: "google" | "linkedin") => {
-    const { response, demoMode } = demoSocialAuth(accountType, provider);
-    saveAuthSession(response, { tipoUsuario: accountType, demoMode });
-    completeAuth();
   };
 
   return (
@@ -67,13 +58,13 @@ export function LoginForm({
         </p>
       ) : null}
 
-      <form className="space-y-3 mb-6" onSubmit={handleSubmit}>
+      <form className="space-y-3 mb-2" onSubmit={handleSubmit}>
         <Input
           label="Correo electrónico"
           type="email"
           name="email"
           autoComplete="email"
-          placeholder={accountType === "empresa" ? "tu@empresa.com" : "tu@email.com"}
+          placeholder="tu@email.com"
           value={data.email}
           onChange={(e) => setData((prev) => ({ ...prev, email: e.target.value }))}
           required
@@ -104,30 +95,7 @@ export function LoginForm({
         </Button>
       </form>
 
-      <div className="flex items-center gap-3 mb-4">
-        <div className="h-[0.5px] bg-black/10 flex-1" />
-        <span className="text-[12px] text-text-secondary-light">o continuá con</span>
-        <div className="h-[0.5px] bg-black/10 flex-1" />
-      </div>
-
-      <Button
-        type="button"
-        variant="ghost"
-        className="w-full mb-3"
-        onClick={() => handleSocialDemo("google")}
-      >
-        <GoogleIcon />
-        Continuar con Google
-      </Button>
-      <Button
-        type="button"
-        variant="ghost"
-        className="w-full mb-6"
-        onClick={() => handleSocialDemo("linkedin")}
-      >
-        <LinkedInIcon />
-        Continuar con LinkedIn
-      </Button>
+      <SocialAuthButtons onSuccess={completeAuth} />
 
       {showRegisterLink ? (
         <p className="text-center text-[13px] text-text-secondary-light">

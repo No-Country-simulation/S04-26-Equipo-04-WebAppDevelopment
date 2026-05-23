@@ -11,8 +11,7 @@ import { RegisterForm } from "@/components/auth/RegisterForm";
 import { Card } from "@/components/Card";
 import type { AuthTab } from "@/lib/auth-types";
 import type { UserAccountType } from "@/lib/auth-types";
-import { getPostAuthPath } from "@/lib/auth-session";
-import { usesDemoByDefault } from "@/lib/auth-demo";
+import { getAccountType, getPostAuthPath } from "@/lib/auth-session";
 
 function parseTab(value: string | null): AuthTab {
   return value === "register" ? "register" : "login";
@@ -32,24 +31,34 @@ export function AccesoPanel() {
   const setParams = useCallback(
     (updates: { tab?: AuthTab; tipo?: UserAccountType }) => {
       const params = new URLSearchParams(searchParams.toString());
-      if (updates.tab) params.set("tab", updates.tab);
-      if (updates.tipo) params.set("tipo", updates.tipo);
+
+      if (updates.tab) {
+        params.set("tab", updates.tab);
+        if (updates.tab === "login") {
+          params.delete("tipo");
+        }
+      }
+
+      if (updates.tipo && (updates.tab === "register" || tab === "register")) {
+        params.set("tipo", updates.tipo);
+      }
+
       router.replace(`/login?${params.toString()}`, { scroll: false });
     },
-    [router, searchParams],
+    [router, searchParams, tab],
   );
 
   const goAfterAuth = useCallback(() => {
-    router.push(getPostAuthPath(accountType));
-  }, [router, accountType]);
+    router.push(getPostAuthPath(getAccountType()));
+  }, [router]);
 
   const registerGoAfterAuth = useCallback(() => {
-    if (accountType === "profesional") {
+    if (getAccountType() === "profesional") {
       router.push("/diagnostic");
       return;
     }
     router.push(getPostAuthPath("empresa"));
-  }, [router, accountType]);
+  }, [router]);
 
   const tabButtonClass = (active: boolean) =>
     `flex-1 py-2.5 text-[14px] font-medium rounded-lg transition-colors ${
@@ -62,7 +71,7 @@ export function AccesoPanel() {
     if (tab === "login") {
       return {
         title: "Iniciar sesión",
-        subtitle: "Elige si entras como profesional o como empresa y accede a tu espacio.",
+        subtitle: "Entra con el correo y la contraseña de tu cuenta.",
       };
     }
     if (accountType === "empresa") {
@@ -101,28 +110,35 @@ export function AccesoPanel() {
       <h1 className="text-primary-navy mb-2 font-medium text-[22px]">{headline.title}</h1>
       <p className="text-text-secondary-light text-[13px] mb-6">{headline.subtitle}</p>
 
-      <p className="text-[13px] text-text-secondary-light mb-2 font-medium">¿Cómo quieres usar TalentRenew?</p>
-      <AccountTypePicker
-        value={accountType}
-        onChange={(tipo) => setParams({ tab, tipo })}
-      />
+      {tab === "register" ? (
+        <>
+          <p className="text-[13px] text-text-secondary-light mb-2 font-medium">
+            ¿Cómo quieres usar TalentRenew?
+          </p>
+          <AccountTypePicker
+            value={accountType}
+            onChange={(tipo) => setParams({ tab: "register", tipo })}
+          />
+        </>
+      ) : null}
 
-      {usesDemoByDefault(accountType) && tab === "login" ? (
-        <p className="text-[12px] text-amber-accent mb-4 -mt-2">
-          El acceso de empresa está en modo demo hasta que el backend esté listo.
+      {tab === "register" && accountType === "empresa" ? (
+        <p className="text-[12px] text-text-secondary-light mb-4 -mt-2 leading-snug">
+          El servidor guarda tu cuenta como{" "}
+          <span className="font-medium text-primary-navy">empresa</span>. Nombre de empresa, sector
+          y tamaño se guardan en este navegador hasta el módulo de empresas en la API.
         </p>
       ) : null}
 
       {tab === "login" ? (
         <LoginForm
-          accountType={accountType}
           onSuccess={goAfterAuth}
-          onSwitchToRegister={() => setParams({ tab: "register", tipo: accountType })}
+          onSwitchToRegister={() => setParams({ tab: "register", tipo: "profesional" })}
         />
       ) : accountType === "empresa" ? (
         <CompanyRegisterForm
           onSuccess={registerGoAfterAuth}
-          onSwitchToLogin={() => setParams({ tab: "login", tipo: "empresa" })}
+          onSwitchToLogin={() => setParams({ tab: "login" })}
         />
       ) : (
         <>
@@ -136,7 +152,7 @@ export function AccesoPanel() {
           </div>
           <RegisterForm
             onSuccess={registerGoAfterAuth}
-            onSwitchToLogin={() => setParams({ tab: "login", tipo: "profesional" })}
+            onSwitchToLogin={() => setParams({ tab: "login" })}
           />
         </>
       )}

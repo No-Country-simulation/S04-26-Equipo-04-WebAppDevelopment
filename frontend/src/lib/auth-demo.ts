@@ -1,15 +1,14 @@
 import type { AuthResponse } from "@/lib/auth-client";
 import type { UserAccountType } from "@/lib/auth-types";
 
-/** Forzar demo siempre (útil en demos sin backend). */
+/** Forzar demo siempre (útil cuando no hay backend disponible). */
 export function isAuthDemoForced(): boolean {
   return process.env.NEXT_PUBLIC_AUTH_DEMO_MODE === "true";
 }
 
-/** Registro/login de empresa aún sin API estable — usar demo hasta que el backend esté listo. */
-export function usesDemoByDefault(accountType: UserAccountType): boolean {
-  if (isAuthDemoForced()) return true;
-  return accountType === "empresa";
+/** Solo demo explícito por env; empresa ya puede registrarse con tipoUsuario en la API. */
+export function usesDemoByDefault(_accountType: UserAccountType): boolean {
+  return isAuthDemoForced();
 }
 
 export function createDemoAuthResponse(

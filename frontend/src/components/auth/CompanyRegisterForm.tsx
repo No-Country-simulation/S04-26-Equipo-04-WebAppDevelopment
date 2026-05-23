@@ -6,10 +6,11 @@ import Link from "next/link";
 
 import { Button } from "@/components/Button";
 import { Input } from "@/components/Input";
+import { SocialAuthButtons } from "@/components/auth/SocialAuthButtons";
 import { registerCompanyWithFallback } from "@/lib/auth-actions";
-import { saveAuthSession } from "@/lib/auth-session";
+import { saveAuthSession, saveCompanyProfileLocal } from "@/lib/auth-session";
 import type { UserAccountType } from "@/lib/auth-types";
-import { usesDemoByDefault } from "@/lib/auth-demo";
+import { isAuthDemoForced } from "@/lib/auth-demo";
 
 type CompanyRegisterFormProps = {
   onSuccess?: () => void;
@@ -36,7 +37,6 @@ export function CompanyRegisterForm({
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const accountType: UserAccountType = "empresa";
-  const isDemo = usesDemoByDefault(accountType);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -44,14 +44,16 @@ export function CompanyRegisterForm({
     setIsSubmitting(true);
 
     try {
-      const { response, demoMode } = await registerCompanyWithFallback({
+      const profile = {
         companyName: companyName.trim(),
         sector,
         companySize,
         contactName: contactName.trim(),
         email: email.trim(),
         password,
-      });
+      };
+      const { response, demoMode } = await registerCompanyWithFallback(profile);
+      saveCompanyProfileLocal(profile);
       saveAuthSession(response, { tipoUsuario: accountType, demoMode });
       onSuccess?.();
     } catch (error) {
@@ -77,8 +79,20 @@ export function CompanyRegisterForm({
 
       <p className="text-amber-accent text-[11px] uppercase tracking-wide mb-4 font-medium">
         Acceso para empresas
-        {isDemo ? " · modo demo" : ""}
+        {isAuthDemoForced() ? " · modo demo forzado" : ""}
       </p>
+
+      <SocialAuthButtons
+        accountType={accountType}
+        dividerLabel="o registrate con"
+        onSuccess={onSuccess}
+      />
+
+      <div className="flex items-center gap-3 mb-4">
+        <div className="h-[0.5px] bg-black/10 flex-1" />
+        <span className="text-[12px] text-text-secondary-light">o con tu correo corporativo</span>
+        <div className="h-[0.5px] bg-black/10 flex-1" />
+      </div>
 
       <form className="space-y-3 mb-4" onSubmit={handleSubmit}>
         <Input

@@ -3,11 +3,14 @@
 import type { AuthResponse } from "@/lib/auth-client";
 import type { UserAccountType } from "@/lib/auth-types";
 import { isDemoToken } from "@/lib/auth-demo";
+import { parseAccountTypeFromToken } from "@/lib/auth-jwt";
+import type { CompanyRegisterPayload } from "@/lib/auth-types";
 
 const TOKEN_KEY = "auth_token";
 const USER_KEY = "auth_user";
 const TYPE_KEY = "auth_tipo";
 const DEMO_KEY = "auth_demo";
+const COMPANY_PROFILE_KEY = "auth_company_profile";
 
 export type StoredAuthUser = {
   id: number;
@@ -24,9 +27,11 @@ export type AuthSessionMeta = {
 
 export function saveAuthSession(response: AuthResponse, meta: AuthSessionMeta): void {
   const demoMode = meta.demoMode ?? isDemoToken(response.token);
+  const tipoFromToken = parseAccountTypeFromToken(response.token);
+  const tipoUsuario = tipoFromToken ?? meta.tipoUsuario;
 
   localStorage.setItem(TOKEN_KEY, response.token);
-  localStorage.setItem(TYPE_KEY, meta.tipoUsuario);
+  localStorage.setItem(TYPE_KEY, tipoUsuario);
   localStorage.setItem(DEMO_KEY, demoMode ? "1" : "0");
   localStorage.setItem(
     USER_KEY,
@@ -34,10 +39,26 @@ export function saveAuthSession(response: AuthResponse, meta: AuthSessionMeta): 
       id: response.id,
       nombre: response.nombre,
       email: response.email,
-      tipoUsuario: meta.tipoUsuario,
+      tipoUsuario,
       demoMode,
     } satisfies StoredAuthUser),
   );
+}
+
+/** Datos de empresa del formulario (el backend aún no tiene entidad Empresa). */
+export function saveCompanyProfileLocal(profile: CompanyRegisterPayload): void {
+  localStorage.setItem(COMPANY_PROFILE_KEY, JSON.stringify(profile));
+}
+
+export function getCompanyProfileLocal(): CompanyRegisterPayload | null {
+  if (typeof window === "undefined") return null;
+  const raw = localStorage.getItem(COMPANY_PROFILE_KEY);
+  if (!raw) return null;
+  try {
+    return JSON.parse(raw) as CompanyRegisterPayload;
+  } catch {
+    return null;
+  }
 }
 
 export function getAuthToken(): string | null {
@@ -79,6 +100,7 @@ export function clearAuthSession(): void {
   localStorage.removeItem(USER_KEY);
   localStorage.removeItem(TYPE_KEY);
   localStorage.removeItem(DEMO_KEY);
+  localStorage.removeItem(COMPANY_PROFILE_KEY);
 }
 
 export function isAuthenticated(): boolean {

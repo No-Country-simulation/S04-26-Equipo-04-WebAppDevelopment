@@ -64,21 +64,22 @@ async function postAuth<TPayload, TResponse = unknown>(path: string, payload: TP
   return data as TResponse;
 }
 
+/** Contrato API: docs/contrato_API-Guia_Front/01-Guia-Autenticacion.md (camelCase) */
 export async function loginRequest(payload: LoginPayload) {
   const backendPayload = {
-    Email: payload.email,
-    Contraseña: payload.password,
+    email: payload.email,
+    password: payload.password,
   };
   return postAuth<typeof backendPayload, AuthResponse>("/api/Auth/login", backendPayload);
 }
 
 export async function registerRequest(payload: RegisterPayload) {
   const backendPayload = {
-    Nombre: payload.name,
-    Apellido: payload.lastName,
-    Email: payload.email,
-    Contraseña: payload.password,
-    TipoUsuario: payload.accountType ?? "profesional",
+    nombre: payload.name,
+    apellido: payload.lastName,
+    email: payload.email,
+    password: payload.password,
+    tipoUsuario: payload.accountType ?? "profesional",
   };
   return postAuth<typeof backendPayload, AuthResponse>("/api/Auth/register", backendPayload);
 }

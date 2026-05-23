@@ -10,16 +10,9 @@ import {
   type LoginPayload,
   type RegisterPayload,
 } from "@/lib/auth-client";
-import type { UserAccountType } from "@/lib/auth-types";
+import type { CompanyRegisterPayload, UserAccountType } from "@/lib/auth-types";
 
-export type CompanyRegisterPayload = {
-  companyName: string;
-  sector: string;
-  companySize: string;
-  contactName: string;
-  email: string;
-  password: string;
-};
+export type { CompanyRegisterPayload };
 
 export type AuthActionResult = {
   response: AuthResponse;
@@ -64,20 +57,14 @@ function demoRegister(
   };
 }
 
-export async function loginWithFallback(
-  payload: LoginPayload,
-  accountType: UserAccountType,
-): Promise<AuthActionResult> {
-  if (usesDemoByDefault(accountType)) {
-    return demoLogin(payload, accountType);
-  }
-
+/** Login: el tipo de cuenta viene del JWT; no hace falta elegirlo en el formulario. */
+export async function loginWithFallback(payload: LoginPayload): Promise<AuthActionResult> {
   try {
     const response = await tryRealLogin(payload);
     return { response, demoMode: false };
   } catch (error) {
     if (isAuthDemoForced()) {
-      return demoLogin(payload, accountType);
+      return demoLogin(payload, "profesional");
     }
     throw error;
   }
@@ -127,7 +114,7 @@ export async function registerCompanyWithFallback(
     );
     return { response, demoMode: false };
   } catch (error) {
-    if (isAuthDemoForced() || usesDemoByDefault(accountType)) {
+    if (isAuthDemoForced()) {
       return demoRegister(payload, accountType, displayName);
     }
     throw error;
@@ -135,8 +122,8 @@ export async function registerCompanyWithFallback(
 }
 
 export function demoSocialAuth(
-  accountType: UserAccountType,
   provider: "google" | "linkedin",
+  accountType: UserAccountType = "profesional",
 ): AuthActionResult {
   const email = `demo.${provider}@${accountType === "empresa" ? "empresa" : "profesional"}.local`;
   const name = provider === "google" ? "Usuario Google (demo)" : "Usuario LinkedIn (demo)";
