@@ -1,15 +1,21 @@
+//import CTASection from "@/components/sections/CTASection";
 import HeroSection from "@/components/sections/HeroSection";
-import ProblemSection from "@/components/sections/ProblemSection";
+//import HowItWorks from "@/components/sections/HowItWorks";
+//import ImpactSection from "@/components/sections/ImpactSection";
+//import ProblemSection from "@/components/sections/ProblemSection";
+//import ProfessionalVsCompany from "@/components/sections/ProfessionalVsCompany";
+//import SolutionSection from "@/components/sections/SolutionSection";
 
-/**
- * Landing basada en el prototipo del equipo (`public/prototipo/prototipo.html`).
- * Vista HTML completa del diseño: abrir /prototipo/prototipo.html en el navegador.
- */
 export default function Home() {
   return (
     <div className="p-8">
       <HeroSection />
-      <ProblemSection />
+      {/* <ProblemSection /> */}
+      {/* <SolutionSection /> */}
+      {/* <HowItWorks /> */}
+      {/* <ProfessionalVsCompany /> */}
+      {/* <ImpactSection /> */}
+      {/* <CTASection />  */}
     </div>
-  );
+  )
 }

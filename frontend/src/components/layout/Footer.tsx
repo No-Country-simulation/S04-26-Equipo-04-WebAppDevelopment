@@ -1,28 +1,24 @@
 export default function Footer() {
   return (
-    <footer className="bg-[#1A2B4B] px-8 py-12 text-white">
-      <div className="mx-auto flex max-w-container-max flex-col justify-between gap-8 md:flex-row">
+    <footer className="bg-[#1A2B4B] text-white py-12 px-8">
+      <div className="max-w-container-max mx-auto flex flex-col md:flex-row justify-between gap-8">
+        
         <div>
-          <h2 className="text-lg font-bold text-teal-400">TalentRenew</h2>
-          <p className="mt-2 max-w-sm text-sm text-slate-400">
-            © 2026 TalentRenew. Impulsando la autoridad experiencial y el crecimiento continuo.
+          <h2 className="text-lg font-bold text-teal-400">
+            TalentRenew
+          </h2>
+          <p className="text-sm text-slate-400 mt-2 max-w-sm">
+            © 2026 TalentRenew. Empowering experienced authority and continuous growth.
           </p>
         </div>
 
         <div className="flex gap-8 text-sm uppercase tracking-widest">
-          <a className="text-slate-400 transition hover:text-white" href="#">
-            Institucional
-          </a>
-          <a className="text-slate-400 transition hover:text-white" href="#">
-            Carreras
-          </a>
-          <a className="text-slate-400 transition hover:text-white" href="#">
-            Privacidad
-          </a>
-          <a className="text-slate-400 transition hover:text-white" href="#">
-            Soporte
-          </a>
+          <a className="text-slate-400 hover:text-white" href="#">Institutional</a>
+          <a className="text-slate-400 hover:text-white" href="#">Careers</a>
+          <a className="text-slate-400 hover:text-white" href="#">Privacy</a>
+          <a className="text-slate-400 hover:text-white" href="#">Support</a>
         </div>
+
       </div>
     </footer>
   );

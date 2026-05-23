@@ -18,6 +18,10 @@ npm run dev
 
 Usa `npm ci` (no `pnpm install`) para respetar el lockfile del repo y no generar conflictos con tus compañeros.
 
+### Diseño UI
+
+El diseño **naranja** nuevo de tu compañera **aún no está en este repositorio**. Ver `DISENO-NARANJA.md`. La home actual usa el Hero de `develop` (shadcn) hasta que suban Figma/rama con el naranja.
+
 Si en tu máquina aparece `Unknown command: npm`, instala Node + npm (ej. en Arch: `sudo pacman -S nodejs npm`) o activa tu version con `fnm`/`nvm` y vuelve a abrir la terminal.
 
 Abrir en navegador:
