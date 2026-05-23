@@ -1,63 +1,123 @@
-# Guía de Integración Backend-Frontend (Next.js / React)
+# Guia de Integracion Backend-Frontend
 
-Esta carpeta contiene la documentación oficial de los endpoints desarrollados en el Backend y ejemplos prácticos de cómo consumirlos desde el Frontend utilizando **Next.js / React**.
+Esta carpeta es el contrato practico para que el Frontend consuma la API del backend Talent. Incluye endpoints, payloads, respuestas esperadas y ejemplos cortos con Axios.
 
-## 🚀 Estado Actual del MVP
+## Estado del MVP
 
-Hasta el momento, el Backend está **desplegado en vivo en Render** y tiene implementados y asegurados los siguientes módulos:
+El backend actual cubre el flujo completo del MVP:
 
-1. **Módulo 0: Autenticación y Seguridad (JWT)** - Registro, Login y Roles.
-2. **Módulo 3: Diagnóstico Profesional** - Cuestionario adaptativo, cálculo de puntajes y radar de habilidades.
+1. Autenticacion JWT con roles `profesional` y `empresa`.
+2. Diagnostico profesional por categorias.
+3. Rutas de aprendizaje con modulos, clases y progreso.
+4. CV vivo con perfil, skills validadas y experiencia laboral.
+5. Vacantes creadas por empresas.
+6. Marketplace de talentos visibles y match por skills.
+7. Postulaciones, estados de seleccion y feedback de empresa.
 
-*(Nota: Los Módulos 1 y 2 fueron conceptuales, y los Módulos 4 en adelante están en desarrollo).*
+## Base URL
 
-## 🌐 Acceso a Swagger (Documentación Viva)
+Produccion:
 
-Hemos habilitado **Swagger** en producción para que el equipo de Front pueda ver y probar los endpoints directamente desde el navegador, sin instalar nada.
-
-👉 **Link de Swagger:** [https://s04-26-equipo-04-webappdevelopment.onrender.com/swagger](https://s04-26-equipo-04-webappdevelopment.onrender.com/swagger)
-
-*Importante: Acordate de usar el botón verde "Authorize" en Swagger para pegarle el Token JWT después de loguearte, sino te va a dar error 401 Unauthorized.*
-
-## ⚙️ Configuración Inicial Sugerida (Axios)
-
-Dado que toda la API a partir del Diagnóstico está protegida, te recomendamos usar `axios` y configurar un **Interceptor** en tu proyecto Next.js. Esto hará que no tengas que escribir el Token manualmente en cada petición.
-
-### 1. Instalar Axios
-```bash
-npm install axios
+```txt
+https://s04-26-equipo-04-webappdevelopment.onrender.com/api
 ```
 
-### 2. Crear instancia de API (`src/lib/api.js` o `src/services/api.ts`)
+Local:
+
+```txt
+http://localhost:5187/api
+```
+
+Swagger:
+
+```txt
+https://s04-26-equipo-04-webappdevelopment.onrender.com/swagger
+```
+
+## Autenticacion
+
+Todos los endpoints salvo `POST /Auth/register` y `POST /Auth/login` requieren:
+
+```http
+Authorization: Bearer TOKEN_JWT
+Content-Type: application/json
+```
+
+Roles soportados:
+
+- `profesional`: usuario candidato.
+- `empresa`: usuario reclutador/empresa.
+
+El registro publico rechaza cualquier otro rol, incluido `admin`.
+
+## Axios sugerido
+
 ```javascript
 import axios from 'axios';
 
-// Usar variables de entorno en Next.js (.env.local) para separar dev de prod
-// URL de Producción: 'https://s04-26-equipo-04-webappdevelopment.onrender.com/api'
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://s04-26-equipo-04-webappdevelopment.onrender.com/api'; 
+const API_URL =
+  process.env.NEXT_PUBLIC_API_URL ||
+  'https://s04-26-equipo-04-webappdevelopment.onrender.com/api';
 
 export const api = axios.create({
   baseURL: API_URL,
-  headers: {
-    'Content-Type': 'application/json',
-  },
+  headers: { 'Content-Type': 'application/json' },
 });
 
-// Interceptor para inyectar el token JWT en cada petición automáticamente
 api.interceptors.request.use((config) => {
-  // Asumiendo que guardás el token en localStorage después del login
-  const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
-  
+  const token =
+    typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
+
   return config;
 });
 ```
 
-## 📂 Índice de Documentación
+## Indice de guias
 
-A continuación, revisá los siguientes archivos para ver los contratos de datos y ejemplos de código:
+- [01-Guia-Autenticacion.md](./01-Guia-Autenticacion.md): registro, login, roles y token.
+- [02-Guia-Diagnostico.md](./02-Guia-Diagnostico.md): preguntas, inicio y envio de respuestas.
+- [03-Guia-Rutas-Aprendizaje.md](./03-Guia-Rutas-Aprendizaje.md): generar ruta, ver clases y completar clases.
+- [04-Guia-Perfil-CV-Vivo.md](./04-Guia-Perfil-CV-Vivo.md): perfil, skills validadas y experiencia.
+- [05-Guia-Vacantes-Marketplace.md](./05-Guia-Vacantes-Marketplace.md): vacantes, talentos visibles y match.
+- [06-Guia-Postulaciones.md](./06-Guia-Postulaciones.md): aplicar a vacantes, listar postulaciones y feedback.
 
-- [01-Guia-Autenticacion.md](./01-Guia-Autenticacion.md) - Cómo registrar y loguear usuarios.
-- [02-Guia-Diagnostico.md](./02-Guia-Diagnostico.md) - Cómo renderizar las preguntas y enviar las respuestas.
+## Flujo recomendado para Frontend
+
+### Profesional
+
+1. `POST /Auth/register` con `tipoUsuario: "profesional"`.
+2. `POST /Auth/login` y guardar `token`.
+3. Completar diagnostico.
+4. `POST /Rutas/generar/{diagnosticoId}`.
+5. Completar clases con `PUT /Rutas/progreso/clase/{progresoClaseId}`.
+6. Consultar/editar CV vivo con `/Perfiles/mi-perfil`.
+7. Cuando `visibleMarketplace` sea `true`, puede postularse a vacantes.
+8. Ver oportunidades recomendadas con `GET /Marketplace/mis-oportunidades/match`.
+
+### Empresa
+
+1. `POST /Auth/register` con `tipoUsuario: "empresa"`.
+2. `POST /Auth/login` y guardar `token`.
+3. Crear vacantes con `POST /Vacantes`.
+4. Ver talentos visibles con `GET /Marketplace/talentos`.
+5. Ver match de candidatos para una vacante con `GET /Marketplace/vacantes/{vacanteId}/match`.
+6. Ver postulantes con `GET /Postulaciones/vacante/{vacanteId}`.
+7. Cambiar estado y dejar feedback con `PUT /Postulaciones/{id}/estado`.
+
+## Convenciones
+
+- IDs: `long`/number.
+- Niveles: `basico`, `intermedio`, `avanzado`.
+- Estado de vacante: `abierta`, `cerrada`.
+- Estado de postulacion: `aplicado`, `en_proceso`, `rechazado`, `seleccionado`.
+- Las respuestas de error suelen tener forma:
+
+```json
+{
+  "message": "Descripcion del error"
+}
+```

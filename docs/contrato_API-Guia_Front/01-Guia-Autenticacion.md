@@ -1,44 +1,85 @@
-# Guía 01: Autenticación y Usuarios
+# Guia 01: Autenticacion y Roles
 
-Todos los endpoints (excepto Login y Registro) requieren que el usuario esté autenticado mediante un Token JWT.
+## Resumen
 
-## 1. Registro de Usuario
+La API usa JWT. El frontend debe guardar el token devuelto por login/registro y enviarlo como `Authorization: Bearer <token>` en cada request protegida.
 
-**Endpoint:** `POST /api/Auth/register`  
-**Auth:** ❌ No requiere token.
+Roles publicos permitidos:
 
-### Payload (Body) esperado:
+- `profesional`
+- `empresa`
+
+No se puede registrar un usuario `admin` desde el frontend.
+
+## 1. Registrar usuario
+
+**Endpoint:** `POST /api/Auth/register`
+
+**Auth:** no requiere token.
+
+### Body
+
 ```json
 {
   "nombre": "Juan",
   "apellido": "Perez",
   "email": "juan@test.com",
   "password": "password123",
-  "tipoUsuario": "profesional" 
+  "tipoUsuario": "profesional"
 }
 ```
-*Nota: Para el MVP inicial, `tipoUsuario` siempre debe ser `"profesional"`.*
 
-### Ejemplo de implementación (React)
+Para una empresa:
+
+```json
+{
+  "nombre": "Talent",
+  "apellido": "Empresa",
+  "email": "rrhh@empresa.com",
+  "password": "password123",
+  "tipoUsuario": "empresa"
+}
+```
+
+### Respuesta 200
+
+```json
+{
+  "id": 1,
+  "nombre": "Juan",
+  "email": "juan@test.com",
+  "token": "eyJhbGciOi..."
+}
+```
+
+### Errores comunes
+
+```json
+{ "message": "El email ya esta registrado" }
+```
+
+```json
+{ "message": "El tipo de usuario especificado no es valido (solo 'profesional' o 'empresa')." }
+```
+
+### Ejemplo React
+
 ```javascript
-const handleRegister = async (datos) => {
-  try {
-    const response = await api.post('/Auth/register', datos);
-    alert('Usuario registrado con éxito. Ahora podés iniciar sesión.');
-  } catch (error) {
-    console.error('Error al registrar:', error.response?.data);
-  }
+const register = async (payload) => {
+  const { data } = await api.post('/Auth/register', payload);
+  localStorage.setItem('token', data.token);
+  return data;
 };
 ```
 
----
+## 2. Login
 
-## 2. Iniciar Sesión (Login)
+**Endpoint:** `POST /api/Auth/login`
 
-**Endpoint:** `POST /api/Auth/login`  
-**Auth:** ❌ No requiere token.
+**Auth:** no requiere token.
 
-### Payload (Body) esperado:
+### Body
+
 ```json
 {
   "email": "juan@test.com",
@@ -46,40 +87,46 @@ const handleRegister = async (datos) => {
 }
 ```
 
-### Respuesta del servidor:
+### Respuesta 200
+
 ```json
 {
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+  "id": 1,
+  "nombre": "Juan",
+  "email": "juan@test.com",
+  "token": "eyJhbGciOi..."
 }
 ```
 
-### Ejemplo de implementación (React)
-Es crítico que al recibir el token, lo guardes en el `localStorage` o en cookies para que el Interceptor de Axios (ver configuración inicial) lo pueda usar.
+### Error 401
+
+```json
+{ "message": "Email o contrasena incorrectos" }
+```
+
+### Ejemplo React
 
 ```javascript
-const handleLogin = async (email, password) => {
-  try {
-    const response = await api.post('/Auth/login', { email, password });
-    const { token } = response.data;
-    
-    // Guardar token en el navegador
-    localStorage.setItem('token', token);
-    
-    // Redirigir al inicio o al diagnóstico
-    router.push('/dashboard');
-  } catch (error) {
-    alert('Credenciales incorrectas');
-  }
+const login = async (email, password) => {
+  const { data } = await api.post('/Auth/login', { email, password });
+  localStorage.setItem('token', data.token);
+  return data;
 };
 ```
 
-## 3. Cerrar Sesión (Logout)
+## 3. Logout
 
-Dado que usamos JWT, el backend no guarda estado de sesión. Para desloguear a un usuario, el Frontend simplemente debe **eliminar el token** del navegador.
+El backend no guarda sesion. Para cerrar sesion:
 
 ```javascript
-const handleLogout = () => {
-  localStorage.removeItem('token');
-  router.push('/login');
-};
+localStorage.removeItem('token');
 ```
+
+## 4. Uso de roles en Frontend
+
+El backend valida roles con el token. El frontend puede guardar el tipo de usuario segun el formulario de registro/login, o decodificar el JWT si necesita pintar vistas distintas.
+
+Recomendacion simple para MVP:
+
+- Si el usuario se registro como `profesional`, mostrar diagnostico, ruta, CV vivo y vacantes.
+- Si se registro como `empresa`, mostrar gestion de vacantes, marketplace y postulantes.

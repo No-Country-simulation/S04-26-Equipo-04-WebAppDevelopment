@@ -1,23 +1,22 @@
-# Guía 02: Módulo de Diagnóstico
+# Guia 02: Diagnostico Profesional
 
-Este módulo es el corazón del MVP. Permite evaluar las habilidades del profesional.
-**Todos estos endpoints requieren estar logueados (Token JWT en el Header).**
+Todos los endpoints de diagnostico requieren token.
 
-## Flujo del Frontend
+## Flujo recomendado
 
-1. **Pantalla Inicial:** El Front le pregunta al usuario *"¿En qué área desarrolló su carrera?"* (Ventas, Sistemas, etc.). Esto no se envía al backend todavía, es solo visual.
-2. **Pedir Preguntas:** El Front llama a `GET /preguntas` y filtra el array gigante usando el área que eligió el usuario + las categorías generales.
-3. **Iniciar:** Justo antes de mostrar la primera pregunta, el Front llama a `POST /iniciar` para obtener el ID de la sesión.
-4. **Responder:** Cuando el usuario termina el formulario, el Front envía todas las respuestas elegidas a `POST /responder`.
+1. Pedir preguntas con `GET /Diagnostico/preguntas`.
+2. Opcionalmente filtrar en frontend por area elegida por el usuario.
+3. Iniciar sesion de diagnostico con `POST /Diagnostico/iniciar`.
+4. Enviar respuestas con `POST /Diagnostico/responder`.
+5. Guardar `diagnosticoId` completado para generar ruta de aprendizaje.
 
----
-
-## 1. Obtener Catálogo de Preguntas
+## 1. Obtener preguntas
 
 **Endpoint:** `GET /api/Diagnostico/preguntas`
 
-### Respuesta del servidor (Resumida):
-Te devuelve un Array agrupado por "categoría".
+**Auth:** requiere token.
+
+### Respuesta 200
 
 ```json
 [
@@ -26,84 +25,68 @@ Te devuelve un Array agrupado por "categoría".
     "preguntas": [
       {
         "id": 1,
-        "texto": "¿Qué experiencia tiene en ventas por internet?",
+        "texto": "Que experiencia tiene en ventas por internet o marketing digital?",
         "opciones": [
-          { "id": 1, "texto": "Nulo", "orden": 1 },
-          { "id": 2, "texto": "Básico", "orden": 2 },
-          { "id": 3, "texto": "Avanzado", "orden": 3 }
+          { "id": 1, "texto": "Nulo / Totalmente tradicional", "orden": 1 },
+          { "id": 2, "texto": "Basico / Uso herramientas intermedias", "orden": 2 },
+          { "id": 3, "texto": "Avanzado / Uso tecnologia moderna", "orden": 3 }
         ]
       }
     ]
-  },
-  {
-    "categoria": "Liderazgo",
-    "preguntas": [ ... ]
   }
 ]
 ```
 
-### Ejemplo de implementación (React)
-```javascript
-const loadQuestions = async (areaElegidaPorUsuario) => {
-  const { data } = await api.get('/Diagnostico/preguntas');
-  
-  // Filtrar solo las preguntas del área elegida + las generales
-  const categoriasGenerales = ["Liderazgo", "Gestión Estratégica", "Adaptabilidad", "Marca Personal"];
-  
-  const preguntasFiltradas = data.filter(cat => 
-    cat.categoria === areaElegidaPorUsuario || categoriasGenerales.includes(cat.categoria)
-  );
+### Ejemplo React
 
-  setPreguntasAMostrar(preguntasFiltradas);
+```javascript
+const loadQuestions = async (areaElegida) => {
+  const { data } = await api.get('/Diagnostico/preguntas');
+  const generales = ['Liderazgo', 'Gestion Estrategica', 'Adaptabilidad', 'Marca Personal'];
+
+  return data.filter(
+    (grupo) => grupo.categoria === areaElegida || generales.includes(grupo.categoria)
+  );
 };
 ```
 
----
+## 2. Iniciar diagnostico
 
-## 2. Iniciar Diagnóstico
+**Endpoint:** `POST /api/Diagnostico/iniciar`
 
-**Endpoint:** `POST /api/Diagnostico/iniciar`  
-*(No requiere body, el ID de usuario se saca del Token).*
+**Auth:** requiere token.
 
-### Respuesta del servidor:
+No requiere body.
+
+### Respuesta 201
+
 ```json
 {
   "id": 5,
-  "fecha": "2026-05-18T20:48:56Z",
+  "fecha": "2026-05-23T20:48:56Z",
   "estado": "en_progreso"
 }
 ```
 
-### Ejemplo (React)
-```javascript
-const startDiagnostico = async () => {
-  const { data } = await api.post('/Diagnostico/iniciar');
-  // Guardar el ID de diagnóstico en el estado para usarlo al final
-  setDiagnosticoId(data.id); 
-};
-```
-
----
-
-## 3. Enviar Respuestas y Obtener Resultado
+## 3. Enviar respuestas
 
 **Endpoint:** `POST /api/Diagnostico/responder`
 
-### Payload (Body) esperado:
-Tenés que enviar el `diagnosticoId` que obtuviste en el paso anterior, y un array con el ID de la pregunta y el ID de la opción que eligió el usuario.
+**Auth:** requiere token.
+
+### Body
 
 ```json
 {
   "diagnosticoId": 5,
   "respuestas": [
     { "preguntaId": 1, "opcionId": 3 },
-    { "preguntaId": 21, "opcionId": 63 }
+    { "preguntaId": 2, "opcionId": 6 }
   ]
 }
 ```
 
-### Respuesta del servidor (Tu Mapa Profesional):
-Te devuelve los porcentajes y niveles calculados para graficar el radar.
+### Respuesta 200
 
 ```json
 {
@@ -115,33 +98,26 @@ Te devuelve los porcentajes y niveles calculados para graficar el radar.
       "puntajeObtenido": 11,
       "puntajeMaximo": 15,
       "nivel": "avanzado",
-      "recomendacion": "Nivel destacado. Podés enfocarte en compartir conocimiento..."
-    },
-    {
-      "categoria": "Liderazgo",
-      "puntajeObtenido": 5,
-      "puntajeMaximo": 5,
-      "nivel": "avanzado",
-      "recomendacion": "Excelente manejo de equipos..."
+      "recomendacion": "Nivel destacado..."
     }
   ]
 }
 ```
 
-### Ejemplo (React)
-```javascript
-const submitRespuestas = async (respuestasUsuario) => {
-  const payload = {
-    diagnosticoId: diagnosticoId, // El ID del estado
-    respuestas: respuestasUsuario // Array formateado
-  };
+## 4. Obtener resultado existente
 
-  try {
-    const { data } = await api.post('/Diagnostico/responder', payload);
-    setResultadoRadar(data.resultados);
-    // Redirigir a la pantalla del Radar / Resultados
-  } catch (error) {
-    console.error('Error al enviar diagnóstico');
-  }
-};
+**Endpoint:** `GET /api/Diagnostico/resultado/{diagnosticoId}`
+
+**Auth:** requiere token.
+
+### Respuesta 200
+
+Misma estructura que `POST /Diagnostico/responder`.
+
+## Siguiente paso
+
+Cuando `estado` sea `completado`, llamar:
+
+```txt
+POST /api/Rutas/generar/{diagnosticoId}
 ```
