@@ -20,7 +20,7 @@ Usa `npm ci` (no `pnpm install`) para respetar el lockfile del repo y no generar
 
 ### Trabajo en equipo (diseño)
 
-La UI de landing sigue lo que está en **`develop`** (shadcn + Hero del equipo). No reintroducir maquetados viejos por cuenta propia; los cambios de diseño entran por PR y luego `merge` a `main`. Ver `TRABAJO-EQUIPO.md`.
+La UI actual viene de **`origin/main`** (landing ámbar de Scarlet en `app/(marketing)`). Actualizá con `git pull origin main`. Ver `TRABAJO-EQUIPO.md`.
 
 Si en tu máquina aparece `Unknown command: npm`, instala Node + npm (ej. en Arch: `sudo pacman -S nodejs npm`) o activa tu version con `fnm`/`nvm` y vuelve a abrir la terminal.
 
