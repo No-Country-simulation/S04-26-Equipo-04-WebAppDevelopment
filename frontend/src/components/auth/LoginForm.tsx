@@ -95,7 +95,7 @@ export function LoginForm({
         </Button>
       </form>
 
-      <SocialAuthButtons onSuccess={completeAuth} />
+      <SocialAuthButtons showLinkedIn onSuccess={completeAuth} />
 
       {showRegisterLink ? (
         <p className="text-center text-[13px] text-text-secondary-light">

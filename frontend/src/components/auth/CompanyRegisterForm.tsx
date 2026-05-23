@@ -84,6 +84,7 @@ export function CompanyRegisterForm({
 
       <SocialAuthButtons
         accountType={accountType}
+        showLinkedIn={false}
         dividerLabel="o registrate con"
         onSuccess={onSuccess}
       />

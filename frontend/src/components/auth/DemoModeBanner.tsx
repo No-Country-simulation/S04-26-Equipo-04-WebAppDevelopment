@@ -14,9 +14,8 @@ export function DemoModeBanner() {
     >
       <FlaskConical className="text-amber-accent shrink-0 mt-0.5 size-4" aria-hidden />
       <p className="text-[13px] text-primary-navy leading-snug">
-        <span className="font-medium">Modo demostración.</span> Estás usando credenciales locales o
-        OAuth simulado. Quita{" "}
-        <code className="text-[12px]">NEXT_PUBLIC_AUTH_DEMO_MODE</code> para usar solo la API real.
+        <span className="font-medium">Modo demostración.</span> Google y LinkedIn simulan el acceso;
+        correo y contraseña usan la API cuando está disponible.
       </p>
     </div>
   );
