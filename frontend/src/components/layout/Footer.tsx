@@ -1,24 +1,47 @@
+import Link from 'next/link';
+import { Logo } from '@/components/Logo';
+import {  MessageCircle } from 'lucide-react';
+
 export default function Footer() {
   return (
-    <footer className="bg-[#1A2B4B] text-white py-12 px-8">
-      <div className="max-w-container-max mx-auto flex flex-col md:flex-row justify-between gap-8">
-        
-        <div>
-          <h2 className="text-lg font-bold text-teal-400">
-            TalentRenew
-          </h2>
-          <p className="text-sm text-slate-400 mt-2 max-w-sm">
-            © 2026 TalentRenew. Empowering experienced authority and continuous growth.
+    <footer className="bg-dark-base">
+      <div className="max-w-7xl mx-auto px-8 py-12">
+        <div className="flex items-start justify-between">
+          <div className="text-white">
+            <Logo />
+          </div>
+          <div className="flex gap-8">
+            <Link href="/como-funciona" className="text-[12px] text-text-muted-dark hover:text-text-secondary-dark transition-colors">
+              Cómo funciona
+            </Link>
+            <Link href="/empresas" className="text-[12px] text-text-muted-dark hover:text-text-secondary-dark transition-colors">
+              Para empresas
+            </Link>
+            <Link href="/terminos" className="text-[12px] text-text-muted-dark hover:text-text-secondary-dark transition-colors">
+              Términos
+            </Link>
+            <Link href="/privacidad" className="text-[12px] text-text-muted-dark hover:text-text-secondary-dark transition-colors">
+              Privacidad
+            </Link>
+          </div>
+        </div>
+
+        <div className="border-t border-white/8 mt-8 pt-6 flex items-center justify-between">
+          <p className="text-[12px] text-text-muted-dark">
+            © 2026 TalentRenew · Red de Bienestar Laboral
           </p>
+          <div className="flex gap-4">
+            {/* <a href="#" className="text-[#4A6480] hover:text-text-secondary-dark transition-colors">
+              <Linkedin size={16} />
+            </a>
+            <a href="#" className="text-[#4A6480] hover:text-text-secondary-dark transition-colors">
+              <Instagram size={16} />
+            </a> */}
+            <a href="#" className="text-[#4A6480] hover:text-text-secondary-dark transition-colors">
+              <MessageCircle size={16} />
+            </a>
+          </div>
         </div>
-
-        <div className="flex gap-8 text-sm uppercase tracking-widest">
-          <a className="text-slate-400 hover:text-white" href="#">Institutional</a>
-          <a className="text-slate-400 hover:text-white" href="#">Careers</a>
-          <a className="text-slate-400 hover:text-white" href="#">Privacy</a>
-          <a className="text-slate-400 hover:text-white" href="#">Support</a>
-        </div>
-
       </div>
     </footer>
   );

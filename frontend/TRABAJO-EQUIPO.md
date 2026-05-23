@@ -1,39 +1,32 @@
 # Frontend — trabajo en equipo
 
-## Fuente de verdad del diseño
+## Fuente de verdad del diseño (actual)
 
-El diseño de landing que el equipo acordó está en la rama **`develop`** (merge PR #8: shadcn + Hero, Navbar, Footer, secciones en `components/sections/`).
+La landing y el flujo UI actual de Scarlet están en **`origin/main`** (mayo 2026):
 
-En **`main`** mantenemos eso y solo añadimos lo que el backend necesita:
+- Landing ámbar: `src/app/(marketing)/page.tsx` (`--amber-accent: #C98A2A`)
+- Login / registro: `src/app/login`, `src/app/register`
+- Diagnóstico, dashboard, empresa: rutas bajo `src/app/dashboard`, etc.
+- Componentes: `src/components/Button.tsx`, `Badge`, `Card`, `Navbar`, `Footer`
 
-- Modal de login/registro (`auth-client` → API en Render)
-- Página pública de CV (`/cv/[slug]`)
-- Tests y CI (`npm ci`, lint, typecheck, Playwright)
+La rama `develop` y `6-setup-shadcn-ui-and-build-landing-page` son **anteriores** (shadcn + Hero verde, 6 mayo).
 
-## Reglas para no pisar el trabajo del equipo
+## Mantener `main` al día
 
-1. **No volver a meter** la landing antigua (`LandingMain` / `sections.tsx` propios) sin acuerdo del grupo.
-2. **No cambiar colores ni layout** por cuenta propia; si hay diseño nuevo (p. ej. otra paleta), que llegue en un PR de quien diseñó.
-3. **Actualizar UI** trayendo cambios desde `develop`:
+```bash
+git fetch origin
+git pull origin main
+cd frontend && npm ci && npm run dev
+```
 
-   ```bash
-   git fetch origin
-   git checkout main
-   git merge origin/develop
-   # Resolver conflictos priorizando los archivos de diseño del equipo
-   ```
+## Integraciones locales que pueden convivir
 
-4. Archivos que suelen ser solo del equipo (tocar con cuidado):  
-   `globals.css`, `components/sections/*`, `components/ui/*`, `layout/Navbar.tsx`, `layout/Footer.tsx`, `HeroSection.tsx`, `public/mujer.png`
+- `src/lib/auth-client.ts` y API en Render (si el contrato coincide con el backend)
+- `src/app/cv/[slug]` — CV público (ruta aparte del marketing)
 
-5. Archivos de integración (pueden evolucionar en `main`):  
-   `components/auth/*`, `lib/auth-client.ts`, `app/cv/*`
+Priorizar los archivos de Scarlet en conflictos de diseño (`globals.css`, `(marketing)/*`, `layout/Navbar`, etc.).
 
-## Referencias viejas (no usar como diseño actual)
+## No reintroducir sin acuerdo
 
-- `public/prototipo/prototipo.html` — prototipo HTML anterior; no es la landing React del equipo.
-- Documentación suelta en la raíz puede quedar desactualizada; priorizar lo que está en `develop`.
-
-## Cuando el equipo suba cambios nuevos
-
-Hagan merge o PR desde su rama → `develop` → `main`. Después se revisa en conjunto (colores, secciones completas, etc.).
+- Landing vieja (`LandingMain`, `components/sections` de shadcn del 6 mayo)
+- Colores del `prototipo.html` verde (`#156967`) como diseño activo

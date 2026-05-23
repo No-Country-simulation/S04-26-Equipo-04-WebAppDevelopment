@@ -16,6 +16,6 @@ namespace Talent.API.DTO
 
         // La contraseña no es obligatoria al actualizar.
         // Si la mandan vacía, conservamos la que ya tenía.
-        public string? Contraseña { get; set; }
+        public string? Password { get; set; }
     }
 }
