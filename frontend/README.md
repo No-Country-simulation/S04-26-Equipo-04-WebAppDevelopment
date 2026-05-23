@@ -5,16 +5,20 @@ Aplicacion frontend construida con Next.js (App Router), React y Tailwind CSS.
 ## Requisitos
 
 - Node.js 20+
-- npm 10+
+- **npm 10+** (gestor del equipo; CI y `package-lock.json` usan npm, no pnpm/yarn)
 
 ## Ejecucion local
 
 Desde la carpeta `frontend`:
 
 ```bash
-npm install
+npm ci
 npm run dev
 ```
+
+Usa `npm ci` (no `pnpm install`) para respetar el lockfile del repo y no generar conflictos con tus compañeros.
+
+Si en tu máquina aparece `Unknown command: npm`, instala Node + npm (ej. en Arch: `sudo pacman -S nodejs npm`) o activa tu version con `fnm`/`nvm` y vuelve a abrir la terminal.
 
 Abrir en navegador:
 
@@ -58,10 +62,13 @@ frontend/
     app/
     components/
       auth/
-      landing/
       layout/
+      sections/   # landing del equipo (shadcn)
+      ui/
+      cv/
     lib/
   e2e/
+  package-lock.json
   playwright.config.ts
   vitest.config.ts
   vitest.setup.ts
