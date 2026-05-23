@@ -1,29 +1,28 @@
 export default function Footer() {
   return (
-    <footer className="border-t border-primary/20 bg-primary py-10 text-on-primary">
-      <div className="app-container flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+    <footer className="bg-[#1A2B4B] px-8 py-12 text-white">
+      <div className="mx-auto flex max-w-container-max flex-col justify-between gap-8 md:flex-row">
         <div>
-          <p className="text-lg font-bold text-secondary-fixed">TalentRenew</p>
-          <p className="mt-2 max-w-md text-sm text-white/70">
-            © 2026 TalentRenew. Plataforma para potenciar talento senior y
-            conectar experiencia con oportunidades reales.
+          <h2 className="text-lg font-bold text-teal-400">TalentRenew</h2>
+          <p className="mt-2 max-w-sm text-sm text-slate-400">
+            © 2026 TalentRenew. Impulsando la autoridad experiencial y el crecimiento continuo.
           </p>
         </div>
 
-        <nav className="flex flex-wrap gap-4 text-xs font-semibold uppercase tracking-wider text-white/70">
-          <a className="hover:text-white" href="#">
+        <div className="flex gap-8 text-sm uppercase tracking-widest">
+          <a className="text-slate-400 hover:text-white" href="#">
             Institucional
           </a>
-          <a className="hover:text-white" href="#">
+          <a className="text-slate-400 hover:text-white" href="#">
             Carreras
           </a>
-          <a className="hover:text-white" href="#">
+          <a className="text-slate-400 hover:text-white" href="#">
             Privacidad
           </a>
-          <a className="hover:text-white" href="#">
+          <a className="text-slate-400 hover:text-white" href="#">
             Soporte
           </a>
-        </nav>
+        </div>
       </div>
     </footer>
   );

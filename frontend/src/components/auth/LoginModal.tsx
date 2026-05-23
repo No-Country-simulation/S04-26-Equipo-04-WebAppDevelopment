@@ -1,6 +1,24 @@
 "use client";
 
-import { type FormEvent, useCallback, useEffect, useState } from "react";
+import {
+  type FormEvent,
+  type PointerEvent,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { cn } from "@/lib/utils";
 import {
   type AuthMode,
   loginRequest,
@@ -62,6 +80,41 @@ function LinkedInIcon() {
   );
 }
 
+function AuthDivider() {
+  return (
+    <div className="flex items-center gap-3">
+      <span className="h-px flex-1 bg-border" />
+      <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+        o continúa con
+      </span>
+      <span className="h-px flex-1 bg-border" />
+    </div>
+  );
+}
+
+function SocialButtons({
+  loginLabel,
+  onGoogle,
+  onLinkedIn,
+}: {
+  loginLabel: string;
+  onGoogle: () => void;
+  onLinkedIn: () => void;
+}) {
+  return (
+    <>
+      <Button type="button" variant="outline" className="w-full" onClick={onGoogle}>
+        <GoogleIcon />
+        {loginLabel} Google
+      </Button>
+      <Button type="button" variant="outline" className="mt-3 w-full" onClick={onLinkedIn}>
+        <LinkedInIcon />
+        {loginLabel} LinkedIn
+      </Button>
+    </>
+  );
+}
+
 export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
   const [mode, setMode] = useState<AuthMode>("login");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -78,26 +131,29 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
     acceptedTerms: false,
   });
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const backdropPointerDownRef = useRef(false);
 
-  // Reset visual state each time modal closes.
   const closeModal = useCallback(() => {
     setMode("login");
     setErrorMessage(null);
     onClose();
   }, [onClose]);
 
-  const handleAuthSuccess = useCallback((response: AuthResponse | null) => {
-    if (!response) {
+  const handleAuthSuccess = useCallback(
+    (response: AuthResponse | null) => {
+      if (!response) {
+        closeModal();
+        return;
+      }
+      localStorage.setItem("auth_token", response.token);
+      localStorage.setItem(
+        "auth_user",
+        JSON.stringify({ id: response.id, nombre: response.nombre, email: response.email }),
+      );
       closeModal();
-      return;
-    }
-    localStorage.setItem("auth_token", response.token);
-    localStorage.setItem(
-      "auth_user",
-      JSON.stringify({ id: response.id, nombre: response.nombre, email: response.email }),
-    );
-    closeModal();
-  }, [closeModal]);
+    },
+    [closeModal],
+  );
 
   const handleLoginSubmit = useCallback(
     async (event: FormEvent<HTMLFormElement>) => {
@@ -174,7 +230,6 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
       return;
     }
 
-    // Prevent background scroll while mobile sheet/modal is open.
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
 
@@ -187,36 +242,51 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
     return null;
   }
 
+  const handleBackdropPointerDown = (event: PointerEvent<HTMLDivElement>) => {
+    backdropPointerDownRef.current = event.target === event.currentTarget;
+  };
+
+  const handleBackdropPointerUp = (event: PointerEvent<HTMLDivElement>) => {
+    const upOnBackdrop = event.target === event.currentTarget;
+    if (backdropPointerDownRef.current && upOnBackdrop) {
+      closeModal();
+    }
+    backdropPointerDownRef.current = false;
+  };
+
+  const handleBackdropPointerCancel = () => {
+    backdropPointerDownRef.current = false;
+  };
+
+  const socialLabel = mode === "login" ? "Iniciar con" : "Registrarme con";
+
   return (
     <div
-      className="fixed inset-0 z-[60] flex items-end justify-center bg-[#031635]/45 px-0 pt-10 sm:px-4 sm:pt-4 md:items-center"
+      className="fixed inset-0 z-[60] flex items-end justify-center bg-primary/45 px-0 pt-10 sm:px-4 sm:pt-4 md:items-center"
       role="dialog"
       aria-modal="true"
       aria-labelledby="login-modal-title"
-      onClick={closeModal}
+      onPointerDown={handleBackdropPointerDown}
+      onPointerUp={handleBackdropPointerUp}
+      onPointerCancel={handleBackdropPointerCancel}
     >
-      <div
-        className="card-elevated max-h-[90vh] w-full overflow-y-auto rounded-b-none p-6 sm:max-w-md sm:rounded-b-[var(--radius-lg)] md:p-7"
-        onClick={(event) => event.stopPropagation()}
+      <Card
+        className={cn(
+          "max-h-[90vh] w-full gap-0 overflow-y-auto rounded-b-none py-0 ring-foreground/10 sm:max-w-md sm:rounded-xl",
+          "shadow-[0_4px_20px_rgba(26,43,75,0.08)]",
+        )}
+        onPointerDown={(event) => event.stopPropagation()}
       >
-        <div className="mb-5 flex items-start justify-between">
-          <div>
-            <h2 id="login-modal-title" className="text-2xl font-black tracking-tight text-[#1A2B4B]">
-              {mode === "login" ? "Iniciar sesión" : "Crear cuenta"}
-            </h2>
-            <p className="mt-1 text-sm text-slate-600">
-              {mode === "login"
-                ? "Bienvenido de nuevo a TalentRenew."
-                : "Crea tu cuenta con lo mínimo para empezar."}
-            </p>
-          </div>
-          <button
+        <CardHeader className="relative border-b border-border pb-4 pt-6">
+          <Button
             type="button"
+            variant="ghost"
+            size="icon-sm"
             onClick={closeModal}
             aria-label="Cerrar modal"
-            className="rounded-md p-1 text-slate-500 transition hover:bg-slate-100 hover:text-slate-700"
+            className="absolute top-4 right-4 text-muted-foreground"
           >
-            <svg aria-hidden="true" className="h-4 w-4" viewBox="0 0 24 24" fill="none">
+            <svg aria-hidden="true" className="size-4" viewBox="0 0 24 24" fill="none">
               <path
                 d="M6 6L18 18M18 6L6 18"
                 stroke="currentColor"
@@ -224,221 +294,213 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
                 strokeLinecap="round"
               />
             </svg>
-          </button>
-        </div>
+          </Button>
+          <CardTitle
+            id="login-modal-title"
+            className="font-heading text-2xl font-bold tracking-tight text-primary"
+          >
+            {mode === "login" ? "Iniciar sesión" : "Crear cuenta"}
+          </CardTitle>
+          <CardDescription>
+            {mode === "login"
+              ? "Bienvenido de nuevo a TalentRenew."
+              : "Crea tu cuenta con lo mínimo para empezar."}
+          </CardDescription>
+        </CardHeader>
 
-        {errorMessage ? (
-          <p className="mb-4 rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">{errorMessage}</p>
-        ) : null}
-
-        {mode === "login" ? (
-          <>
-            <form className="space-y-4" onSubmit={handleLoginSubmit}>
-              <div>
-                <label className="mb-1 block text-sm font-semibold text-[#1A2B4B]" htmlFor="login-email">
-                  Correo electrónico
-                </label>
-                <input
-                  id="login-email"
-                  name="email"
-                  type="email"
-                  autoComplete="email"
-                  placeholder="tu@email.com"
-                  value={loginData.email}
-                  onChange={(event) => setLoginData((prev) => ({ ...prev, email: event.target.value }))}
-                  className="h-11 w-full rounded-md border border-slate-300 bg-white px-3 text-sm text-slate-800 outline-none transition focus:border-secondary focus:ring-2 focus:ring-secondary/20"
-                  required
-                />
-              </div>
-
-              <div>
-                <label className="mb-1 block text-sm font-semibold text-[#1A2B4B]" htmlFor="login-password">
-                  Contraseña
-                </label>
-                <input
-                  id="login-password"
-                  name="password"
-                  type="password"
-                  autoComplete="current-password"
-                  placeholder="********"
-                  value={loginData.password}
-                  onChange={(event) => setLoginData((prev) => ({ ...prev, password: event.target.value }))}
-                  className="h-11 w-full rounded-md border border-slate-300 bg-white px-3 text-sm text-slate-800 outline-none transition focus:border-secondary focus:ring-2 focus:ring-secondary/20"
-                  required
-                />
-              </div>
-
-              <button className="btn-primary w-full disabled:cursor-not-allowed disabled:opacity-70" type="submit" disabled={isSubmitting}>
-                {isSubmitting ? "Entrando..." : "Entrar"}
-              </button>
-            </form>
-
-            <div className="my-5 flex items-center gap-3">
-              <span className="h-px flex-1 bg-slate-200" />
-              <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">o continúa con</span>
-              <span className="h-px flex-1 bg-slate-200" />
-            </div>
-
-            <button
-              type="button"
-              onClick={handleGoogleAuth}
-              className="flex h-11 w-full items-center justify-center gap-2 rounded-md border border-slate-300 bg-white text-sm font-semibold text-[#1A2B4B] transition hover:border-slate-400 hover:bg-slate-50"
+        <CardContent className="space-y-4 pb-6">
+          {errorMessage ? (
+            <p
+              role="alert"
+              className="rounded-lg border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive"
             >
-              <GoogleIcon />
-              Iniciar con Google
-            </button>
-
-            <button
-              type="button"
-              onClick={handleLinkedInAuth}
-              className="mt-3 flex h-11 w-full items-center justify-center gap-2 rounded-md border border-slate-300 bg-white text-sm font-semibold text-[#1A2B4B] transition hover:border-slate-400 hover:bg-slate-50"
-            >
-              <LinkedInIcon />
-              Iniciar con LinkedIn
-            </button>
-
-            <p className="mt-5 text-center text-sm text-slate-600">
-              ¿No tienes cuenta?{" "}
-              <button
-                type="button"
-                onClick={() => setMode("register")}
-                className="font-semibold text-secondary hover:underline"
-              >
-                Crear cuenta
-              </button>
+              {errorMessage}
             </p>
-          </>
-        ) : (
-          <>
-            <button
-              type="button"
-              onClick={handleGoogleAuth}
-              className="mb-5 flex h-11 w-full items-center justify-center gap-2 rounded-md border border-slate-300 bg-white text-sm font-semibold text-[#1A2B4B] transition hover:border-slate-400 hover:bg-slate-50"
-            >
-              <GoogleIcon />
-              Registrarme con Google
-            </button>
+          ) : null}
 
-            <button
-              type="button"
-              onClick={handleLinkedInAuth}
-              className="mb-5 flex h-11 w-full items-center justify-center gap-2 rounded-md border border-slate-300 bg-white text-sm font-semibold text-[#1A2B4B] transition hover:border-slate-400 hover:bg-slate-50"
-            >
-              <LinkedInIcon />
-              Registrarme con LinkedIn
-            </button>
+          {mode === "login" ? (
+            <>
+              <form className="space-y-4" onSubmit={handleLoginSubmit}>
+                <div className="space-y-2">
+                  <Label htmlFor="login-email">Correo electrónico</Label>
+                  <Input
+                    id="login-email"
+                    name="email"
+                    type="email"
+                    autoComplete="email"
+                    placeholder="tu@email.com"
+                    value={loginData.email}
+                    onChange={(event) =>
+                      setLoginData((prev) => ({ ...prev, email: event.target.value }))
+                    }
+                    required
+                  />
+                </div>
 
-            <form className="space-y-4" onSubmit={handleRegisterSubmit}>
-              <div>
-                <label className="mb-1 block text-sm font-semibold text-[#1A2B4B]" htmlFor="register-name">
-                  Nombres
+                <div className="space-y-2">
+                  <Label htmlFor="login-password">Contraseña</Label>
+                  <Input
+                    id="login-password"
+                    name="password"
+                    type="password"
+                    autoComplete="current-password"
+                    placeholder="********"
+                    value={loginData.password}
+                    onChange={(event) =>
+                      setLoginData((prev) => ({ ...prev, password: event.target.value }))
+                    }
+                    required
+                  />
+                </div>
+
+                <Button type="submit" className="w-full" size="xl" disabled={isSubmitting}>
+                  {isSubmitting ? "Entrando..." : "Entrar"}
+                </Button>
+              </form>
+
+              <AuthDivider />
+
+              <SocialButtons
+                loginLabel={socialLabel}
+                onGoogle={handleGoogleAuth}
+                onLinkedIn={handleLinkedInAuth}
+              />
+
+              <p className="text-center text-sm text-muted-foreground">
+                ¿No tienes cuenta?{" "}
+                <Button
+                  type="button"
+                  variant="link"
+                  className="h-auto p-0 text-secondary"
+                  onClick={() => setMode("register")}
+                >
+                  Crear cuenta
+                </Button>
+              </p>
+            </>
+          ) : (
+            <>
+              <SocialButtons
+                loginLabel={socialLabel}
+                onGoogle={handleGoogleAuth}
+                onLinkedIn={handleLinkedInAuth}
+              />
+
+              <AuthDivider />
+
+              <form className="space-y-4" onSubmit={handleRegisterSubmit}>
+                <div className="space-y-2">
+                  <Label htmlFor="register-name">Nombres</Label>
+                  <Input
+                    id="register-name"
+                    name="name"
+                    type="text"
+                    autoComplete="given-name"
+                    placeholder="Tus nombres"
+                    value={registerData.name}
+                    onChange={(event) =>
+                      setRegisterData((prev) => ({ ...prev, name: event.target.value }))
+                    }
+                    required
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="register-lastname">Apellidos</Label>
+                  <Input
+                    id="register-lastname"
+                    name="lastName"
+                    type="text"
+                    autoComplete="family-name"
+                    placeholder="Tus apellidos"
+                    value={registerData.lastName}
+                    onChange={(event) =>
+                      setRegisterData((prev) => ({ ...prev, lastName: event.target.value }))
+                    }
+                    required
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="register-email">Correo electrónico</Label>
+                  <Input
+                    id="register-email"
+                    name="email"
+                    type="email"
+                    autoComplete="email"
+                    placeholder="tu@email.com"
+                    value={registerData.email}
+                    onChange={(event) =>
+                      setRegisterData((prev) => ({ ...prev, email: event.target.value }))
+                    }
+                    required
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="register-password">Contraseña</Label>
+                  <Input
+                    id="register-password"
+                    name="password"
+                    type="password"
+                    autoComplete="new-password"
+                    placeholder="********"
+                    value={registerData.password}
+                    onChange={(event) =>
+                      setRegisterData((prev) => ({ ...prev, password: event.target.value }))
+                    }
+                    minLength={8}
+                    required
+                  />
+                </div>
+
+                <label className="flex items-start gap-3 rounded-lg border border-border bg-muted p-3 text-sm text-foreground">
+                  <input
+                    type="checkbox"
+                    name="terms"
+                    checked={registerData.acceptedTerms}
+                    onChange={(event) =>
+                      setRegisterData((prev) => ({
+                        ...prev,
+                        acceptedTerms: event.target.checked,
+                      }))
+                    }
+                    className="mt-0.5 size-4 rounded border-input text-secondary accent-secondary focus:ring-ring"
+                  />
+                  <span>
+                    Acepto los{" "}
+                    <a href="#" className="font-semibold text-secondary hover:underline">
+                      términos y condiciones
+                    </a>
+                    .
+                  </span>
                 </label>
-                <input
-                  id="register-name"
-                  name="name"
-                  type="text"
-                  autoComplete="name"
-                  placeholder="Tus nombres"
-                  value={registerData.name}
-                  onChange={(event) => setRegisterData((prev) => ({ ...prev, name: event.target.value }))}
-                  className="h-11 w-full rounded-md border border-slate-300 bg-white px-3 text-sm text-slate-800 outline-none transition focus:border-secondary focus:ring-2 focus:ring-secondary/20"
-                  required
-                />
-              </div>
 
-              <div>
-                <label className="mb-1 block text-sm font-semibold text-[#1A2B4B]" htmlFor="register-lastname">
-                  Apellidos
-                </label>
-                <input
-                  id="register-lastname"
-                  name="lastName"
-                  type="text"
-                  autoComplete="family-name"
-                  placeholder="Tus apellidos"
-                  value={registerData.lastName}
-                  onChange={(event) => setRegisterData((prev) => ({ ...prev, lastName: event.target.value }))}
-                  className="h-11 w-full rounded-md border border-slate-300 bg-white px-3 text-sm text-slate-800 outline-none transition focus:border-secondary focus:ring-2 focus:ring-secondary/20"
-                  required
-                />
-              </div>
+                <Button
+                  type="submit"
+                  className="w-full"
+                  size="xl"
+                  disabled={isSubmitting || !registerData.acceptedTerms}
+                >
+                  {isSubmitting ? "Creando..." : "Crear cuenta"}
+                </Button>
+              </form>
 
-              <div>
-                <label className="mb-1 block text-sm font-semibold text-[#1A2B4B]" htmlFor="register-email">
-                  Correo electrónico
-                </label>
-                <input
-                  id="register-email"
-                  name="email"
-                  type="email"
-                  autoComplete="email"
-                  placeholder="tu@email.com"
-                  value={registerData.email}
-                  onChange={(event) => setRegisterData((prev) => ({ ...prev, email: event.target.value }))}
-                  className="h-11 w-full rounded-md border border-slate-300 bg-white px-3 text-sm text-slate-800 outline-none transition focus:border-secondary focus:ring-2 focus:ring-secondary/20"
-                  required
-                />
-              </div>
-
-              <div>
-                <label className="mb-1 block text-sm font-semibold text-[#1A2B4B]" htmlFor="register-password">
-                  Contraseña
-                </label>
-                <input
-                  id="register-password"
-                  name="password"
-                  type="password"
-                  autoComplete="new-password"
-                  placeholder="********"
-                  value={registerData.password}
-                  onChange={(event) => setRegisterData((prev) => ({ ...prev, password: event.target.value }))}
-                  className="h-11 w-full rounded-md border border-slate-300 bg-white px-3 text-sm text-slate-800 outline-none transition focus:border-secondary focus:ring-2 focus:ring-secondary/20"
-                  minLength={8}
-                  required
-                />
-              </div>
-
-              <label className="flex items-start gap-2 rounded-md border border-slate-200 bg-slate-50 p-3 text-sm text-slate-700">
-                <input
-                  type="checkbox"
-                  name="terms"
-                  checked={registerData.acceptedTerms}
-                  onChange={(event) =>
-                    setRegisterData((prev) => ({ ...prev, acceptedTerms: event.target.checked }))
-                  }
-                  className="mt-0.5 h-4 w-4 rounded border-slate-300 text-secondary focus:ring-secondary"
-                />
-                <span>
-                  Acepto los{" "}
-                  <a href="#" className="font-semibold text-secondary hover:underline">
-                    términos y condiciones
-                  </a>
-                  .
-                </span>
-              </label>
-
-              <button
-                className="btn-primary w-full disabled:cursor-not-allowed disabled:opacity-70"
-                type="submit"
-                disabled={isSubmitting || !registerData.acceptedTerms}
-              >
-                {isSubmitting ? "Creando..." : "Crear cuenta"}
-              </button>
-            </form>
-
-            <p className="mt-5 text-center text-sm text-slate-600">
-              ¿Ya tienes cuenta?{" "}
-              <button
-                type="button"
-                onClick={() => setMode("login")}
-                className="font-semibold text-secondary hover:underline"
-              >
-                Iniciar sesión
-              </button>
-            </p>
-          </>
-        )}
-      </div>
+              <p className="text-center text-sm text-muted-foreground">
+                ¿Ya tienes cuenta?{" "}
+                <Button
+                  type="button"
+                  variant="link"
+                  className="h-auto p-0 text-secondary"
+                  onClick={() => setMode("login")}
+                >
+                  Iniciar sesión
+                </Button>
+              </p>
+            </>
+          )}
+        </CardContent>
+      </Card>
     </div>
   );
 }

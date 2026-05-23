@@ -3,15 +3,16 @@ import { Manrope, Work_Sans } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
+import { cn } from "@/lib/utils";
 
-const manrope = Manrope({
-  variable: "--font-heading",
+const manropeHeading = Manrope({
   subsets: ["latin"],
+  variable: "--font-heading",
 });
 
 const workSans = Work_Sans({
-  variable: "--font-body",
   subsets: ["latin"],
+  variable: "--font-sans",
 });
 
 export const metadata: Metadata = {
@@ -27,11 +28,11 @@ export default function RootLayout({
   return (
     <html
       lang="es"
-      className={`${manrope.variable} ${workSans.variable} h-full antialiased`}
+      className={cn("h-full antialiased", workSans.variable, manropeHeading.variable)}
     >
-      <body className="min-h-full bg-background text-on-background">
+      <body className="flex min-h-full flex-col">
         <Navbar />
-        <main>{children}</main>
+        <main className="flex-1 pt-16">{children}</main>
         <Footer />
       </body>
     </html>

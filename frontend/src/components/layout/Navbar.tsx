@@ -1,44 +1,50 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 import LoginModal from "@/components/auth/LoginModal";
+
+const navItems = [
+  { name: "Inicio", href: "#inicio", active: true },
+  { name: "Cómo funciona", href: "#como-funciona" },
+  { name: "Para profesionales", href: "#profesionales" },
+  { name: "Para empresas", href: "#empresas" },
+];
 
 export default function Navbar() {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
 
   return (
     <>
-      <header className="fixed left-0 top-0 z-50 h-16 w-full border-b border-slate-100 bg-white/90 shadow-[0_4px_20px_rgba(26,43,75,0.08)] backdrop-blur-md">
-        <div className="app-container flex h-full items-center justify-between">
-          <a className="text-xl font-black tracking-tight text-[#1A2B4B]" href="#inicio">
+      <header className="fixed top-0 left-0 z-50 h-16 w-full border-b border-slate-100 bg-white/90 shadow-[0px_4px_20px_rgba(26,43,75,0.08)] backdrop-blur-sm">
+        <div className="mx-auto flex h-full max-w-container-max items-center justify-between px-8">
+          <Link
+            href="/"
+            className="font-heading text-xl font-extrabold tracking-tight text-primary"
+          >
             TalentRenew
-          </a>
+          </Link>
 
           <nav className="hidden items-center gap-8 md:flex">
-            <a
-              className="border-b-2 border-secondary pb-1 text-sm font-bold text-[#1A2B4B]"
-              href="#inicio"
-            >
-              Inicio
-            </a>
-            <a className="text-sm font-medium text-slate-600 hover:text-secondary" href="#como-funciona">
-              Cómo funciona
-            </a>
-            <a className="text-sm font-medium text-slate-600 hover:text-secondary" href="#profesionales">
-              Para profesionales
-            </a>
-            <a className="text-sm font-medium text-slate-600 hover:text-secondary" href="#empresas">
-              Para empresas
-            </a>
+            {navItems.map((item) => (
+              <Link
+                key={item.name}
+                href={item.href}
+                className={`text-base font-semibold transition ${
+                  item.active
+                    ? "border-b-3 border-[#156967] pb-1 text-primary"
+                    : "text-[#475569] hover:text-primary"
+                }`}
+              >
+                {item.name}
+              </Link>
+            ))}
           </nav>
 
-          <button
-            className="btn-primary !h-10 !px-6"
-            type="button"
-            onClick={() => setIsLoginOpen(true)}
-          >
+          <Button type="button" onClick={() => setIsLoginOpen(true)}>
             Iniciar sesión
-          </button>
+          </Button>
         </div>
       </header>
 
