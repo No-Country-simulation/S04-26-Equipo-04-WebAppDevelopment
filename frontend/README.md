@@ -18,9 +18,9 @@ npm run dev
 
 Usa `npm ci` (no `pnpm install`) para respetar el lockfile del repo y no generar conflictos con tus compañeros.
 
-### Diseño UI
+### Trabajo en equipo (diseño)
 
-El diseño **naranja** nuevo de tu compañera **aún no está en este repositorio**. Ver `DISENO-NARANJA.md`. La home actual usa el Hero de `develop` (shadcn) hasta que suban Figma/rama con el naranja.
+La UI de landing sigue lo que está en **`develop`** (shadcn + Hero del equipo). No reintroducir maquetados viejos por cuenta propia; los cambios de diseño entran por PR y luego `merge` a `main`. Ver `TRABAJO-EQUIPO.md`.
 
 Si en tu máquina aparece `Unknown command: npm`, instala Node + npm (ej. en Arch: `sudo pacman -S nodejs npm`) o activa tu version con `fnm`/`nvm` y vuelve a abrir la terminal.
 

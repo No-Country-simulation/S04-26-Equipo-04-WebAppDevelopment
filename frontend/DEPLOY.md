@@ -8,7 +8,7 @@
 
 ### Pasos
 
-1. Sube la rama `feat/team-landing-deploy` (o `main` tras merge) a GitHub.
+1. Sube la rama `main` (o la rama del PR del equipo) a GitHub.
 2. Entra en [vercel.com](https://vercel.com) → **Add New Project** → importa el repo.
 3. Configura:
    - **Root Directory:** `frontend`
@@ -26,9 +26,7 @@
 
 ## Rama sugerida
 
-Usa **`feat/team-landing-deploy`**: diseño del equipo (`develop`) + auth/CV de `main`.
-
-Tras revisión del equipo, merge a `main` y conecta Vercel a `main`.
+Despliega **`main`**: landing del equipo (`develop`) + auth/CV integrados. Los cambios de diseño nuevos entran por merge desde `develop` (ver `TRABAJO-EQUIPO.md`).
 
 ## Comprobar antes de desplegar
 
