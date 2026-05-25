@@ -15,5 +15,7 @@ namespace Talent.API.Entities
         public string TipoUsuario { get; set; } = "profesional";
 
         public DateTime FechaRegistro { get; set; } = DateTime.UtcNow;
+
+        public bool HizoDiagnostico { get; set; } = false;
     }
 }

@@ -7,10 +7,12 @@ namespace Talent.API.Services
     public class DiagnosticoService : IDiagnosticoService
     {
         private readonly IDiagnosticoRepository _repository;
+        private readonly IUsuarioRepository _usuarioRepository;
 
-        public DiagnosticoService(IDiagnosticoRepository repository)
+        public DiagnosticoService(IDiagnosticoRepository repository, IUsuarioRepository usuarioRepository)
         {
             _repository = repository;
+            _usuarioRepository = usuarioRepository;
         }
 
         public async Task<List<CategoriaPreguntasDTO>> ObtenerPreguntasAsync()
@@ -121,6 +123,14 @@ namespace Talent.API.Services
 
             diagnostico.Estado = "completado";
             await _repository.UpdateDiagnosticoAsync(diagnostico);
+
+            // Actualizar la bandera HizoDiagnostico del usuario a true
+            var usuario = await _usuarioRepository.GetByIdAsync(usuarioId);
+            if (usuario != null)
+            {
+                usuario.HizoDiagnostico = true;
+                await _usuarioRepository.UpdateAsync(usuarioId, usuario);
+            }
 
             return await ObtenerResultadoAsync(diagnostico.Id, usuarioId);
         }

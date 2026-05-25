@@ -52,6 +52,7 @@ namespace Talent.API.Data
                 entity.Property(e => e.Password).HasColumnName("contraseña");
                 entity.Property(e => e.TipoUsuario).HasColumnName("tipo_usuario");
                 entity.Property(e => e.FechaRegistro).HasColumnName("fecha_registro");
+                entity.Property(e => e.HizoDiagnostico).HasColumnName("hizo_diagnostico");
             });
 
             modelBuilder.Entity<CategoriaSkill>(entity =>

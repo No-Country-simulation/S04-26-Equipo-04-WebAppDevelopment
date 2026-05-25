@@ -39,6 +39,8 @@ namespace Talent.API.Repositories
             existente.Apellido = usuario.Apellido;
             existente.Email = usuario.Email;
             existente.Password = usuario.Password;
+            existente.TipoUsuario = usuario.TipoUsuario;
+            existente.HizoDiagnostico = usuario.HizoDiagnostico;
 
             await _context.SaveChangesAsync();
             return existente;

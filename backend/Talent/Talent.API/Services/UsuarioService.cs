@@ -23,7 +23,8 @@ namespace Talent.API.Services
                 Id = u.Id,
                 Nombre = u.Nombre,
                 Apellido = u.Apellido,
-                Email = u.Email
+                Email = u.Email,
+                HizoDiagnostico = u.HizoDiagnostico
             }).ToList();
         }
 
@@ -37,7 +38,8 @@ namespace Talent.API.Services
                 Id = usuario.Id,
                 Nombre = usuario.Nombre,
                 Apellido = usuario.Apellido,
-                Email = usuario.Email
+                Email = usuario.Email,
+                HizoDiagnostico = usuario.HizoDiagnostico
             };
         }
 
@@ -64,7 +66,8 @@ namespace Talent.API.Services
                 Id = creado.Id,
                 Nombre = creado.Nombre,
                 Apellido = creado.Apellido,
-                Email = creado.Email
+                Email = creado.Email,
+                HizoDiagnostico = creado.HizoDiagnostico
             };
         }
 
@@ -97,7 +100,8 @@ namespace Talent.API.Services
                 Id = actualizado!.Id,
                 Nombre = actualizado.Nombre,
                 Apellido = actualizado.Apellido,
-                Email = actualizado.Email
+                Email = actualizado.Email,
+                HizoDiagnostico = actualizado.HizoDiagnostico
             };
         }
 

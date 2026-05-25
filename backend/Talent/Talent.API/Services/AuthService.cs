@@ -62,7 +62,8 @@ namespace Talent.API.Services
                 Id = creado.Id,
                 Nombre = creado.Nombre,
                 Email = creado.Email,
-                Token = GenerarToken(creado)
+                Token = GenerarToken(creado),
+                HizoDiagnostico = creado.HizoDiagnostico
             };
         }
 
@@ -80,7 +81,8 @@ namespace Talent.API.Services
                 Id = usuario.Id,
                 Nombre = usuario.Nombre,
                 Email = usuario.Email,
-                Token = GenerarToken(usuario)
+                Token = GenerarToken(usuario),
+                HizoDiagnostico = usuario.HizoDiagnostico
             };
         }
 
