@@ -67,6 +67,10 @@ namespace Talent.API.Repositories
                 .Include(pm => pm.ProgresosClase)
                     .ThenInclude(pc => pc.Clase)
                 .Include(pm => pm.Modulo)
+                    .ThenInclude(m => m.Categoria)
+                .Include(pm => pm.Modulo)
+                    .ThenInclude(m => m.ModuloSkills)
+                        .ThenInclude(ms => ms.Skill)
                 .Include(pm => pm.Ruta)
                 .FirstOrDefaultAsync(pm => pm.Id == progresoModuloId);
         }
