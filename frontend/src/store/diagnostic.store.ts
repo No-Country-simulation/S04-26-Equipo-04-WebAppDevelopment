@@ -38,12 +38,17 @@ export const useDiagnosticStore = create<State>((set, get) => ({
   loadQuestions: async () => {
     set({ loading: true });
 
-    const data = await DiagnosticService.getQuestions();
+    try {
+      const data = await DiagnosticService.getQuestions();
 
-    set({
-      questions: data,
-      loading: false,
-    });
+      set({
+        questions: data,
+      });
+    } catch (error) {
+      console.error("Error loading questions:", error);
+    } finally {
+      set({ loading: false });
+    }
   },
 
   startDiagnostic: async () => {
@@ -56,12 +61,12 @@ export const useDiagnosticStore = create<State>((set, get) => ({
   },
 
   setSelectedCategory: (category) => {
-  set({
-    selectedCategory: category,
-    answers: [],
-    result: null,
-  });
-},
+    set({
+      selectedCategory: category,
+      answers: [],
+      result: null,
+    });
+  },
 
   setAnswer: (preguntaId, opcionId) => {
     const answers = get().answers;
