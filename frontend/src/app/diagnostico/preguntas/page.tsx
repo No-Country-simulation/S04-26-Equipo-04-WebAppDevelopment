@@ -2,12 +2,16 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { AlertTriangle, ArrowLeft, ArrowRight, X } from "lucide-react";
 import { useDiagnosticStore } from "@/store/diagnostic.store";
-import { Badge } from "@/components/Badge";
-import { Button } from "@/components/Button";
-import { Card } from "@/components/Card";
 import { GENERAL_CATEGORIES } from "@/constants/categories";
+import {
+  DiagnosticFooter,
+  DiagnosticHeader,
+  DiagnosticProgress,
+  ExitModal,
+  OptionItem,
+  QuestionCard,
+} from "@/components/diagnostico";
 
 export default function DiagnosticQuestionPage() {
   const router = useRouter();
@@ -31,14 +35,14 @@ export default function DiagnosticQuestionPage() {
     }
   }, [selectedCategory, router]);
 
-  // 3. reset índice cuando cambia dataset
-  useEffect(() => {
-    setCurrentIndex(0);
-  }, [selectedCategory]);
+  //.3
+  const answeredCount = useMemo(() => {
+    return new Set(answers.map((a) => a.preguntaId)).size;
+  }, [answers]);
 
   // 4. filtrar preguntas
   const filteredGroups = useMemo(() => {
-    if (!selectedCategory || !questions.length) return [];
+    if (!selectedCategory) return [];
 
     return questions.filter(
       (group) =>
@@ -73,8 +77,9 @@ export default function DiagnosticQuestionPage() {
   };
 
   // 8. loading guards
-  if (!allQuestions.length) return <div className="text-blue-400">Cargando preguntas...</div>;
-  if (!question) return <div className="text-blue-400">Cargando pregunta...</div>;
+  if (!allQuestions.length || !question) {
+    return <div className="text-blue-400">Cargando preguntas...</div>;
+  }
 
   const progress = ((currentIndex + 1) / allQuestions.length) * 100;
 
@@ -110,6 +115,11 @@ export default function DiagnosticQuestionPage() {
   };
 
   const prev = () => {
+    if (currentIndex === 0) {
+      router.push("/diagnostico/categoria");
+      return;
+    }
+
     setCurrentIndex((prev) => Math.max(0, prev - 1));
   };
 
@@ -118,120 +128,50 @@ export default function DiagnosticQuestionPage() {
   const isLast = currentIndex === allQuestions.length - 1;
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#162840]">
-      <div className="border-b border-white/6 px-5 py-4 flex items-center justify-between">
-        <div className="flex items-center gap-6">
-          <button
-            onClick={() => setShowExitModal(true)}
-            className="flex items-center gap-1 text-text-muted-dark hover:text-white transition-colors text-[13px]"
-          >
-            <X className="h-3.5 w-3.5" />
-            Salir
-          </button>
-          <p className="text-text-muted-dark text-[13px]">
-            Pregunta {currentIndex + 1} de {allQuestions.length}
-          </p>
-        </div>
-        <Badge variant="navy" className="text-[11px]">
-          {question.categoria}
-        </Badge>
-      </div>
-
-      <div className="h-1 bg-white/8">
-        <div
-          className="h-full bg-amber-accent transition-all"
-          style={{ width: `${progress}%` }}
-        ></div>
-      </div>
-
+    <div className="flex flex-col h-screen">
+      <DiagnosticHeader
+        current={currentIndex + 1}
+        total={allQuestions.length}
+        onExit={() => setShowExitModal(true)}
+        category={question.categoria}
+      />
+      <DiagnosticProgress value={progress} />
       <div className="flex-1 flex items-center justify-center px-4 py-8">
         <div className="max-w-2xl w-full">
-          <div className="bg-white/4 border border-white/8 rounded-xl px-7 pt-6 pb-7">
-            <h2 className="text-white text-[20px] mb-6 font-medium">{question.texto}</h2>
-
-            <div className="space-y-3">
-              {question.opciones.map((option) => (
-                <button
-                  key={option.id}
-                  onClick={() => handleSelect(option.id)}
-                  className={`w-full text-left p-4 rounded-xl border transition-all ${
-                    selectedOption === option.id
-                      ? "bg-amber-accent/10 border-amber-accent"
-                      : "bg-white/8 border-white/10 hover:bg-white/10"
-                  }`}
-                >
-                  <div className="flex items-center gap-3">
-                    <div
-                      className={`w-4.5 h-4.5 rounded-full border-[1.5px] flex items-center justify-center ${
-                        selectedOption === option.id ? "border-amber-accent" : "border-white/30"
-                      }`}
-                    >
-                      {selectedOption === option.id && (
-                        <div className="w-2 h-2 rounded-full bg-amber-accent"></div>
-                      )}
-                    </div>
-                    <span className="text-[#D4E4F5] text-[14px]">{formatOption(option.texto)}</span>
-                  </div>
-                </button>
-              ))}
-            </div>
-          </div>
+          <QuestionCard texto={question.texto}>
+            {question.opciones.map((option) => (
+              <OptionItem
+                key={option.id}
+                option={option}
+                selected={selectedOption === option.id}
+                onSelect={() => handleSelect(option.id)}
+                formatText={formatOption}
+              />
+            ))}
+          </QuestionCard>
         </div>
       </div>
-
-      <div className="border-t border-white/6 px-7 py-4 flex items-center justify-between">
-        <Button
-          onClick={prev}
-          disabled={currentIndex === 0}
-          variant="secondary"
-          className="min-h-11"
-        >
-          <ArrowLeft className="size-4" /> Anterior
-        </Button>
-
-        <p className="text-[12px] text-[#4A6480]">
-          {selectedOption ? "Opción seleccionada" : "Selecciona una opción"}
-        </p>
-
-        <Button
-          variant="primary"
-          disabled={!selectedOption || submitting}
-          onClick={next}
-          className="min-h-11"
-        >
-          {isLast ? (submitting ? "Enviando..." : "Ver resultado") : "Siguiente"}
-          <ArrowRight className="size-4" />
-        </Button>
-      </div>
-
+      <DiagnosticFooter
+        onNext={next}
+        onPrev={prev}
+        showPrev={true}
+        disabledNext={!selectedOption || submitting}
+        disabledPrev={submitting}
+        isLast={isLast}
+        submitting={submitting}
+        selected={!!selectedOption}
+      />
       {showExitModal && (
-        <div
-          className="fixed inset-0 bg-black/60 flex items-center justify-center z-50"
-          onClick={() => setShowExitModal(false)}
-        >
-          <Card className="max-w-sm w-full m-4 p-6">
-            <h4 className="text-primary-navy mb-3 font-medium">¿Salir del diagnóstico?</h4>
-            <p className="text-text-secondary-light text-[13px] mb-4">
-              Tu progreso no se guardará y tendrás que comenzar desde el principio.
-            </p>
-
-            <div className="bg-light-amber border border-amber-accent/35 rounded-lg p-3 flex items-center gap-2 mb-6">
-              <AlertTriangle size={16} className="text-amber-accent shrink-0" />
-              <p className="text-amber-accent text-[13px]">
-                Llevas {currentIndex + 1} preguntas respondidas
-              </p>
-            </div>
-
-            <div className="flex gap-3">
-              <Button variant="ghost" className="flex-1" onClick={() => setShowExitModal(false)}>
-                Cancelar
-              </Button>
-              <Button variant="dark" className="flex-1" onClick={handleExit}>
-                Salir de todas formas
-              </Button>
-            </div>
-          </Card>
-        </div>
+        <ExitModal
+          open={showExitModal}
+          onClose={() => setShowExitModal(false)}
+          onConfirm={handleExit}
+          texto={
+            answeredCount === 0
+              ? "Has respondido 0 preguntas"
+              : `Llevas ${answeredCount} preguntas respondidas`
+          }
+        />
       )}
     </div>
   );
