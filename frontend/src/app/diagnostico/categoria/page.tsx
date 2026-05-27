@@ -1,15 +1,24 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useDiagnosticStore } from "@/store/diagnostic.store";
-import { Button } from "@/components/Button";
 import { GENERAL_CATEGORIES } from "@/constants/categories";
+import {
+  CategorySelector,
+  DiagnosticFooter,
+  DiagnosticHeader,
+  ExitModal,
+  QuestionCard,
+} from "@/components/diagnostico";
 
 export default function CategoryPage() {
   const router = useRouter();
 
-  const { questions, loadQuestions, setSelectedCategory, selectedCategory } = useDiagnosticStore();
+  const { questions, loadQuestions, setSelectedCategory, selectedCategory, loading } =
+    useDiagnosticStore();
+
+  const [showExitModal, setShowExitModal] = useState(false);
 
   useEffect(() => {
     loadQuestions();
@@ -30,31 +39,47 @@ export default function CategoryPage() {
     ),
   ];
 
+  const handleExit = () => router.push("/");
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#162840] px-4">
-      <div className="max-w-xl w-full">
-        <h2 className="text-white text-xl mb-6">Selecciona tu área principal</h2>
-
-        <div className="space-y-3 mb-6">
-          {categories.map((categoria) => (
-            <button
-              key={categoria}
-              onClick={() => handleSelect(categoria)}
-              className={`w-full p-4 rounded-xl border text-left ${
-                selectedCategory === categoria
-                  ? "border-amber-accent bg-amber-accent/10"
-                  : "border-white/10 bg-white/5"
-              }`}
-            >
-              <p className="text-white">{categoria}</p>
-            </button>
-          ))}
+    <div className="h-screen flex flex-col">
+      <DiagnosticHeader onExit={() => setShowExitModal(true)} category="Categoria" />
+      <div className="flex-1 flex items-center justify-center px-4 py-8">
+        <div className="max-w-2xl w-full">
+          <QuestionCard texto="Selecciona tu área principal de interés para el diagnóstico">
+            {loading ? (
+              <div className="flex-1 flex items-center justify-center">
+                <div className="text-blue-400 animate-pulse text-sm">Cargando categorías...</div>
+              </div>
+            ) : (
+              categories.map((categoria) => (
+                <CategorySelector
+                  key={categoria}
+                  categoria={categoria}
+                  selected={selectedCategory === categoria}
+                  onSelect={() => handleSelect(categoria)}
+                />
+              ))
+            )}
+          </QuestionCard>
         </div>
-
-        <Button onClick={handleContinue} disabled={!selectedCategory}>
-          Continuar →
-        </Button>
       </div>
+      <DiagnosticFooter
+        onNext={handleContinue}
+        disabledNext={!selectedCategory}
+        disabledPrev={false}
+        isLast={false}
+        submitting={false}
+        selected={!!selectedCategory}
+      />
+
+      {showExitModal && (
+        <ExitModal
+          open={showExitModal}
+          onClose={() => setShowExitModal(false)}
+          onConfirm={handleExit}
+        />
+      )}
     </div>
   );
 }
