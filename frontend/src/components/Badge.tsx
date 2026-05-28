@@ -10,7 +10,7 @@ export function Badge({ variant = 'amber', children, className = '' }: BadgeProp
     green: 'bg-success-green/20 border-[0.5px] border-success-green/40 text-[#5DBF82]',
     navy: 'bg-primary-navy/60 text-[#85B7EB]',
     success: 'bg-[#EAF3DE] text-[#27500A]',
-    gray: 'bg-gray-200 text-gray-600',
+    gray: 'bg-gray-200 text-gray-500 border border-gray-300',
     inProgress: 'bg-blue-200 text-black border border-blue-300'
   };
 
