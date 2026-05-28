@@ -24,11 +24,11 @@ export default function DiagnosticResultPage() {
     <div className="min-h-screen px-8 py-12 bg-[#162840]">
       <div className="max-w-4xl mx-auto">
         <Link
-          href="/diagnostic/3"
+          href="/dashboard/profesional/mi-ruta"
           className="flex items-center gap-2 text-amber-accent text-[13px] hover:underline mb-8"
         >
           <ArrowLeft size={14} />
-          Volver al diagnóstico
+          Volver a Mi Ruta
         </Link>
 
         <div className="text-center mb-12">
@@ -168,7 +168,7 @@ export default function DiagnosticResultPage() {
               </div>
             </div>
 
-            <Link href="/dashboard">
+            <Link href="/dashboard/profesional">
               <Button variant="primary" className="w-full">
                 Ver mi dashboard →
               </Button>

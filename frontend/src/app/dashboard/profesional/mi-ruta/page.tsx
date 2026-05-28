@@ -135,7 +135,7 @@ export default function MiRutaPage() {
         <p className="text-text-secondary-light text-[14px] mb-6">
           Realiza el diagnóstico para generar tu camino de formación personalizado.
         </p>
-        <Link href="/diagnostic">
+        <Link href="/diagnostico">
           <Button variant="primary">Ir al Diagnóstico</Button>
         </Link>
       </div>

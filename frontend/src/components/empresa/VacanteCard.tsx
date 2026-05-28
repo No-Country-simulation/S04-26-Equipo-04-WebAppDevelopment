@@ -72,11 +72,11 @@ export function VacanteCard({ vacante, onDelete }: Props) {
         ))}
       </div>
       {/* Footer */}
-      <div className="flex justify-between items-end -mt-6">
+      <div className="flex flex-col gap-3 border-t border-black/5 pt-4 sm:flex-row sm:items-center sm:justify-between">
         <span className="text-xs text-text-secondary-light">
           Publicado: {new Date(vacante.fechaPublicacion).toLocaleDateString()}
         </span>
-        <div className="flex justify-between gap-4">
+        <div className="flex flex-wrap gap-3">
           <Button variant="ghost" onClick={() => onDelete(vacante.id)} className="hover:opacity-80">
             <Trash2 size={16} />
             Eliminar
