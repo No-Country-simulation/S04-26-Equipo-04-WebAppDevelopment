@@ -160,16 +160,16 @@ namespace Talent.API
                 // Clases del Módulo 1 (10 clases integradas)
                 await context.Clases.AddRangeAsync(new List<Clase>
                 {
-                    new Clase { ModuloId = modIA.Id, Titulo = "Clase 1: Introducción a la IA Generativa", Descripcion = "Qué es la Inteligencia Artificial y cómo está transformando el empleo sénior.", VideoUrl = "https://www.youtube.com/embed/5sTCOw56dY8", ContenidoTexto = "La IA generativa no reemplaza al profesional, sino que potencia su productividad...", Orden = 1 },
-                    new Clase { ModuloId = modIA.Id, Titulo = "Clase 2: Creación de Cuenta y Primeros Pasos", Descripcion = "Cómo registrarse en ChatGPT y dar tus primeros comandos básicos.", VideoUrl = "https://www.youtube.com/embed/s79WACO9sFU", ContenidoTexto = "Para interactuar con la IA de manera eficiente, debemos crear un usuario y familiarizarnos...", Orden = 2 },
-                    new Clase { ModuloId = modIA.Id, Titulo = "Clase 3: La Anatomía de un Buen Prompt", Descripcion = "Aprende a redactar instrucciones claras utilizando rol, contexto y formato.", VideoUrl = "https://www.youtube.com/embed/jC4v5AS4RIM", ContenidoTexto = "Un prompt efectivo consta de: 1. Rol, 2. Tarea, 3. Contexto, 4. Formato de salida.", Orden = 3 },
-                    new Clase { ModuloId = modIA.Id, Titulo = "Clase 4: Redacción de Correos Profesionales", Descripcion = "Utiliza IA para redactar y pulir correos de negociación, seguimiento o disculpa.", VideoUrl = "https://www.youtube.com/embed/pqkJGnBTq78", ContenidoTexto = "Puedes pedirle a la IA: 'Actúa como un Gerente de Ventas y redacta un correo para...'", Orden = 4 },
-                    new Clase { ModuloId = modIA.Id, Titulo = "Clase 5: Resumen de Reportes y Documentos Largos", Descripcion = "Cómo subir o copiar textos extensos para obtener resúmenes ejecutivos al instante.", VideoUrl = "https://www.youtube.com/embed/Yq3grVSCdno", ContenidoTexto = "Copia el texto del reporte y pídele a ChatGPT: 'Haz un resumen en 5 viñetas clave de...'", Orden = 5 },
-                    new Clase { ModuloId = modIA.Id, Titulo = "Clase 6: Generación de Ideas y Lluvia de Brainstorming", Descripcion = "Usa ChatGPT como un colega interactivo para proponer estrategias y agendas.", VideoUrl = "https://www.youtube.com/embed/V2RGLXJCEwk", ContenidoTexto = "El brainstorming interactivo permite pulir ideas iniciales y explorar alternativas organizativas...", Orden = 6 },
-                    new Clase { ModuloId = modIA.Id, Titulo = "Clase 7: ChatGPT como Asistente de Aprendizaje", Descripcion = "Cómo pedirle a la IA que te explique conceptos técnicos complejos como si fueras un principiante.", VideoUrl = "https://www.youtube.com/embed/GJzVGtQMUMo", ContenidoTexto = "Usa el prompt: 'Explícame qué es Blockchain como si fuera un niño de 10 años...'", Orden = 7 },
-                    new Clase { ModuloId = modIA.Id, Titulo = "Clase 8: IA para la Búsqueda Laboral", Descripcion = "Simulación de entrevistas y adaptación de tu perfil profesional usando prompts inteligentes.", VideoUrl = "https://www.youtube.com/embed/BYY3MfCXYlM", ContenidoTexto = "Copia el aviso de empleo y pídele: 'Hazme 5 preguntas de entrevista para esta vacante...'", Orden = 8 },
-                    new Clase { ModuloId = modIA.Id, Titulo = "Clase 9: Ética, Privacidad y Limitaciones de la IA", Descripcion = "Qué datos NUNCA debes compartir con la IA y cómo verificar respuestas incorrectas.", VideoUrl = "https://www.youtube.com/embed/39mBMFHNEZo", ContenidoTexto = "Evita subir datos personales de clientes o información confidencial financiera...", Orden = 9 },
-                    new Clase { ModuloId = modIA.Id, Titulo = "Clase 10: Proyecto Final - Tu Asistente Personalizado", Descripcion = "Configura tus prompts diarios ideales para automatizar tus tareas recurrentes.", VideoUrl = "https://www.youtube.com/embed/o_WfdHNjpWc", ContenidoTexto = "Aplica todo lo aprendido creando una hoja de comandos predefinidos para tu trabajo diario...", Orden = 10 }
+                    new Clase { ModuloId = modIA.Id, Titulo = "Clase 1: Introducción a la IA Generativa", Descripcion = "Qué es la Inteligencia Artificial y cómo está transformando el empleo sénior.", VideoUrl = "https://www.youtube.com/embed/ZzLl20FnKhE", ContenidoTexto = "La IA generativa no reemplaza al profesional, sino que potencia su productividad...", Orden = 1 },
+                    new Clase { ModuloId = modIA.Id, Titulo = "Clase 2: Creación de Cuenta y Primeros Pasos", Descripcion = "Cómo registrarse en ChatGPT y dar tus primeros comandos básicos.", VideoUrl = "https://www.youtube.com/embed/mw59ENZKiME", ContenidoTexto = "Para interactuar con la IA de manera eficiente, debemos crear un usuario y familiarizarnos...", Orden = 2 },
+                    new Clase { ModuloId = modIA.Id, Titulo = "Clase 3: La Anatomía de un Buen Prompt", Descripcion = "Aprende a redactar instrucciones claras utilizando rol, contexto y formato.", VideoUrl = "https://www.youtube.com/embed/p2PqfRte46k", ContenidoTexto = "Un prompt efectivo consta de: 1. Rol, 2. Tarea, 3. Contexto, 4. Formato de salida.", Orden = 3 },
+                    new Clase { ModuloId = modIA.Id, Titulo = "Clase 4: Redacción de Correos Profesionales", Descripcion = "Utiliza IA para redactar y pulir correos de negociación, seguimiento o disculpa.", VideoUrl = "https://www.youtube.com/embed/-pRqogF0Q9k", ContenidoTexto = "Puedes pedirle a la IA: 'Actúa como un Gerente de Ventas y redacta un correo para...'", Orden = 4 },
+                    new Clase { ModuloId = modIA.Id, Titulo = "Clase 5: Resumen de Reportes y Documentos Largos", Descripcion = "Cómo subir o copiar textos extensos para obtener resúmenes ejecutivos al instante.", VideoUrl = "https://www.youtube.com/embed/02VLXc7ieC0", ContenidoTexto = "Copia el texto del reporte y pídele a ChatGPT: 'Haz un resumen en 5 viñetas clave de...'", Orden = 5 },
+                    new Clase { ModuloId = modIA.Id, Titulo = "Clase 6: Generación de Ideas y Lluvia de Brainstorming", Descripcion = "Usa ChatGPT como un colega interactivo para proponer estrategias y agendas.", VideoUrl = "https://www.youtube.com/embed/gfUOxpHWLWI", ContenidoTexto = "El brainstorming interactivo permite pulir ideas iniciales y explorar alternativas organizativas...", Orden = 6 },
+                    new Clase { ModuloId = modIA.Id, Titulo = "Clase 7: ChatGPT como Asistente de Aprendizaje", Descripcion = "Cómo pedirle a la IA que te explique conceptos técnicos complejos como si fueras un principiante.", VideoUrl = "https://www.youtube.com/embed/vQVzUG1LKLU", ContenidoTexto = "Usa el prompt: 'Explícame qué es Blockchain como si fuera un niño de 10 años...'", Orden = 7 },
+                    new Clase { ModuloId = modIA.Id, Titulo = "Clase 8: IA para la Búsqueda Laboral", Descripcion = "Simulación de entrevistas y adaptación de tu perfil profesional usando prompts inteligentes.", VideoUrl = "https://www.youtube.com/embed/pKswgMO3Xps", ContenidoTexto = "Copia el aviso de empleo y pídele: 'Hazme 5 preguntas de entrevista para esta vacante...'", Orden = 8 },
+                    new Clase { ModuloId = modIA.Id, Titulo = "Clase 9: Ética, Privacidad y Limitaciones de la IA", Descripcion = "Qué datos NUNCA debes compartir con la IA y cómo verificar respuestas incorrectas.", VideoUrl = "https://www.youtube.com/embed/k83SrYTh0Zg", ContenidoTexto = "Evita subir datos personales de clientes o información confidencial financiera...", Orden = 9 },
+                    new Clase { ModuloId = modIA.Id, Titulo = "Clase 10: Proyecto Final - Tu Asistente Personalizado", Descripcion = "Configura tus prompts diarios ideales para automatizar tus tareas recurrentes.", VideoUrl = "https://www.youtube.com/embed/-zxjtN7hzS4", ContenidoTexto = "Aplica todo lo aprendido creando una hoja de comandos predefinidos para tu trabajo diario...", Orden = 10 }
                 });
 
                 // MÓDULO 2: Excel Avanzado para Reportes de Negocio
@@ -192,9 +192,9 @@ namespace Talent.API
 
                 await context.Clases.AddRangeAsync(new List<Clase>
                 {
-                    new Clase { ModuloId = modExcel.Id, Titulo = "Clase 1: Fórmulas Condicionales y BUSCARX", Descripcion = "Aprende a buscar datos eficientemente en tablas masivas.", VideoUrl = "https://www.youtube.com/embed/ePxensins4g", ContenidoTexto = "BUSCARX reemplaza a BUSCARV ofreciendo mayor flexibilidad y seguridad al insertar columnas...", Orden = 1 },
-                    new Clase { ModuloId = modExcel.Id, Titulo = "Clase 2: Tablas Dinámicas y Segmentación", Descripcion = "Organiza y cruza miles de filas de datos de ventas u operaciones.", VideoUrl = "https://www.youtube.com/embed/gNU3_rMr9WQ", ContenidoTexto = "Las tablas dinámicas te permiten agrupar datos por fecha, categoría y región en un clic...", Orden = 2 },
-                    new Clase { ModuloId = modExcel.Id, Titulo = "Clase 3: Diseño de Dashboards Ejecutivos", Descripcion = "Combina gráficos sencillos y filtros dinámicos para presentar resultados visuales.", VideoUrl = "https://www.youtube.com/embed/UyRDMapKf5s", ContenidoTexto = "Un dashboard efectivo debe ser fácil de leer para directivos y actualizarse automáticamente...", Orden = 3 }
+                    new Clase { ModuloId = modExcel.Id, Titulo = "Clase 1: Fórmulas Condicionales y BUSCARX", Descripcion = "Aprende a buscar datos eficientemente en tablas masivas.", VideoUrl = "https://www.youtube.com/embed/bVJ3UbYkS8s", ContenidoTexto = "BUSCARX reemplaza a BUSCARV ofreciendo mayor flexibilidad y seguridad al insertar columnas...", Orden = 1 },
+                    new Clase { ModuloId = modExcel.Id, Titulo = "Clase 2: Tablas Dinámicas y Segmentación", Descripcion = "Organiza y cruza miles de filas de datos de ventas u operaciones.", VideoUrl = "https://www.youtube.com/embed/Qslu3EuH-oQ", ContenidoTexto = "Las tablas dinámicas te permiten agrupar datos por fecha, categoría y región en un clic...", Orden = 2 },
+                    new Clase { ModuloId = modExcel.Id, Titulo = "Clase 3: Diseño de Dashboards Ejecutivos", Descripcion = "Combina gráficos sencillos y filtros dinámicos para presentar resultados visuales.", VideoUrl = "https://www.youtube.com/embed/OeBMWKr5xFY", ContenidoTexto = "Un dashboard efectivo debe ser fácil de leer para directivos y actualizarse automáticamente...", Orden = 3 }
                 });
 
                 // MÓDULO 3: Liderazgo de Equipos Híbridos
@@ -221,9 +221,9 @@ namespace Talent.API
 
                 await context.Clases.AddRangeAsync(new List<Clase>
                 {
-                    new Clase { ModuloId = modLid.Id, Titulo = "Clase 1: Coordinación de Tiempos y Canales de Comunicación", Descripcion = "Cuándo usar Slack, cuándo mandar un correo y cuándo hacer una videollamada.", VideoUrl = "https://www.youtube.com/embed/M3KKGQ5_LAQ", ContenidoTexto = "Establecer reglas claras de comunicación asincrónica evita interrupciones y mejora la productividad...", Orden = 1 },
-                    new Clase { ModuloId = modLid.Id, Titulo = "Clase 2: Medición por Objetivos (OKRs)", Descripcion = "Deja atrás el control presencial y aprende a evaluar a tu equipo basado en resultados reales.", VideoUrl = "https://www.youtube.com/embed/EIcpFZ5rbGc", ContenidoTexto = "Los objetivos y resultados clave (OKRs) alinean los esfuerzos diarios con la estrategia de la empresa...", Orden = 2 },
-                    new Clase { ModuloId = modLid.Id, Titulo = "Clase 3: Motivación y Confianza en Entornos Híbridos", Descripcion = "Estrategias para mantener integrados a colaboradores remotos y presenciales.", VideoUrl = "https://www.youtube.com/embed/Y2dZzwFJOmg", ContenidoTexto = "La seguridad psicológica y los espacios casuales de integración digital evitan el aislamiento...", Orden = 3 }
+                    new Clase { ModuloId = modLid.Id, Titulo = "Clase 1: Coordinación de Tiempos y Canales de Comunicación", Descripcion = "Cuándo usar Slack, cuándo mandar un correo y cuándo hacer una videollamada.", VideoUrl = "https://www.youtube.com/embed/ldjwrzl4mEM", ContenidoTexto = "Establecer reglas claras de comunicación asincrónica evita interrupciones y mejora la productividad...", Orden = 1 },
+                    new Clase { ModuloId = modLid.Id, Titulo = "Clase 2: Medición por Objetivos (OKRs)", Descripcion = "Deja atrás el control presencial y aprende a evaluar a tu equipo basado en resultados reales.", VideoUrl = "https://www.youtube.com/embed/luTStxmXmFo", ContenidoTexto = "Los objetivos y resultados clave (OKRs) alinean los esfuerzos diarios con la estrategia de la empresa...", Orden = 2 },
+                    new Clase { ModuloId = modLid.Id, Titulo = "Clase 3: Motivación y Confianza en Entornos Híbridos", Descripcion = "Estrategias para mantener integrados a colaboradores remotos y presenciales.", VideoUrl = "https://www.youtube.com/embed/Pkb7m7bqb2o", ContenidoTexto = "La seguridad psicológica y los espacios casuales de integración digital evitan el aislamiento...", Orden = 3 }
                 });
 
                 // MÓDULO 4: Marca Personal Digital y LinkedIn para +45
@@ -250,9 +250,9 @@ namespace Talent.API
 
                 await context.Clases.AddRangeAsync(new List<Clase>
                 {
-                    new Clase { ModuloId = modMarca.Id, Titulo = "Clase 1: Optimización de tu Perfil de LinkedIn", Descripcion = "Configura tu titular, foto profesional y sección 'Acerca de' para destacar tu propuesta de valor.", VideoUrl = "https://www.youtube.com/embed/p_80GvTMais", ContenidoTexto = "Tu perfil de LinkedIn no debe ser solo una copia de tu CV, sino una carta de presentación interactiva...", Orden = 1 },
-                    new Clase { ModuloId = modMarca.Id, Titulo = "Clase 2: Redacción de CV Basado en Logros", Descripcion = "Aprende a redactar tus experiencias previas enfocándote en métricas, porcentajes e impactos numéricos.", VideoUrl = "https://www.youtube.com/embed/Q3K1EQ4IjCM", ContenidoTexto = "En lugar de 'Responsable de presupuestos', escribe 'Optimicé un 15% el presupuesto anual mediante...'", Orden = 2 },
-                    new Clase { ModuloId = modMarca.Id, Titulo = "Clase 3: Estrategias de Networking Digital", Descripcion = "Cómo conectar con decisores de empleo y participar activamente en debates de tu sector.", VideoUrl = "https://www.youtube.com/embed/4HCTUesDabE", ContenidoTexto = "Interactuar con aportes valiosos en publicaciones de tu sector incrementa tu visibilidad frente a reclutadores...", Orden = 3 }
+                    new Clase { ModuloId = modMarca.Id, Titulo = "Clase 1: Optimización de tu Perfil de LinkedIn", Descripcion = "Configura tu titular, foto profesional y sección 'Acerca de' para destacar tu propuesta de valor.", VideoUrl = "https://www.youtube.com/embed/diroxCwKS4k", ContenidoTexto = "Tu perfil de LinkedIn no debe ser solo una copia de tu CV, sino una carta de presentación interactiva...", Orden = 1 },
+                    new Clase { ModuloId = modMarca.Id, Titulo = "Clase 2: Redacción de CV Basado en Logros", Descripcion = "Aprende a redactar tus experiencias previas enfocándote en métricas, porcentajes e impactos numéricos.", VideoUrl = "https://www.youtube.com/embed/LhSEYXR9jI4", ContenidoTexto = "En lugar de 'Responsable de presupuestos', escribe 'Optimicé un 15% el presupuesto anual mediante...'", Orden = 2 },
+                    new Clase { ModuloId = modMarca.Id, Titulo = "Clase 3: Estrategias de Networking Digital", Descripcion = "Cómo conectar con decisores de empleo y participar activamente en debates de tu sector.", VideoUrl = "https://www.youtube.com/embed/la3VEf96ipk", ContenidoTexto = "Interactuar con aportes valiosos en publicaciones de tu sector incrementa tu visibilidad frente a reclutadores...", Orden = 3 }
                 });
 
                 // MÓDULO 5: Gestión de Proyectos con Scrum
@@ -275,11 +275,62 @@ namespace Talent.API
 
                 await context.Clases.AddRangeAsync(new List<Clase>
                 {
-                    new Clase { ModuloId = modScrum.Id, Titulo = "Clase 1: Mentalidad Ágil vs Tradicional", Descripcion = "Comprende el manifiesto ágil y por qué las empresas buscan perfiles adaptables.", VideoUrl = "https://www.youtube.com/embed/HhC75IonpOU", ContenidoTexto = "La agilidad prioriza la entrega de valor temprano y la adaptación al cambio sobre planes rígidos...", Orden = 1 },
-                    new Clase { ModuloId = modScrum.Id, Titulo = "Clase 2: Eventos y Ceremonias en Scrum", Descripcion = "Cómo llevar el día a día con Sprint Plannings, Dailies, Reviews y Retrospectivas.", VideoUrl = "https://www.youtube.com/embed/sLexw-z13Fo", ContenidoTexto = "Las reuniones de Scrum deben ser breves, enfocadas y buscar la mejora continua en cada iteración...", Orden = 2 },
-                    new Clase { ModuloId = modScrum.Id, Titulo = "Clase 3: Tableros Trello y Jira para el Día a Día", Descripcion = "Aprende a usar herramientas digitales de organización Kanban para visualizar tus flujos de trabajo.", VideoUrl = "https://www.youtube.com/embed/b-G7JBP4aEg", ContenidoTexto = "Un tablero digital Kanban mejora la transparencia del equipo, permitiendo ver cuellos de botella al instante...", Orden = 3 }
+                    new Clase { ModuloId = modScrum.Id, Titulo = "Clase 1: Mentalidad Ágil vs Tradicional", Descripcion = "Comprende el manifiesto ágil y por qué las empresas buscan perfiles adaptables.", VideoUrl = "https://www.youtube.com/embed/yVA1yI3orDA", ContenidoTexto = "La agilidad prioriza la entrega de valor temprano y la adaptación al cambio sobre planes rígidos...", Orden = 1 },
+                    new Clase { ModuloId = modScrum.Id, Titulo = "Clase 2: Eventos y Ceremonias en Scrum", Descripcion = "Cómo llevar el día a día con Sprint Plannings, Dailies, Reviews y Retrospectivas.", VideoUrl = "https://www.youtube.com/embed/0r7eZkAbh14", ContenidoTexto = "Las reuniones de Scrum deben ser breves, enfocadas y buscar la mejora continua en cada iteración...", Orden = 2 },
+                    new Clase { ModuloId = modScrum.Id, Titulo = "Clase 3: Tableros Trello y Jira para el Día a Día", Descripcion = "Aprende a usar herramientas digitales de organización Kanban para visualizar tus flujos de trabajo.", VideoUrl = "https://www.youtube.com/embed/hGsWUrujmXM", ContenidoTexto = "Un tablero digital Kanban mejora la transparencia del equipo, permitiendo ver cuellos de botella al instante...", Orden = 3 }
                 });
 
+                await context.SaveChangesAsync();
+            }
+
+            await ActualizarVideoUrlsAsync(context);
+        }
+
+        private static async Task ActualizarVideoUrlsAsync(AppDbContext context)
+        {
+            var videoUrlsPorClase = new Dictionary<string, string>
+            {
+                ["Clase 1: Introducción a la IA Generativa"] = "https://www.youtube.com/embed/ZzLl20FnKhE",
+                ["Clase 2: Creación de Cuenta y Primeros Pasos"] = "https://www.youtube.com/embed/mw59ENZKiME",
+                ["Clase 3: La Anatomía de un Buen Prompt"] = "https://www.youtube.com/embed/p2PqfRte46k",
+                ["Clase 4: Redacción de Correos Profesionales"] = "https://www.youtube.com/embed/-pRqogF0Q9k",
+                ["Clase 5: Resumen de Reportes y Documentos Largos"] = "https://www.youtube.com/embed/02VLXc7ieC0",
+                ["Clase 6: Generación de Ideas y Lluvia de Brainstorming"] = "https://www.youtube.com/embed/gfUOxpHWLWI",
+                ["Clase 7: ChatGPT como Asistente de Aprendizaje"] = "https://www.youtube.com/embed/vQVzUG1LKLU",
+                ["Clase 8: IA para la Búsqueda Laboral"] = "https://www.youtube.com/embed/pKswgMO3Xps",
+                ["Clase 9: Ética, Privacidad y Limitaciones de la IA"] = "https://www.youtube.com/embed/k83SrYTh0Zg",
+                ["Clase 10: Proyecto Final - Tu Asistente Personalizado"] = "https://www.youtube.com/embed/-zxjtN7hzS4",
+                ["Clase 1: Fórmulas Condicionales y BUSCARX"] = "https://www.youtube.com/embed/bVJ3UbYkS8s",
+                ["Clase 2: Tablas Dinámicas y Segmentación"] = "https://www.youtube.com/embed/Qslu3EuH-oQ",
+                ["Clase 3: Diseño de Dashboards Ejecutivos"] = "https://www.youtube.com/embed/OeBMWKr5xFY",
+                ["Clase 1: Coordinación de Tiempos y Canales de Comunicación"] = "https://www.youtube.com/embed/ldjwrzl4mEM",
+                ["Clase 2: Medición por Objetivos (OKRs)"] = "https://www.youtube.com/embed/luTStxmXmFo",
+                ["Clase 3: Motivación y Confianza en Entornos Híbridos"] = "https://www.youtube.com/embed/Pkb7m7bqb2o",
+                ["Clase 1: Optimización de tu Perfil de LinkedIn"] = "https://www.youtube.com/embed/diroxCwKS4k",
+                ["Clase 2: Redacción de CV Basado en Logros"] = "https://www.youtube.com/embed/LhSEYXR9jI4",
+                ["Clase 3: Estrategias de Networking Digital"] = "https://www.youtube.com/embed/la3VEf96ipk",
+                ["Clase 1: Mentalidad Ágil vs Tradicional"] = "https://www.youtube.com/embed/yVA1yI3orDA",
+                ["Clase 2: Eventos y Ceremonias en Scrum"] = "https://www.youtube.com/embed/0r7eZkAbh14",
+                ["Clase 3: Tableros Trello y Jira para el Día a Día"] = "https://www.youtube.com/embed/hGsWUrujmXM"
+            };
+
+            var titulos = videoUrlsPorClase.Keys.ToList();
+            var clases = await context.Clases
+                .Where(c => titulos.Contains(c.Titulo))
+                .ToListAsync();
+
+            var huboCambios = false;
+            foreach (var clase in clases)
+            {
+                var nuevoVideoUrl = videoUrlsPorClase[clase.Titulo];
+                if (clase.VideoUrl == nuevoVideoUrl) continue;
+
+                clase.VideoUrl = nuevoVideoUrl;
+                huboCambios = true;
+            }
+
+            if (huboCambios)
+            {
                 await context.SaveChangesAsync();
             }
         }
