@@ -24,9 +24,15 @@ namespace Talent.API.Services
         public async Task<PostulacionResponseDTO> AplicarAsync(CreatePostulacionDTO dto, long usuarioId)
         {
             var perfil = await _perfilRepository.GetPerfilByUsuarioIdAsync(usuarioId);
-            if (perfil == null || !perfil.VisibleMarketplace)
+            if (perfil == null)
             {
-                throw new Exception("Debes completar tu ruta de aprendizaje y tener tu CV Vivo activo/visible para poder postularte a vacantes.");
+                throw new Exception("Debes tener un perfil profesional para poder postularte a vacantes.");
+            }
+
+            var tieneSkillValidada = perfil.PerfilSkills.Any(ps => ps.Validada);
+            if (!tieneSkillValidada)
+            {
+                throw new Exception("Debes completar al menos un mÃ³dulo de tu ruta para validar una habilidad antes de postularte.");
             }
 
             var vacante = await _vacanteRepository.GetByIdAsync(dto.VacanteId);

@@ -26,7 +26,10 @@ namespace Talent.API.Repositories
                 .Include(r => r.Progresos)
                     .ThenInclude(p => p.ProgresosClase)
                         .ThenInclude(pc => pc.Clase)
-                .FirstOrDefaultAsync(r => r.UsuarioId == usuarioId && r.Estado == "activa");
+                .Where(r => r.UsuarioId == usuarioId && (r.Estado == "activa" || r.Estado == "completada"))
+                .OrderBy(r => r.Estado == "activa" ? 0 : 1)
+                .ThenByDescending(r => r.FechaCreacion)
+                .FirstOrDefaultAsync();
         }
 
         public async Task<RutaAprendizaje> CreateRutaAprendizajeAsync(RutaAprendizaje ruta)
