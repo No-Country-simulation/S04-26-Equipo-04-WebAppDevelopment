@@ -1,11 +1,25 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import { HeaderEmpresa, VacanteForm } from "@/components/empresa";
+import { getSkillsCatalogo, SkillCatalogo } from "@/services/skills.service";
 
 export default function NuevaVacantePage() {
-  const skillsCatalogo = [
-    { skillId: 1, skillNombre: "Excel" },
-    { skillId: 2, skillNombre: "SQL" },
-    { skillId: 3, skillNombre: "Comunicación" },
-  ];
+  const [skillsCatalogo, setSkillsCatalogo] = useState<SkillCatalogo[]>([]);
+  const [loadingSkills, setLoadingSkills] = useState(true);
+
+  useEffect(() => {
+    const loadSkills = async () => {
+      try {
+        const skills = await getSkillsCatalogo();
+        setSkillsCatalogo(skills);
+      } finally {
+        setLoadingSkills(false);
+      }
+    };
+
+    loadSkills();
+  }, []);
 
   return (
     <>
@@ -14,7 +28,7 @@ export default function NuevaVacantePage() {
         title="Nueva Vacante"
         description="Complete los detalles de la nueva vacante."
       />
-      <VacanteForm skillsCatalogo={skillsCatalogo} />
+      {loadingSkills ? <p>Cargando skills...</p> : <VacanteForm skillsCatalogo={skillsCatalogo} />}
     </>
   );
 }

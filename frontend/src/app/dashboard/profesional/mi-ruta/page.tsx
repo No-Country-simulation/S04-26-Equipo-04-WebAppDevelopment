@@ -18,7 +18,7 @@ import { Button } from "@/components/Button";
 import { Badge } from "@/components/Badge";
 
 // 1. Interruptor de simulación
-const USE_MOCK = true; // Cambia a false para usar la API real (asegúrate de que esté corriendo y configurada correctamente)
+const USE_MOCK = false; // Cambia a false para usar la API real (asegúrate de que esté corriendo y configurada correctamente)
 
 // 2. Datos Simulados idénticos a los del backend
 const MOCK_RUTA = {
@@ -107,8 +107,14 @@ export default function MiRutaPage() {
           const response = await api.get("/Rutas/mi-ruta");
           setRuta(response.data);
         }
-      } catch (error) {
-        console.error("Error al cargar la ruta, usando simulación:", error);
+      } catch (error: any) {
+        // Si es un 404 significa que el usuario no tiene ruta activa en la BD todavía.
+        // Usamos console.log/warn en vez de console.error para evitar que Next.js levante el overlay de error en desarrollo.
+        if (error?.response?.status === 404) {
+          console.log("No se encontró una ruta de aprendizaje activa en el servidor. Usando datos simulados.");
+        } else {
+          console.warn("Error al conectar con la API de rutas, usando simulación:", error.message || error);
+        }
         setRuta(MOCK_RUTA);
       } finally {
         setLoading(false);
@@ -129,7 +135,7 @@ export default function MiRutaPage() {
         <p className="text-text-secondary-light text-[14px] mb-6">
           Realiza el diagnóstico para generar tu camino de formación personalizado.
         </p>
-        <Link href="/diagnostic">
+        <Link href="/diagnostico">
           <Button variant="primary">Ir al Diagnóstico</Button>
         </Link>
       </div>
@@ -213,8 +219,8 @@ export default function MiRutaPage() {
                     ✓ Habilidad Acreditada
                   </span>
                 ) : (
-                  // Vincula a la ruta dinámica usando el id del módulo
-                  <Link href={`/dashboard/profesional/mi-ruta/${item.moduloId}`}>
+                  // Vincula a la ruta dinámica usando el id correcto (el ID de progreso para la API real, o el ID de módulo para mocks)
+                  <Link href={`/dashboard/profesional/mi-ruta/${USE_MOCK ? item.moduloId : item.id}`}>
                     <Button 
                       variant={item.estado === "en_progreso" ? "primary" : "ghost"} 
                       className="text-[13px]"

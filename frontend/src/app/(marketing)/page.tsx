@@ -38,7 +38,7 @@ export default function LandingPage() {
         </p>
 
         <div className="flex items-center gap-3 justify-center mb-6">
-          <Link href="/diagnostic">
+          <Link href="/diagnostico">
             <Button variant="primary">
               Comenzar mi diagnóstico <ArrowRight className="h-4 w-4" />
             </Button>
@@ -245,7 +245,7 @@ export default function LandingPage() {
                   </div>
                 </div>
 
-                <Link href="/diagnostic">
+                <Link href="/diagnostico">
                   <Button variant="primary" className="w-full mt-4">
                     Comenzar mi diagnóstico <ArrowRight className="h-4 w-4" />
                   </Button>
@@ -397,7 +397,7 @@ export default function LandingPage() {
         <p className="text-text-secondary-dark mb-8 max-w-lg mx-auto">
           15 minutos que pueden cambiar el rumbo de tu carrera.
         </p>
-        <Link href="/diagnostic">
+        <Link href="/diagnostico">
           <Button variant="primary" className="text-[15px] px-8 py-3">
             Comenzar mi diagnóstico gratis <ArrowRight size={18} />
           </Button>

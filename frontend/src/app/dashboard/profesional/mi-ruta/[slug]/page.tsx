@@ -10,7 +10,7 @@ import { Button } from "@/components/Button";
 import { Badge } from "@/components/Badge";
 
 // 1. Interruptor de simulación (cámbialo a false para conectar con la API de Render)
-const USE_MOCK = true;
+const USE_MOCK = false;
 
 // 2. Base de datos simulada indexada por el ID del módulo (slug)
 const MOCK_DETALLE_CURSOS: Record<string, any> = {
@@ -100,8 +100,8 @@ export default function DetalleModuloPage() {
           setClases(response.data.progresosClase);
           setClaseActiva(response.data.progresosClase[0]);
         }
-      } catch (error) {
-        console.error("Error al cargar las clases, usando mock:", error);
+      } catch (error: any) {
+        console.warn("Error al cargar las clases, usando mock:", error.message || error);
         const fallback = MOCK_DETALLE_CURSOS["1"];
         setCurso(fallback);
         setClases(fallback.clases);
@@ -121,14 +121,22 @@ export default function DetalleModuloPage() {
         console.log(`[MOCK] Completando clase ID: ${claseId}`);
         // Actualizamos el estado de la clase localmente para que veas el check y la barra subir
         setClases(prev => 
-          prev.map(c => c.id === claseId ? { ...c, completada: true } : c)
+          prev.map(c => c.id === claseId ? { ...c, completado: true } : c)
         );
+        setClaseActiva((prev: any) => prev && prev.id === claseId ? { ...prev, completado: true } : prev);
       } else {
         // API real de Render
         await api.put(`/Rutas/progreso/clase/${claseId}`);
         // Volvemos a traer las clases para actualizar el estado real de la BD
         const response = await api.get(`/Rutas/progreso/${moduloId}/clases`);
-        setClases(response.data.progresosClase);
+        const updatedClases = response.data.progresosClase;
+        setClases(updatedClases);
+        
+        // Actualizar la clase activa con el nuevo estado completado
+        const updatedActiva = updatedClases.find((c: any) => c.id === claseActiva.id);
+        if (updatedActiva) {
+          setClaseActiva(updatedActiva);
+        }
       }
     } catch (error) {
       console.error("Error al completar clase:", error);
@@ -139,7 +147,7 @@ export default function DetalleModuloPage() {
   if (!curso) return <div className="p-8 text-center">Curso no encontrado.</div>;
 
   // Cálculo del progreso en tiempo real
-  const completadas = clases.filter(c => c.completada).length;
+  const completadas = clases.filter(c => c.completado || c.completada).length;
   const totalClases = clases.length;
   const porcentaje = totalClases > 0 ? Math.round((completadas / totalClases) * 100) : 0;
 
@@ -184,7 +192,7 @@ export default function DetalleModuloPage() {
               </div>
               
               {/* Botón para completar clase */}
-              {!(claseActiva.completada) && (
+              {!(claseActiva.completado || claseActiva.completada) && (
                 <Button 
                   variant="primary" 
                   onClick={() => handleCompletarClase(claseActiva.id)}
@@ -214,14 +222,14 @@ export default function DetalleModuloPage() {
                   }`}
                 >
                   <div className="flex items-center gap-3">
-                    {c.completada ? (
+                    {(c.completado || c.completada) ? (
                       <div className="w-5 h-5 rounded-full bg-success-green/20 flex items-center justify-center">
                         <Check size={12} className="text-success-green" />
                       </div>
                     ) : (
                       <Play size={14} className="text-text-secondary-light" />
                     )}
-                    <span className={`text-[14px] ${c.completada ? "text-gray-400 line-through" : "text-primary-navy"}`}>
+                    <span className={`text-[14px] ${(c.completado || c.completada) ? "text-gray-400 line-through" : "text-primary-navy"}`}>
                       {c.titulo || c.clase?.titulo}
                     </span>
                   </div>
@@ -259,7 +267,7 @@ export default function DetalleModuloPage() {
             Completa el 100% de este módulo para acreditar automáticamente las siguientes habilidades en tu perfil público:
           </p>
           <div className="flex flex-wrap gap-1.5 justify-center">
-            {curso.skills?.map((skill: string, index: number) => (
+            {(curso.skills || curso.skillsDesarrolladas)?.map((skill: string, index: number) => (
               <Badge key={index} variant="amber" className="text-[10px]">
                 {skill}
               </Badge>

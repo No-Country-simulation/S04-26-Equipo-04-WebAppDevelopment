@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { DiagnosticService } from "@/services/diagnostic.service";
+import { api } from "@/lib/api";
 
 type State = {
   loading: boolean;
@@ -95,6 +96,13 @@ export const useDiagnosticStore = create<State>((set, get) => ({
       diagnosticoId,
       respuestas: answers,
     });
+
+    try {
+      // Generar automáticamente la ruta de aprendizaje en base de datos al finalizar
+      await api.post(`/Rutas/generar/${diagnosticoId}`);
+    } catch (e) {
+      console.error("Error al generar la ruta de aprendizaje:", e);
+    }
 
     set({ result });
 
