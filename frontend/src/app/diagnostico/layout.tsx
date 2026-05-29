@@ -36,7 +36,7 @@ export default function DiagnosticLayout({
     }
 
     if (user?.role === "empresa") {
-      router.replace("/dashboard/empresa/search");
+      router.replace("/dashboard/empresa/perfiles");
       return;
     }
 

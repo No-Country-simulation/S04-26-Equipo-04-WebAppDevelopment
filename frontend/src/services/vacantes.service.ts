@@ -1,4 +1,5 @@
 import { api } from "@/lib/api";
+import { UpdateVacantePayload, Vacante, VacantePayload } from "../../types";
 
 export const getMisVacantes = async () => {
   const { data } = await api.get("/Vacantes/mis-vacantes");

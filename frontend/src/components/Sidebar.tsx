@@ -34,7 +34,7 @@ export function Sidebar({}: SidebarProps) {
 
   if (!user) return null;
 
-  const logoLink = user.role === "empresa" ? "/dashboard/empresa/search" : "/dashboard/profesional";
+  const logoLink = user.role === "empresa" ? "/dashboard/empresa/perfiles" : "/dashboard/profesional";
 
   const professionalLinks = [
     { href: "/dashboard/profesional", icon: LayoutDashboard, label: "Inicio" },
@@ -44,9 +44,7 @@ export function Sidebar({}: SidebarProps) {
   ];
 
   const companyLinks = [
-    { href: "/dashboard/empresa/search", icon: Users, label: "Perfiles" },
-    { href: "/dashboard/empresa/candidatos", icon: ClipboardList, label: "Candidatos" },
-    { href: "/dashboard/empresa/evaluaciones", icon: MessageSquareText, label: "Evaluaciones" },
+    { href: "/dashboard/empresa/perfiles", icon: Users, label: "Perfiles" },
     { href: "/dashboard/empresa/vacantes", icon: BriefcaseBusiness, label: "Vacantes" },
   ];
 

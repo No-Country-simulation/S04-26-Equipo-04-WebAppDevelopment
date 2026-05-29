@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Trash2, MapPin, Briefcase, DollarSign, Edit } from "lucide-react";
+import { Trash2, MapPin, Briefcase, DollarSign, ArrowRight } from "lucide-react";
 import { Button } from "@/components/Button";
 import { Card } from "@/components/Card";
 import { Badge } from "@/components/Badge";
@@ -81,10 +81,10 @@ export function VacanteCard({ vacante, onDelete }: Props) {
             <Trash2 size={16} />
             Eliminar
           </Button>
-          <Link href={`/dashboard/empresa/vacantes/${vacante.id}/editar`}>
+          <Link href={`/dashboard/empresa/vacantes/${vacante.id}`}>
             <Button>
-              <Edit size={16} />
-              Editar
+              Ver detalle
+              <ArrowRight size={16} />
             </Button>
           </Link>
         </div>

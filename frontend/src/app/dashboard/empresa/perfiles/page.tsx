@@ -1,46 +1,21 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { Info, X } from "lucide-react";
+import { Avatar } from "@/components/Avatar";
 import { Card } from "@/components/Card";
 import { Button } from "@/components/Button";
 import { Badge } from "@/components/Badge";
-import { HeaderEmpresa } from "@/components/empresa/HeaderEmpresa";
+import { EmptyState, HeaderEmpresa, LoadingCards } from "@/components/empresa";
+import { useMarketplaceStore } from "@/store/marketplace.store";
 
 export default function SearchPage() {
-  const candidates = [
-    {
-      initials: "CL",
-      name: "Claudia López",
-      role: "Gerente de RRHH",
-      years: "20 años",
-      compatibility: 80,
-      bgColor: "bg-primary-navy",
-    },
-    {
-      initials: "RM",
-      name: "Roberto Méndez",
-      role: "Jefe de Ventas",
-      years: "25 años",
-      compatibility: 72,
-      bgColor: "bg-amber-accent",
-    },
-    {
-      initials: "JP",
-      name: "Jorge Pérez",
-      role: "Director Financiero",
-      years: "18 años",
-      compatibility: 68,
-      bgColor: "bg-primary-navy",
-    },
-    {
-      initials: "MS",
-      name: "María Soto",
-      role: "Coordinadora RRHH",
-      years: "15 años",
-      compatibility: 61,
-      bgColor: "bg-amber-accent",
-    },
-  ];
+  const { talentos, loadingTalentos, error, getTalentos } = useMarketplaceStore();
+  const [selectedTalent, setSelectedTalent] = useState<number | null>(null);
+
+  useEffect(() => {
+    getTalentos();
+  }, [getTalentos]);
 
   return (
     <>
@@ -49,6 +24,17 @@ export default function SearchPage() {
         title="Buscar Talento Senior"
         description="Perfiles ordenados por compatibilidad con tu búsqueda activa."
       />
+      {loadingTalentos && <LoadingCards />}
+
+      {loadingTalentos && error && <EmptyState title="Ocurrió un error" description={error} />}
+
+      {!loadingTalentos && !error && talentos.length === 0 && (
+        <EmptyState
+          title="No hay talentos disponibles"
+          description="Todavía no existen perfiles visibles en el marketplace."
+        />
+      )}
+
       <Card className="mb-6">
         <div className="flex items-center gap-4">
           <div className="flex-1">
@@ -86,47 +72,45 @@ export default function SearchPage() {
       </Card>
 
       <div className="flex items-center justify-between mb-3">
-        <p className="text-text-secondary-light text-[13px]">12 perfiles encontrados</p>
+        <p className="text-text-secondary-light text-[13px]">
+          {talentos.length} perfiles encontrados
+        </p>
         <p className="text-[13px] text-text-secondary-light">Mayor compatibilidad primero</p>
       </div>
+      {!loadingTalentos && !error && talentos.length > 0 && (
+        <div className="space-y-3 mb-6">
+          {talentos.map((talento, index) => {
+            const isSelected = selectedTalent === talento.id;
+            const initials = `${talento.apellido?.[0] ?? ""}${
+              talento.nombre?.[0] ?? ""
+            }`.toUpperCase();
 
-      <div className="space-y-3 mb-6">
-        {candidates.map((candidate, index) => (
-          <Card key={index} className={index === 0 ? "border-amber-accent border-l-3 border" : ""}>
-            <div className="flex items-center gap-4">
-              <div
-                className={`w-12 h-12 rounded-full ${candidate.bgColor} text-white flex items-center justify-center text-[14px] font-medium`}
-              >
-                {candidate.initials}
-              </div>
-
-              <div className="flex-1">
-                <p className="text-primary-navy text-[14px] font-medium">{candidate.name}</p>
-                <p className="text-text-secondary-light text-[13px]">
-                  {candidate.role} · {candidate.years}
-                </p>
-              </div>
-              <div className="flex gap-6 items-center">
-                <div className="flex flex-col items-center gap-2">
-                  <p className="text-amber-accent text-[18px] font-medium">
-                    {candidate.compatibility}%
-                  </p>
-                  <div className="w-32 h-1.5 bg-gray-200 rounded-full overflow-hidden mb-3">
-                    <div
-                      className="h-full bg-amber-accent transition-all"
-                      style={{ width: `${candidate.compatibility}%` }}
-                    ></div>
+            const avatarVariant = index % 2 === 0 ? "amber" : "navy";
+            return (
+              <div key={talento.id} onClick={() => setSelectedTalent(talento.id)}>
+                <Card
+                  className={`cursor-pointer transition-all border-amber-accent border ${isSelected ? "border-l-4" : ""}`}
+                >
+                  <div className="flex items-center gap-4">
+                    <Avatar variant={avatarVariant}>{initials}</Avatar>
+                    <div className="flex-1">
+                      <p className="text-primary-navy text-[14px] font-medium">
+                        {talento.nombre} {talento.apellido}
+                      </p>
+                      <p className="text-text-secondary-light text-[13px]">{talento.titular}</p>
+                    </div>
+                    <div className="flex gap-6 items-center">
+                      <Button variant={isSelected ? "primary" : "ghost"} className="text-[13px]">
+                        Ver perfil
+                      </Button>
+                    </div>
                   </div>
-                </div>
-                <Button variant={index === 0 ? "primary" : "ghost"} className="text-[13px]">
-                  Ver perfil
-                </Button>
+                </Card>
               </div>
-            </div>
-          </Card>
-        ))}
-      </div>
-
+            );
+          })}
+        </div>
+      )}
       <div className="bg-light-bg border border-black/10 rounded-lg p-4 flex items-center justify-start gap-3">
         <Info className="text-text-secondary-light size-4" />
         <p className="text-text-secondary-light text-[12px]">
