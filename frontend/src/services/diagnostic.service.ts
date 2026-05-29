@@ -19,6 +19,11 @@ export const DiagnosticService = {
     return data;
   },
 
+  getMyRoute: async () => {
+    const { data } = await api.get("/Rutas/mi-ruta");
+    return data;
+  },
+
   getResult: async (id: number) => {
     const { data } = await api.get(`/Diagnostico/resultado/${id}`);
     return data;
