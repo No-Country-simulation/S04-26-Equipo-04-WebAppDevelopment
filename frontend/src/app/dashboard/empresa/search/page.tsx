@@ -1,9 +1,12 @@
-import { Info } from "lucide-react";
+"use client";
+
+import { Info, X } from "lucide-react";
 import { Card } from "@/components/Card";
 import { Button } from "@/components/Button";
 import { Badge } from "@/components/Badge";
+import { HeaderEmpresa } from "@/components/empresa/HeaderEmpresa";
 
-export default function CompanySearchPage() {
+export default function SearchPage() {
   const candidates = [
     {
       initials: "CL",
@@ -27,7 +30,7 @@ export default function CompanySearchPage() {
       role: "Director Financiero",
       years: "18 años",
       compatibility: 68,
-      bgColor: "bg-success-green",
+      bgColor: "bg-primary-navy",
     },
     {
       initials: "MS",
@@ -35,26 +38,22 @@ export default function CompanySearchPage() {
       role: "Coordinadora RRHH",
       years: "15 años",
       compatibility: 61,
-      bgColor: "bg-primary-navy",
+      bgColor: "bg-amber-accent",
     },
   ];
 
   return (
     <>
-      <div className="mb-6">
-        <h2 className="text-primary-navy text-[22px] mb-1 font-medium">Buscar Talento Senior</h2>
-        <p className="text-text-secondary-light text-[14px]">
-          Perfiles ordenados por compatibilidad con tu búsqueda activa
-        </p>
-      </div>
-
+      <HeaderEmpresa
+        className="mb-6"
+        title="Buscar Talento Senior"
+        description="Perfiles ordenados por compatibilidad con tu búsqueda activa."
+      />
       <Card className="mb-6">
         <div className="flex items-center gap-4">
           <div className="flex-1">
-            <label className="text-[13px] text-text-secondary-light mb-1 block">
-              Área profesional
-            </label>
-            <select className="w-full px-3 py-2 rounded-lg border-[0.5px] border-black/10 text-[14px] outline-none">
+            <label className="text-sm text-primary-navy mb-1 block">Área profesional</label>
+            <select className="w-full h-11 px-3 py-2 rounded-lg border-[0.5px] border-black/10 text-sm outline-none text-text-secondary-light">
               <option>Recursos Humanos</option>
               <option>Finanzas</option>
               <option>Tecnología</option>
@@ -62,46 +61,38 @@ export default function CompanySearchPage() {
           </div>
 
           <div className="flex-1">
-            <label className="text-[13px] text-text-secondary-light mb-1 block">
-              Skills requeridas
-            </label>
-            <div className="flex gap-2">
+            <label className="text-sm text-primary-navy mb-1 block">Skills requeridas</label>
+            <div className="flex gap-2 w-full h-11 px-3 py-2 rounded-lg border-[0.5px] border-black/10 outline-none">
               <Badge variant="amber" className="text-[11px]">
-                Gestión equipos ×
+                Gestión equipos <X size={14} />
               </Badge>
               <Badge variant="amber" className="text-[11px]">
-                Comunicación ×
+                Comunicación <X size={14} />
               </Badge>
             </div>
           </div>
 
           <div className="flex-1">
-            <label className="text-[13px] text-text-secondary-light mb-1 block">Modalidad</label>
-            <select className="w-full px-3 py-2 rounded-lg border-[0.5px] border-black/10 text-[14px] outline-none">
+            <label className="text-sm text-primary-navy mb-2 block">Modalidad</label>
+            <select className="w-full h-11 px-3 py-2 rounded-lg border-[0.5px] border-black/10 text-sm outline-none text-text-secondary-light">
               <option>Híbrido</option>
               <option>Remoto</option>
               <option>Presencial</option>
             </select>
           </div>
 
-          <Button variant="primary" className="mt-5">
-            Actualizar búsqueda
-          </Button>
+          <Button className="mt-5">Buscar</Button>
         </div>
       </Card>
 
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex items-center justify-between mb-3">
         <p className="text-text-secondary-light text-[13px]">12 perfiles encontrados</p>
-        <select className="px-3 py-1 rounded-lg border-[0.5px] border-black/10 text-[13px] text-text-secondary-light outline-none">
-          <option>Ordenado por: Compatibilidad ↓</option>
-          <option>Ordenado por: Experiencia ↓</option>
-          <option>Ordenado por: Años de experiencia ↓</option>
-        </select>
+        <p className="text-[13px] text-text-secondary-light">Mayor compatibilidad primero</p>
       </div>
 
       <div className="space-y-3 mb-6">
         {candidates.map((candidate, index) => (
-          <Card key={index} className={index === 0 ? "border-l-2 border-l-amber-accent" : ""}>
+          <Card key={index} className={index === 0 ? "border-amber-accent border-l-3 border" : ""}>
             <div className="flex items-center gap-4">
               <div
                 className={`w-12 h-12 rounded-full ${candidate.bgColor} text-white flex items-center justify-center text-[14px] font-medium`}
@@ -114,29 +105,18 @@ export default function CompanySearchPage() {
                 <p className="text-text-secondary-light text-[13px]">
                   {candidate.role} · {candidate.years}
                 </p>
-                <div className="flex gap-2 mt-2">
-                  <Badge variant="amber" className="text-[10px]">
-                    Gestión equipos
-                  </Badge>
-                  <Badge variant="amber" className="text-[10px]">
-                    Comunicación
-                  </Badge>
-                  <Badge variant="amber" className="text-[10px]">
-                    Liderazgo
-                  </Badge>
-                  <span className="text-text-secondary-light text-[11px]">+2 más</span>
-                </div>
               </div>
-
-              <div className="text-right flex flex-col items-end">
-                <p className="text-amber-accent text-[16px] mb-1 font-medium">
-                  {candidate.compatibility}%
-                </p>
-                <div className="w-32 h-1.5 bg-gray-200 rounded-full overflow-hidden mb-3">
-                  <div
-                    className="h-full bg-amber-accent transition-all"
-                    style={{ width: `${candidate.compatibility}%` }}
-                  ></div>
+              <div className="flex gap-6 items-center">
+                <div className="flex flex-col items-center gap-2">
+                  <p className="text-amber-accent text-[18px] font-medium">
+                    {candidate.compatibility}%
+                  </p>
+                  <div className="w-32 h-1.5 bg-gray-200 rounded-full overflow-hidden mb-3">
+                    <div
+                      className="h-full bg-amber-accent transition-all"
+                      style={{ width: `${candidate.compatibility}%` }}
+                    ></div>
+                  </div>
                 </div>
                 <Button variant={index === 0 ? "primary" : "ghost"} className="text-[13px]">
                   Ver perfil
@@ -147,8 +127,8 @@ export default function CompanySearchPage() {
         ))}
       </div>
 
-      <div className="bg-light-bg border border-black/10 rounded-lg p-4 flex items-start gap-3">
-        <Info className="text-text-secondary-light shrink-0 mt-0.5 size-4" />
+      <div className="bg-light-bg border border-black/10 rounded-lg p-4 flex items-center justify-start gap-3">
+        <Info className="text-text-secondary-light size-4" />
         <p className="text-text-secondary-light text-[12px]">
           El score de compatibilidad se calcula cruzando skills verificadas, área de experiencia y
           modalidad de trabajo.

@@ -3,7 +3,8 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-
+import { decodeToken } from "@/lib/jwt";
+import { useAuthStore } from "@/store/auth.store";
 import { login } from "@/services/auth";
 
 import { Logo } from "@/components/Logo";
@@ -13,6 +14,7 @@ import { Card } from "@/components/Card";
 
 export default function LoginPage() {
   const router = useRouter();
+  const setAuth = useAuthStore((s) => s.setAuth);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -21,27 +23,33 @@ export default function LoginPage() {
   const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async () => {
-    setLoading(true);
-    setError(null);
-
     try {
+      setLoading(true);
+      setError(null);
       const data = await login({ email, password });
 
-      // Guardar token
-      localStorage.setItem("token", data.token);
+      // Decodificar
+      const decoded = decodeToken(data.token);
+      if (!decoded) throw new Error("Token inválido");
 
-      const role = "profesional";
+      const user = {
+        id: decoded.id,
+        nombre: decoded.nombre,
+        email: decoded.email,
+        role: decoded.role,
+        hizoDiagnostico: data.hizoDiagnostico,
+      };
 
-      const diagnosticoId = localStorage.getItem("diagnosticoId");
+      setAuth({ user, token: data.token });
 
-      if (role === "profesional") {
-        if (!diagnosticoId) {
+      if (user.role === "profesional") {
+        if (!user.hizoDiagnostico) {
           router.push("/diagnostico");
         } else {
-          router.push("/dashboard");
+          router.push("/dashboard/profesional");
         }
       } else {
-        router.push("/dashboard");
+        router.push("/dashboard/empresa/search");
       }
     } catch (err) {
       const error = err as Error;

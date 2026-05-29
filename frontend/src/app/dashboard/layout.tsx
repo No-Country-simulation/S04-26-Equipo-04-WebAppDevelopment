@@ -1,9 +1,8 @@
 "use client";
 
-import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-
 import { Sidebar } from "@/components/Sidebar";
+import { useAuthStore } from "@/store/auth.store";
 
 export default function DashboardLayout({
   children,
@@ -11,20 +10,22 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }>) {
   const router = useRouter();
+  const token = useAuthStore((state) => state.token);
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
+  const hydrated = useAuthStore.persist.hasHydrated();
 
-    if (!token) {
-      router.replace("/login");
-    }
-  }, [router]);
+  if (!hydrated) {
+    return null;
+  }
+
+  if (!token) {
+    router.replace("/login");
+    return null;
+  }
 
   return (
     <div className="flex h-screen bg-light-bg">
-      {/*<Sidebar userName="Finanzas SA" userRole="Empresa" type="empresa" />*/}
-
-      <Sidebar userName="Javier" userRole="Profesional +45" />
+      <Sidebar />
       <main className="flex-1 overflow-y-auto p-8">{children}</main>
     </div>
   );
