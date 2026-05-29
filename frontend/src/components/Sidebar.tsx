@@ -44,7 +44,7 @@ export function Sidebar({}: SidebarProps) {
   ];
 
   const companyLinks = [
-    { href: "/dashboard/empresa/search", icon: Users, label: "Perfiles" },
+    { href: "/dashboard/empresa/perfiles", icon: Users, label: "Perfiles" },
     { href: "/dashboard/empresa/candidatos", icon: ClipboardList, label: "Candidatos" },
     { href: "/dashboard/empresa/evaluaciones", icon: MessageSquareText, label: "Evaluaciones" },
     { href: "/dashboard/empresa/vacantes", icon: BriefcaseBusiness, label: "Vacantes" },
