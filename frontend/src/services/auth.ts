@@ -25,6 +25,7 @@ export type AuthResponse = {
   nombre: string;
   email: string;
   token: string;
+  hizoDiagnostico?: boolean;
 };
 
 // LOGIN
