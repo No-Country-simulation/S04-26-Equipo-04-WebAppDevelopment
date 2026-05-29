@@ -49,7 +49,7 @@ export default function LoginPage() {
           router.push("/dashboard/profesional");
         }
       } else {
-        router.push("/dashboard/empresa/search");
+        router.push("/dashboard/empresa/perfiles");
       }
     } catch (err) {
       const error = err as Error;
