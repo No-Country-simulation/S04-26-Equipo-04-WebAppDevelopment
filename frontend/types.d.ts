@@ -33,7 +33,7 @@ interface QuestionWithCategory extends Question {
 
 //Empresa
 // --- VACANTES ---
-interface Vacante {
+export interface Vacante {
   id: number;
   empresaId: number;
   empresaNombre: string;
@@ -51,7 +51,7 @@ interface Vacante {
  * Payload para CREAR vacante
  * (NO incluye campos que define el backend)
  */
-interface VacantePayload {
+export interface VacantePayload {
   titulo: string;
   descripcion: string;
   ubicacion: string;
@@ -65,6 +65,54 @@ interface VacantePayload {
  * Payload para ACTUALIZAR vacante
  * (permite cambiar estado opcionalmente)
  */
-interface UpdateVacantePayload extends VacantePayload {
+export interface UpdateVacantePayload extends VacantePayload {
   estado?: "abierta" | "cerrada";
+}
+
+//Marketplace
+export type SkillNivel = "basico" | "intermedio" | "avanzado";
+
+export interface TalentSkill {
+  id: number;
+  skillId: number;
+  skillNombre: string;
+  categoriaNombre: string;
+  origen: string;
+  nivel: SkillNivel;
+  validada: boolean;
+}
+
+export interface TalentExperience {
+  id: number;
+  empresa: string;
+  cargo: string;
+  fechaInicio: string;
+  fechaFin: string;
+  descripcion: string;
+}
+
+export interface TalentProfile {
+  id: number;
+  usuarioId: number;
+  nombre: string;
+  apellido: string;
+  email: string;
+  titular: string;
+  biografia: string;
+  urlLinkedin: string;
+  visibleMarketplace: boolean;
+  skills: TalentSkill[];
+  experiencias: TalentExperience[];
+}
+
+export interface MatchCandidate {
+  perfilId: number;
+  usuarioId: number;
+  nombre: string;
+  apellido: string;
+  titular: string;
+  urlLinkedin: string;
+  porcentajeMatch: number;
+  skillsCoincidentes: string[];
+  skillsFaltantes: string[];
 }
