@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Sidebar } from "@/components/Sidebar";
 import { useAuthStore } from "@/store/auth.store";
@@ -11,17 +12,29 @@ export default function DashboardLayout({
 }>) {
   const router = useRouter();
   const token = useAuthStore((state) => state.token);
+  const [hydrated, setHydrated] = useState(false);
 
-  const hydrated = useAuthStore.persist.hasHydrated();
+  useEffect(() => {
+    const persist = useAuthStore.persist;
 
-  if (!hydrated) {
-    return null;
-  }
+    setHydrated(persist?.hasHydrated?.() ?? true);
 
-  if (!token) {
-    router.replace("/login");
-    return null;
-  }
+    const unsubscribe = persist?.onFinishHydration?.(() => {
+      setHydrated(true);
+    });
+
+    return () => unsubscribe?.();
+  }, []);
+
+  useEffect(() => {
+    if (!hydrated) return;
+
+    if (!token) {
+      router.replace("/login");
+    }
+  }, [hydrated, token, router]);
+
+  if (!hydrated || !token) return null;
 
   return (
     <div className="flex h-screen bg-light-bg">

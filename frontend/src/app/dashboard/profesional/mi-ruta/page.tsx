@@ -13,9 +13,11 @@ import {
 } from "lucide-react";
 import { Linkedin } from "@/components/icons/Linkedin";
 import { api } from "@/lib/api";
+import { authRequestConfig } from "@/lib/auth-request-config";
 import { Card } from "@/components/Card";
 import { Button } from "@/components/Button";
 import { Badge } from "@/components/Badge";
+import { useAuthStore } from "@/store/auth.store";
 
 // 1. Interruptor de simulación
 const USE_MOCK = false; // Cambia a false para usar la API real (asegúrate de que esté corriendo y configurada correctamente)
@@ -97,6 +99,7 @@ export default function MiRutaPage() {
   const [ruta, setRuta] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<"todos" | "en_curso" | "completado" | "pendiente">("todos");
+  const token = useAuthStore((state) => state.token);
 
   useEffect(() => {
     const cargarRuta = async () => {
@@ -104,25 +107,25 @@ export default function MiRutaPage() {
         if (USE_MOCK) {
           setRuta(MOCK_RUTA);
         } else {
-          const response = await api.get("/Rutas/mi-ruta");
+          const response = await api.get("/Rutas/mi-ruta", authRequestConfig(token));
           setRuta(response.data);
         }
       } catch (error: any) {
         // Si es un 404 significa que el usuario no tiene ruta activa en la BD todavía.
         // Usamos console.log/warn en vez de console.error para evitar que Next.js levante el overlay de error en desarrollo.
         if (error?.response?.status === 404) {
-          console.log("No se encontró una ruta de aprendizaje activa en el servidor. Usando datos simulados.");
+          console.log("No se encontró una ruta de aprendizaje activa en el servidor.");
         } else {
-          console.warn("Error al conectar con la API de rutas, usando simulación:", error.message || error);
+          console.warn("Error al conectar con la API de rutas:", error.message || error);
         }
-        setRuta(MOCK_RUTA);
+        setRuta(null);
       } finally {
         setLoading(false);
       }
     };
 
     cargarRuta();
-  }, []);
+  }, [token]);
 
   if (loading) {
     return <div className="p-8 text-center text-text-secondary-light">Cargando tu ruta de aprendizaje...</div>;

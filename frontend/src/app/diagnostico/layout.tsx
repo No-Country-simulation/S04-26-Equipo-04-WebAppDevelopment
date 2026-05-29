@@ -2,18 +2,30 @@
 
 import { useRouter, usePathname } from "next/navigation";
 import { useAuthStore } from "@/store/auth.store";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export default function DiagnosticLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-    const router = useRouter();
+  const router = useRouter();
   const pathname = usePathname();
 
   const { user, token } = useAuthStore();
-  const hydrated = useAuthStore.persist.hasHydrated();
+  const [hydrated, setHydrated] = useState(false);
+
+  useEffect(() => {
+    const persist = useAuthStore.persist;
+
+    setHydrated(persist?.hasHydrated?.() ?? true);
+
+    const unsubscribe = persist?.onFinishHydration?.(() => {
+      setHydrated(true);
+    });
+
+    return () => unsubscribe?.();
+  }, []);
 
   useEffect(() => {
     if (!hydrated) return;

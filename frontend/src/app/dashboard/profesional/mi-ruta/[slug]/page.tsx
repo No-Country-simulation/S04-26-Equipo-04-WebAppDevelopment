@@ -5,9 +5,11 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { ArrowLeft, Check, Lock, Play } from "lucide-react";
 import { api } from "@/lib/api";
+import { authRequestConfig } from "@/lib/auth-request-config";
 import { Card } from "@/components/Card";
 import { Button } from "@/components/Button";
 import { Badge } from "@/components/Badge";
+import { useAuthStore } from "@/store/auth.store";
 
 // 1. Interruptor de simulación (cámbialo a false para conectar con la API de Render)
 const USE_MOCK = false;
@@ -77,6 +79,7 @@ export default function DetalleModuloPage() {
   const params = useParams();
   const moduloId = (params.slug as string) || "1"; // Si no hay URL, toma el módulo 1 por defecto
 
+  const token = useAuthStore((state) => state.token);
   const [curso, setCurso] = useState<any>(null);
   const [clases, setClases] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -95,24 +98,26 @@ export default function DetalleModuloPage() {
           setClaseActiva(dataSimulada.clases[0]); // Seleccionamos la clase 1 por defecto
         } else {
           // Conexión real con la API
-          const response = await api.get(`/Rutas/progreso/${moduloId}/clases`);
+          const response = await api.get(
+            `/Rutas/progreso/${moduloId}/clases`,
+            authRequestConfig(token)
+          );
           setCurso(response.data.modulo);
           setClases(response.data.progresosClase);
           setClaseActiva(response.data.progresosClase[0]);
         }
       } catch (error: any) {
-        console.warn("Error al cargar las clases, usando mock:", error.message || error);
-        const fallback = MOCK_DETALLE_CURSOS["1"];
-        setCurso(fallback);
-        setClases(fallback.clases);
-        setClaseActiva(fallback.clases[0]);
+        console.warn("Error al cargar las clases:", error.message || error);
+        setCurso(null);
+        setClases([]);
+        setClaseActiva(null);
       } finally {
         setLoading(false);
       }
     };
 
     cargarCurso();
-  }, [moduloId]);
+  }, [moduloId, token]);
 
   // Función para marcar clases como completadas
   const handleCompletarClase = async (claseId: number) => {
@@ -126,9 +131,12 @@ export default function DetalleModuloPage() {
         setClaseActiva((prev: any) => prev && prev.id === claseId ? { ...prev, completado: true } : prev);
       } else {
         // API real de Render
-        await api.put(`/Rutas/progreso/clase/${claseId}`);
+        await api.put(`/Rutas/progreso/clase/${claseId}`, undefined, authRequestConfig(token));
         // Volvemos a traer las clases para actualizar el estado real de la BD
-        const response = await api.get(`/Rutas/progreso/${moduloId}/clases`);
+        const response = await api.get(
+          `/Rutas/progreso/${moduloId}/clases`,
+          authRequestConfig(token)
+        );
         const updatedClases = response.data.progresosClase;
         setClases(updatedClases);
         

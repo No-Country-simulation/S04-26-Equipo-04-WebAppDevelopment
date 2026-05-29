@@ -72,6 +72,18 @@ export default function DiagnosticQuestionPage() {
 
   // 7. format
   const formatOption = (text: string) => {
+    if (question?.texto?.toLowerCase().includes("objetivo principal")) {
+      const normalized = text.toLowerCase();
+
+      if (normalized.includes("nulo")) return "Aun no tengo claro mi proximo objetivo";
+      if (normalized.includes("basico") || normalized.includes("básico")) {
+        return "Tengo una idea general, pero necesito ordenarla";
+      }
+      if (normalized.includes("avanzado")) {
+        return "Tengo un objetivo claro y una estrategia para alcanzarlo";
+      }
+    }
+
     const parts = text.split("/");
     return parts.length > 1 ? parts[1].trim() : text;
   };

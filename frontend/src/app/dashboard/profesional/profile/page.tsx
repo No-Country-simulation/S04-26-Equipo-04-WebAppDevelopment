@@ -4,13 +4,15 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { MapPin, Edit, Check, Lock, ArrowRight, X, Trash2, Plus } from "lucide-react";
 import { api } from "@/lib/api";
+import { authRequestConfig } from "@/lib/auth-request-config";
 import { Badge } from "@/components/Badge";
 import { Button } from "@/components/Button";
 import { Card } from "@/components/Card";
 import { Input } from "@/components/Input";
+import { useAuthStore } from "@/store/auth.store";
 
 // 1. Interruptor de simulación (true para desarrollo, false para API real de Render)
-const USE_MOCK = true;
+const USE_MOCK = false;
 
 // 2. Datos de perfil simulados idénticos a los del diseño visual
 const MOCK_PERFIL = {
@@ -54,6 +56,7 @@ const MOCK_PERFIL = {
 export default function ProfilePage() {
   const [perfil, setPerfil] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const token = useAuthStore((state) => state.token);
 
   // Modales
   const [isEditProfileOpen, setIsEditProfileOpen] = useState(false);
@@ -81,12 +84,12 @@ export default function ProfilePage() {
       if (USE_MOCK) {
         setPerfil(MOCK_PERFIL);
       } else {
-        const response = await api.get("/Perfiles/mi-perfil");
+        const response = await api.get("/Perfiles/mi-perfil", authRequestConfig(token));
         setPerfil(response.data);
       }
     } catch (error: any) {
-      console.warn("Error al cargar perfil real, usando simulación:", error.message || error);
-      setPerfil(MOCK_PERFIL);
+      console.warn("Error al cargar perfil real:", error.message || error);
+      setPerfil(null);
     } finally {
       setLoading(false);
     }
@@ -111,6 +114,17 @@ export default function ProfilePage() {
     return <div className="p-8 text-center text-text-secondary-light">Cargando tu perfil profesional...</div>;
   }
 
+  if (!perfil) {
+    return (
+      <div className="p-8 text-center bg-white border rounded-xl max-w-md mx-auto mt-12">
+        <h3 className="text-primary-navy mb-2 font-medium">No se pudo cargar tu perfil</h3>
+        <p className="text-text-secondary-light text-[14px]">
+          Revisa que la sesión siga activa e intenta entrar nuevamente.
+        </p>
+      </div>
+    );
+  }
+
   // --- HANDLERS PERFIL ---
   const handleUpdateProfile = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -122,7 +136,11 @@ export default function ProfilePage() {
         }));
         setIsEditProfileOpen(false);
       } else {
-        const response = await api.put("/Perfiles/mi-perfil", profileForm);
+        const response = await api.put(
+          "/Perfiles/mi-perfil",
+          profileForm,
+          authRequestConfig(token)
+        );
         setPerfil(response.data);
         setIsEditProfileOpen(false);
       }
@@ -187,9 +205,13 @@ export default function ProfilePage() {
         setIsExpModalOpen(false);
       } else {
         if (selectedExp) {
-          await api.put(`/Perfiles/experiencia/${selectedExp.id}`, payload);
+          await api.put(
+            `/Perfiles/experiencia/${selectedExp.id}`,
+            payload,
+            authRequestConfig(token)
+          );
         } else {
-          await api.post("/Perfiles/experiencia", payload);
+          await api.post("/Perfiles/experiencia", payload, authRequestConfig(token));
         }
         await cargarPerfil();
         setIsExpModalOpen(false);
@@ -208,7 +230,7 @@ export default function ProfilePage() {
           experiencias: prev.experiencias.filter((x: any) => x.id !== expId)
         }));
       } else {
-        await api.delete(`/Perfiles/experiencia/${expId}`);
+        await api.delete(`/Perfiles/experiencia/${expId}`, authRequestConfig(token));
         await cargarPerfil();
       }
     } catch (err) {
@@ -397,18 +419,20 @@ export default function ProfilePage() {
                 Realiza los módulos de formación para validar habilidades en tu CV.
               </p>
             ) : (
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 gap-3">
                 {/* Verificadas */}
                 {verifiedSkills.map((s: any) => (
                   <div
                     key={s.id}
-                    className="flex items-center gap-2 p-3 bg-light-bg rounded-lg border border-success-green/30"
+                    className="flex items-start gap-2 p-3 bg-light-bg rounded-lg border border-success-green/30"
                   >
-                    <Check className="text-success-green shrink-0 size-3.5" />
+                    <Check className="text-success-green shrink-0 size-3.5 mt-0.5" />
                     <div className="flex-1 min-w-0">
-                      <p className="text-primary-navy text-[13px] truncate">{s.skillNombre}</p>
+                      <p className="text-primary-navy text-[13px] leading-snug break-words">
+                        {s.skillNombre}
+                      </p>
                     </div>
-                    <Badge variant="green" className="text-[10px] shrink-0">
+                    <Badge variant="green" className="text-[10px] shrink-0 mt-0.5">
                       Verificada
                     </Badge>
                   </div>
@@ -418,11 +442,13 @@ export default function ProfilePage() {
                 {pendingSkills.map((s: any) => (
                   <div
                     key={s.id}
-                    className="flex items-center gap-2 p-3 bg-gray-100 rounded-lg border border-gray-200"
+                    className="flex items-start gap-2 p-3 bg-gray-100 rounded-lg border border-gray-200"
                   >
-                    <Lock className="text-gray-400 shrink-0 size-3.5" />
+                    <Lock className="text-gray-400 shrink-0 size-3.5 mt-0.5" />
                     <div className="flex-1 min-w-0">
-                      <p className="text-gray-600 text-[13px] truncate">{s.skillNombre}</p>
+                      <p className="text-gray-600 text-[13px] leading-snug break-words">
+                        {s.skillNombre}
+                      </p>
                     </div>
                   </div>
                 ))}

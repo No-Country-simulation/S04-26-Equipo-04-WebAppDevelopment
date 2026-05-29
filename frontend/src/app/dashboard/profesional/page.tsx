@@ -4,12 +4,14 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { TrendingUp, Share2, CheckCircle } from "lucide-react";
 import { api } from "@/lib/api";
+import { authRequestConfig } from "@/lib/auth-request-config";
 import { Card } from "@/components/Card";
 import { Button } from "@/components/Button";
 import { Badge } from "@/components/Badge";
+import { useAuthStore } from "@/store/auth.store";
 
 // 1. Interruptor de simulación (true para usar mock por ahora, false para usar API real)
-const USE_MOCK = true;
+const USE_MOCK = false;
 
 // 2. Datos Simulados idénticos al diseño visual y al backend
 const MOCK_RUTA = {
@@ -74,23 +76,6 @@ const MOCK_RUTA = {
   ]
 };
 
-// Helper para decodificar el token JWT en el cliente
-function parseJwt(token: string) {
-  try {
-    const base64Url = token.split(".")[1];
-    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-    const jsonPayload = decodeURIComponent(
-      window.atob(base64)
-        .split("")
-        .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
-        .join("")
-    );
-    return JSON.parse(jsonPayload);
-  } catch (e) {
-    return null;
-  }
-}
-
 // Obtener icono según el estado del módulo para alinearse al diseño visual
 function getIconForStatus(estado: string) {
   if (estado === "completado") return CheckCircle;
@@ -101,41 +86,29 @@ function getIconForStatus(estado: string) {
 export default function DashboardPage() {
   const [ruta, setRuta] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const [userName, setUserName] = useState("Javier");
+  const { user, token } = useAuthStore();
+  const userName = user?.nombre || "Javier";
 
   useEffect(() => {
-    // 1. Decodificar el nombre de usuario del token JWT
-    const token = localStorage.getItem("token");
-    if (token) {
-      const payload = parseJwt(token);
-      const name =
-        payload?.["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"] ||
-        payload?.unique_name ||
-        payload?.name;
-      if (name) {
-        setUserName(name);
-      }
-    }
-
-    // 2. Cargar la ruta activa de aprendizaje desde la API o usar Mock
+    // Cargar la ruta activa de aprendizaje desde la API o usar Mock
     const cargarRuta = async () => {
       try {
         if (USE_MOCK) {
           setRuta(MOCK_RUTA);
         } else {
-          const response = await api.get("/Rutas/mi-ruta");
+          const response = await api.get("/Rutas/mi-ruta", authRequestConfig(token));
           setRuta(response.data);
         }
       } catch (error) {
-        console.warn("No se encontró una ruta de aprendizaje activa en el servidor. Usando fallback de simulación.");
-        setRuta(MOCK_RUTA);
+        console.warn("No se encontró una ruta de aprendizaje activa en el servidor.", error);
+        setRuta(null);
       } finally {
         setLoading(false);
       }
     };
 
     cargarRuta();
-  }, []);
+  }, [token]);
 
   if (loading) {
     return (

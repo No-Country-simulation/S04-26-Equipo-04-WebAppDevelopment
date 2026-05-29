@@ -1,6 +1,8 @@
 import { create } from "zustand";
 import { DiagnosticService } from "@/services/diagnostic.service";
 import { api } from "@/lib/api";
+import { authRequestConfig } from "@/lib/auth-request-config";
+import { useAuthStore } from "@/store/auth.store";
 
 type ResultItem = {
   categoria: string;
@@ -55,7 +57,8 @@ export const useDiagnosticStore = create<State>((set, get) => ({
     set({ loading: true });
 
     try {
-      const data = await DiagnosticService.getQuestions();
+      const token = useAuthStore.getState().token;
+      const data = await DiagnosticService.getQuestions(token);
 
       set({
         questions: data,
@@ -68,7 +71,8 @@ export const useDiagnosticStore = create<State>((set, get) => ({
   },
 
   startDiagnostic: async () => {
-    const data = await DiagnosticService.start();
+    const token = useAuthStore.getState().token;
+    const data = await DiagnosticService.start(token);
 
     set({
       diagnosticoId: data.id,
@@ -104,17 +108,21 @@ export const useDiagnosticStore = create<State>((set, get) => ({
 
   sendAnswers: async () => {
     const { diagnosticoId, answers } = get();
+    const token = useAuthStore.getState().token;
 
     if (!diagnosticoId) return;
 
-    const result = await DiagnosticService.sendAnswers({
-      diagnosticoId,
-      respuestas: answers,
-    });
+    const result = await DiagnosticService.sendAnswers(
+      {
+        diagnosticoId,
+        respuestas: answers,
+      },
+      token
+    );
 
     try {
       // Generar automáticamente la ruta de aprendizaje en base de datos al finalizar
-      await api.post(`/Rutas/generar/${diagnosticoId}`);
+      await api.post(`/Rutas/generar/${diagnosticoId}`, undefined, authRequestConfig(token));
     } catch (e) {
       console.error("Error al generar la ruta de aprendizaje:", e);
     }
@@ -126,14 +134,15 @@ export const useDiagnosticStore = create<State>((set, get) => ({
   fetchResultFromRoute: async () => {
     try {
       set({ loading: true });
+      const token = useAuthStore.getState().token;
 
       // 1. traer ruta
-      const route = await DiagnosticService.getMyRoute();
+      const route = await DiagnosticService.getMyRoute(token);
 
       const diagnosticoId = route.diagnosticoId;
 
       // 2. traer resultado
-      const result = await DiagnosticService.getResult(diagnosticoId);
+      const result = await DiagnosticService.getResult(diagnosticoId, token);
 
       set({
         diagnosticoId,

@@ -3,12 +3,14 @@
 import { useState, useEffect } from "react";
 import { Briefcase, X, CheckCircle2, AlertTriangle, HelpCircle } from "lucide-react";
 import { api } from "@/lib/api";
+import { authRequestConfig } from "@/lib/auth-request-config";
 import { Card } from "@/components/Card";
 import { Button } from "@/components/Button";
 import { Badge } from "@/components/Badge";
+import { useAuthStore } from "@/store/auth.store";
 
 // 1. Interruptor de simulación (true por defecto para testing/demostración, false para API real)
-const USE_MOCK = true;
+const USE_MOCK = false;
 
 // 2. Base de datos simulada coincidente con los DTOs del backend
 const MOCK_COINCIDENCIAS = [
@@ -69,6 +71,8 @@ export default function PropuestasPage() {
   const [coincidencias, setCoincidencias] = useState<any[]>([]);
   const [procesos, setProcesos] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const token = useAuthStore((state) => state.token);
 
   // Modal de Detalle de Propuesta
   const [selectedJob, setSelectedJob] = useState<any>(null);
@@ -76,22 +80,27 @@ export default function PropuestasPage() {
 
   const cargarPropuestas = async () => {
     try {
+      setErrorMessage(null);
       if (USE_MOCK) {
         setCoincidencias(MOCK_COINCIDENCIAS);
         setProcesos(MOCK_PROCESOS);
       } else {
         // GET /api/Marketplace/mis-oportunidades/match
-        const resMatch = await api.get("/Marketplace/mis-oportunidades/match");
+        const resMatch = await api.get(
+          "/Marketplace/mis-oportunidades/match",
+          authRequestConfig(token)
+        );
         setCoincidencias(resMatch.data);
 
         // GET /api/Postulaciones/mis-postulaciones
-        const resPost = await api.get("/Postulaciones/mis-postulaciones");
+        const resPost = await api.get("/Postulaciones/mis-postulaciones", authRequestConfig(token));
         setProcesos(resPost.data);
       }
-    } catch (error) {
-      console.warn("Error al cargar propuestas reales, usando simulación:", error);
-      setCoincidencias(MOCK_COINCIDENCIAS);
-      setProcesos(MOCK_PROCESOS);
+    } catch (error: any) {
+      console.warn("Error al cargar propuestas reales:", error);
+      setErrorMessage(error?.response?.data?.message || "No se pudieron cargar las propuestas reales.");
+      setCoincidencias([]);
+      setProcesos([]);
     } finally {
       setLoading(false);
     }
@@ -99,7 +108,7 @@ export default function PropuestasPage() {
 
   useEffect(() => {
     cargarPropuestas();
-  }, []);
+  }, [token]);
 
   // Aplicar a una vacante (Crear postulación)
   const handleApply = async (vacanteId: number) => {
@@ -129,7 +138,7 @@ export default function PropuestasPage() {
         setSelectedJob(null);
       } else {
         // POST /api/Postulaciones
-        await api.post("/Postulaciones", { vacanteId });
+        await api.post("/Postulaciones", { vacanteId }, authRequestConfig(token));
         await cargarPropuestas();
         setSelectedJob(null);
       }
@@ -174,9 +183,15 @@ export default function PropuestasPage() {
           Nuevas Coincidencias
         </h2>
 
+        {errorMessage && (
+          <p className="text-sm text-red-600 bg-red-50 border border-red-100 rounded-lg p-3">
+            {errorMessage}
+          </p>
+        )}
+
         {coincidencias.length === 0 ? (
           <p className="text-sm text-gray-500 py-2">
-            No tienes nuevas coincidencias en este momento. Completa más módulos de tu ruta para desbloquear nuevas ofertas.
+            No tienes nuevas coincidencias en este momento. Completa al menos un modulo de tu ruta para fortalecer tus postulaciones.
           </p>
         ) : (
           coincidencias.map((job) => (
