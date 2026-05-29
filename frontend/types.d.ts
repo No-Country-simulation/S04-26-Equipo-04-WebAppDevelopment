@@ -1,34 +1,37 @@
-interface IconsProps {
-  className?: string;
-  width?: number;
-  height?: number;
-  strokeWidth?: number;
-}
+declare global {
+  interface IconsProps {
+    className?: string;
+    size?: number;
+    width?: number;
+    height?: number;
+    strokeWidth?: number;
+  }
 
-// Diagnostico
-interface Option {
-  id: number;
-  texto: string;
-};
+  // Diagnostico
+  interface Option {
+    id: number;
+    texto: string;
+  }
 
-interface Question {
-  id: number;
-  texto: string;
-  opciones: Option[];
-};
+  interface Question {
+    id: number;
+    texto: string;
+    opciones: Option[];
+  }
 
-interface QuestionGroup {
-  categoria: string;
-  preguntas: Question[];
-};
+  interface QuestionGroup {
+    categoria: string;
+    preguntas: Question[];
+  }
 
-interface Answer {
-  preguntaId: number;
-  opcionId: number;
-};
+  interface Answer {
+    preguntaId: number;
+    opcionId: number;
+  }
 
-interface QuestionWithCategory extends Question {
-  categoria: string;
+  interface QuestionWithCategory extends Question {
+    categoria: string;
+  }
 }
 
 //Empresa
