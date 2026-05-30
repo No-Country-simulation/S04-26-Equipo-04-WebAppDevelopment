@@ -6,7 +6,8 @@ El perfil profesional se crea automaticamente al registrar un usuario `profesion
 
 - `visibleMarketplace` empieza en `false`.
 - Al completar toda la ruta de aprendizaje, pasa a `true`.
-- Solo perfiles con `visibleMarketplace: true` aparecen en marketplace y pueden postularse a vacantes.
+- Solo perfiles con `visibleMarketplace: true` aparecen en el buscador publico de talentos para empresas.
+- Para postularse a vacantes alcanza con tener al menos una skill validada por completar un modulo.
 - Las empresas solo pueden ver perfiles visibles, salvo que sea su propio usuario.
 
 ## 1. Obtener mi perfil

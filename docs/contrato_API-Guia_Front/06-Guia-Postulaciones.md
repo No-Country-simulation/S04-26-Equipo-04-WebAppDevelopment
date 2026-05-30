@@ -5,7 +5,7 @@ Este modulo permite que profesionales visibles apliquen a vacantes abiertas y qu
 ## Reglas clave
 
 - Solo rol `profesional` puede postularse.
-- El profesional debe tener `visibleMarketplace: true`.
+- El profesional debe tener al menos una skill validada por completar un modulo de su ruta.
 - Solo se puede aplicar a vacantes con `estado: "abierta"`.
 - No se puede aplicar dos veces a la misma vacante.
 - La base de datos tiene indice unico por `(id_usuario, id_vacante)`.
@@ -53,11 +53,11 @@ Este modulo permite que profesionales visibles apliquen a vacantes abiertas y qu
 
 ### Errores comunes
 
-Perfil no visible:
+Perfil sin skills validadas:
 
 ```json
 {
-  "message": "Debes completar tu ruta de aprendizaje y tener tu CV Vivo activo/visible para poder postularte a vacantes."
+  "message": "Debes completar al menos un modulo de tu ruta para validar una habilidad antes de postularte."
 }
 ```
 

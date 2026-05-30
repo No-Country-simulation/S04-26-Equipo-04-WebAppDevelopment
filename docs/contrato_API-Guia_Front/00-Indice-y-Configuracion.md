@@ -95,7 +95,7 @@ api.interceptors.request.use((config) => {
 4. `POST /Rutas/generar/{diagnosticoId}`.
 5. Completar clases con `PUT /Rutas/progreso/clase/{progresoClaseId}`.
 6. Consultar/editar CV vivo con `/Perfiles/mi-perfil`.
-7. Cuando `visibleMarketplace` sea `true`, puede postularse a vacantes.
+7. Cuando tenga al menos una skill validada por completar un modulo, puede postularse a vacantes.
 8. Ver oportunidades recomendadas con `GET /Marketplace/mis-oportunidades/match`.
 
 ### Empresa
