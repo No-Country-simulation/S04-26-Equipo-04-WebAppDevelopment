@@ -58,7 +58,7 @@ export default function VacanteMatchPage() {
       )}
 
       {!loadingMatches && !error && matches.length > 0 && (
-        <div className="space-y-5">
+        <div className="space-y-5 mt-6">
           {matches.map((candidate) => (
             <MatchCandidateCard
               key={candidate.perfilId}
