@@ -9,12 +9,10 @@ import {
   Settings,
   HelpCircle,
   Users,
-  ClipboardList,
   LayoutDashboard,
   Route,
   Briefcase,
   LogOut,
-  MessageSquareText,
   BriefcaseBusiness,
 } from "lucide-react";
 

@@ -9,7 +9,7 @@ export const MatchBadge = ({ percentage }: Props) => {
 
   return (
     <div
-      className={`px-3 py-1 rounded-full text-sm font-semibol border ${styles.bg} ${styles.text} ${styles.border}`}
+      className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-[12px] font-medium text-sm border ${styles.bg} ${styles.text} ${styles.border}`}
     >
       {percentage}% Match
     </div>

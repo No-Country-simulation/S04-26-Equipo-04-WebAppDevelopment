@@ -1,9 +1,8 @@
-
 import { MatchCandidate } from "../../../types";
-import { Linkedin } from "../icons/Linkedin";
-
-import { MatchBadge } from "./MatchBadge";
-import { SkillsList } from "./SkillsList";
+import { Linkedin } from "@/components/icons/Linkedin";
+import { MatchBadge } from "@/components/empresa";
+import { SkillsList } from "@/components/empresa";
+import { Button } from "../Button";
 
 interface Props {
   candidate: MatchCandidate;
@@ -11,62 +10,35 @@ interface Props {
 
 export const MatchCandidateCard = ({ candidate }: Props) => {
   return (
-    <div
-      className="
-        bg-white
-        border
-        border-gray-200
-        rounded-2xl
-        p-5
-        shadow-sm
-      "
-    >
+    <div className="bg-white border border-gray-200 rounded-2xl p-5 shadow-sm">
       <div className="flex justify-between gap-4">
         <div>
-          <h3 className="text-lg font-semibold text-gray-900">
+          <h4 className="text-text-primary-light font-medium text-base test-sm">
             {candidate.nombre} {candidate.apellido}
-          </h3>
-
-          <p className="text-sm text-gray-500 mt-1">
-            {candidate.titular}
-          </p>
+          </h4>
+          <p className="text-text-secondary-light text-sm">{candidate.titular}</p>
         </div>
-
         <MatchBadge percentage={candidate.porcentajeMatch} />
       </div>
-
-      <div className="flex items-center gap-2 mt-4">
-        <Linkedin size={16} className="text-blue-600" />
-
-        <a
-          href={candidate.urlLinkedin}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-sm text-blue-600 hover:underline"
-        >
+      <div className="flex justify-between items-end">
+        <div>
+          {candidate.skillsCoincidentes.length > 0 && (
+            <div className="mt-5">
+              <p className="text-primary-navy text-sm">Skills coincidentes</p>
+              <SkillsList skills={candidate.skillsCoincidentes} variant="success" />
+            </div>
+          )}
+          {candidate.skillsFaltantes.length > 0 && (
+            <div className="mt-5">
+              <p className="text-primary-navy text-sm">Skills faltantes</p>
+              <SkillsList skills={candidate.skillsFaltantes} variant="danger" />
+            </div>
+          )}
+        </div>
+        <Button variant="ghost" className="">
+          <Linkedin size={16} />
           Ver LinkedIn
-        </a>
-      </div>
-
-      <div className="mt-5">
-        <h4 className="text-sm font-semibold text-gray-900">          Skills coincidentes
-        </h4>
-
-        <SkillsList
-          skills={candidate.skillsCoincidentes}
-          variant="success"
-        />
-      </div>
-
-      <div className="mt-5">
-        <h4 className="text-sm font-semibold text-gray-900">
-          Skills faltantes
-        </h4>
-
-        <SkillsList
-          skills={candidate.skillsFaltantes}
-          variant="danger"
-        />
+        </Button>
       </div>
     </div>
   );
