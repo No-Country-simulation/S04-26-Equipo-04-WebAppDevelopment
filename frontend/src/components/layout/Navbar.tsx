@@ -16,15 +16,19 @@ export default function Navbar() {
           Cómo funciona
         </Link>
         <Link
-          href="/company/register"
+          href="/login"
           className="text-[13px] text-text-secondary-dark hover:text-white transition-colors"
         >
           Para empresas
         </Link>
       </div>
       <div className="flex items-center gap-3">
-        <Button variant="secondary">Iniciar sesión</Button>
-        <Button variant="primary">Comenzar gratis</Button>
+        <Link href="/login">
+          <Button variant="secondary">Iniciar sesión</Button>
+        </Link>
+        <Link href="/register">
+          <Button variant="primary">Comenzar gratis</Button>
+        </Link>
       </div>
     </nav>
   );

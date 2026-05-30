@@ -43,7 +43,7 @@ export default function LandingPage() {
               Comenzar mi diagnóstico <ArrowRight className="h-4 w-4" />
             </Button>
           </Link>
-          <Link href="/company/register">
+          <Link href="/login">
             <Button variant="secondary">
               <Briefcase className="h-4 w-4" />
               Buscar talento senior
@@ -295,7 +295,7 @@ export default function LandingPage() {
               </div>
             </div>
 
-            <Link href="/company/search">
+            <Link href="/login">
               <Button variant="primary">
                 Buscar talento senior <ArrowRight className="h-4 w-4" />
               </Button>

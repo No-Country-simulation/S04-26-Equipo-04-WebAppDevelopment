@@ -14,7 +14,7 @@ export default function Footer() {
             <Link href="/como-funciona" className="text-[12px] text-text-muted-dark hover:text-text-secondary-dark transition-colors">
               Cómo funciona
             </Link>
-            <Link href="/empresas" className="text-[12px] text-text-muted-dark hover:text-text-secondary-dark transition-colors">
+            <Link href="/login" className="text-[12px] text-text-muted-dark hover:text-text-secondary-dark transition-colors">
               Para empresas
             </Link>
             <Link href="/terminos" className="text-[12px] text-text-muted-dark hover:text-text-secondary-dark transition-colors">
